@@ -25,7 +25,9 @@ func main() {
 }))
 
 	m.Get("/", handlers.MainHandler)
-	m.Get("/regestration", handlers.RegestrationHandler)
+	m.Get("/registration", handlers.RegestrationHandler)
 	m.Post("/signup", handlers.SignupHandler)
+	//m.Post("/signin", handlers.SigninHandler)
+	m.Get("/login", handlers.LoginHandler)
 	m.Run()
 }

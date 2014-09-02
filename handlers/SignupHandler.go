@@ -23,3 +23,15 @@ func SignupHandler(rnd render.Render, r *http.Request){
 	models.UserCollection.Insert(newUser)
 	rnd.Redirect("/")
 }
+
+func SigninHandler(rnd render.Render, r *http.Request){
+	users := []models.UserDocument{}
+	UserCollection.Find(nil).All(&users)
+	for _,user := range users {
+		if user.Email == r.FormValue("email_signin") && user.Password == r.FormValue("password_signin") {
+			rnd.Redirect("/" + user.FirstName)
+		}
+	}
+}
+
+
