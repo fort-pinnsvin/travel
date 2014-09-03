@@ -3,7 +3,8 @@ package handlers
 import (
 	"github.com/martini-contrib/render"
 	"net/http"
-	"travel/models"
+	"models"
+
 )
 
 func SignupHandler(rnd render.Render, r *http.Request){
@@ -22,16 +23,6 @@ func SignupHandler(rnd render.Render, r *http.Request){
 	newUser := &models.UserDocument{models.GenerateId(),firstName,lastName,email_first,pass_first}
 	models.UserCollection.Insert(newUser)
 	rnd.Redirect("/")
-}
-
-func SigninHandler(rnd render.Render, r *http.Request){
-	users := []models.UserDocument{}
-	UserCollection.Find(nil).All(&users)
-	for _,user := range users {
-		if user.Email == r.FormValue("email_signin") && user.Password == r.FormValue("password_signin") {
-			rnd.Redirect("/" + user.FirstName)
-		}
-	}
 }
 
 
