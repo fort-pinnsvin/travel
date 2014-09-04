@@ -32,6 +32,7 @@ func main() {
 	m.Get("/", handlers.Root)
 	m.Get("/user/:id", oauth2.LoginRequired, handlers.UserProfile)
 	m.Get("/signin", oauth2.LoginRequired, handlers.GetData)
+	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)
 
 	// Routes that require a logged in user
 	// can be protected with oauth2.LoginRequired handler.
