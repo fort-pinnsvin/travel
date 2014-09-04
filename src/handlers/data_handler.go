@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"github.com/martini-contrib/oauth2"
 	gooauth2 "github.com/golang/oauth2"
+	"encoding/json"
+	"models"
 )
 
 func GetData(tokens oauth2.Tokens)  {
@@ -21,5 +23,13 @@ func GetData(tokens oauth2.Tokens)  {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("%s", robots)
+	var dat map[string]string
+	if err := json.Unmarshal(robots, &dat); err == nil {
+		user := &models.User{};
+		user.Id = string(dat["id"])
+		user.FirstName = string(dat["given_name"])
+		user.LastName = string(dat["family_name"])
+		user.Email = string(dat["link"])
+		fmt.Printf("%v\n", user)
+	}
 }
