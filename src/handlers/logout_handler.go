@@ -8,7 +8,8 @@ import (
 
 func Logout(rnd render.Render, r *http.Request, session sessions.Session) {
 	if session.Get("auth") != "" && session.Get("auth_id") != "" {
-		session.Clear()
+		session.Set("auth","")
+		session.Set("auth_id","")
 		rnd.Redirect("/")
 	}
 }
