@@ -43,7 +43,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-6">
-            <form role="form" onchange="" method="post" action="/signup">
+
                 <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Required
                     Field</strong></div>
                 <div class="form-group">
@@ -102,8 +102,7 @@
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
-                <input type="submit" name="submit" id="submit" value="I'm ready, sign up me" class="btn btn-info pull-right">
-            </form>
+                <input type="submit" name="submit" id="submit" value="I'm ready, sign up me" class="btn btn-info pull-right" onclick="singup()">
         </div>
         <div class="col-lg-6">Some text for registration, license or any other.</div>
     </div>
@@ -121,3 +120,27 @@
 <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
+
+<script>
+    var singup = function () {
+        $.ajax({
+            type: "POST",
+            url: "signup",
+            data: getParams("InputFirstName")+getParams("InputLastName")+
+                    getParams("InputEmailFirst")+getParams("InputEmailSecond")+
+                    getParams("InputPasswordFirst")+getParams("InputPasswordSecond"),
+            success: function(msg){
+                var rdr = JSON.parse(msg)
+                console.log(rdr.error)
+                window.location.href=rdr.url;
+            }
+        });
+    }
+
+    var getParams = function (id) {
+        return $('#'+ id).attr('name') + "=" + $('#'+ id).val() + "&"
+    }
+
+
+
+</script>
