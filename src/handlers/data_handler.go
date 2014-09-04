@@ -9,9 +9,10 @@ import (
 	gooauth2 "github.com/golang/oauth2"
 	"encoding/json"
 	"models"
+	"github.com/martini-contrib/sessions"
 )
 
-func GetData(tokens oauth2.Tokens)  {
+func GetData(session sessions.Session, tokens oauth2.Tokens)  {
 	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
 	client := http.Client{Transport: tr}
 	res, err := client.Get("https://www.googleapis.com/oauth2/v1/userinfo?alt=json")
@@ -24,12 +25,23 @@ func GetData(tokens oauth2.Tokens)  {
 		log.Fatal(err)
 	}
 	var dat map[string]string
+	user := &models.User{};
 	if err := json.Unmarshal(robots, &dat); err == nil {
-		user := &models.User{};
 		user.Id = string(dat["id"])
 		user.FirstName = string(dat["given_name"])
 		user.LastName = string(dat["family_name"])
 		user.Email = string(dat["link"])
 		fmt.Printf("%v\n", user)
+	}
+	findUser := &models.User{};
+	models.UserCollection.FindId(user.Id).One(&findUser)
+	fmt.Println(findUser)
+
+	if findUser.Id == "" {
+		models.UserCollection.Insert(&user)
+		session.Set("auth_id",user.Id)
+	}else{
+		models.UserCollection.UpdateId(user.Id,&user)
+		session.Set("auth_id",user.Id)
 	}
 }
