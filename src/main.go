@@ -12,7 +12,6 @@ import (
 
 func main() {
 	models.ConnectToDataBase()
-
 	store := sessions.NewCookieStore([]byte("yLiCQYG7CAflDavqGH461IO0MHp7TEbpg6TwHBWdJzNwYod1i5ZTbrIF5bEoO3oP"))
 	m := martini.Classic()
 	m.Use(martini.Static("assets"))

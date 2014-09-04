@@ -9,7 +9,7 @@ import (
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
-	if session.Get("auth") != "" && session.Get("auth_id") != "" {
+	if session.Get("auth_id") != "" {
 		id := params["id"]
 		user := models.User{}
 		err := models.UserCollection.FindId(id).One(&user)
