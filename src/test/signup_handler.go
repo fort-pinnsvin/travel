@@ -1,4 +1,4 @@
-package handlers
+package test
 
 import (
 	"fmt"
@@ -18,6 +18,7 @@ func PostSignUp(r *http.Request, res http.ResponseWriter) {
 	confirmEmail := r.FormValue("confirm_email")
 	password := r.FormValue("password")
 	confirmPassword := r.FormValue("confirm_password")
+	models.UserCollection.Find
 	if (email != confirmEmail) || (password != confirmPassword) {
 		fmt.Print("emails and (or) passwords are not equal!")
 		res.Write([]byte(`{"error":1, "url":"/"}`))
