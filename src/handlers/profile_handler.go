@@ -1,4 +1,4 @@
-package test
+package handlers
 
 import (
 	"fmt"
@@ -9,14 +9,15 @@ import (
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
-	if session.Get("auth_id") != "" {
+	if session.Get("auth") != "" && session.Get("auth_id") != "" {
 		id := params["id"]
 		user := models.User{}
 		err := models.UserCollection.FindId(id).One(&user)
 
 		if err != nil {
 			fmt.Println(err)
-			rnd.HTML(200, "not_allowed", map[string]string{"error": "Not Found"})
+			rnd.Redirect("/")
+			return
 		}
 		rnd.HTML(200, "user", user)
 	} else {
