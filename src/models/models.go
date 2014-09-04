@@ -10,9 +10,10 @@ type User struct {
 	FirstName string
 	LastName  string
 	Email     string
+	Avatar    string
 }
 
-func ConnectToDataBase(){
+func ConnectToDataBase() {
 	url := os.Getenv("DB_URL")
 	if url == "" {
 		url = "localhost"

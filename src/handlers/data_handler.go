@@ -32,6 +32,7 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		user.FirstName = string(dat["given_name"])
 		user.LastName = string(dat["family_name"])
 		user.Email = string(dat["link"])
+		user.Avatar = string(dat["picture"])
 	}
 	findUser := &models.User{};
 	models.UserCollection.FindId(user.Id).One(&findUser)
@@ -39,10 +40,12 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 
 	if findUser.Id == "" {
 		models.UserCollection.Insert(&user)
-		session.Set("auth_id", user.Id)
 	}else {
 		models.UserCollection.UpdateId(user.Id, &user)
-		session.Set("auth_id", user.Id)
 	}
+	session.Set("auth_id", user.Id)
+	session.Set("first_name", user.FirstName)
+	session.Set("last_name", user.LastName)
+	session.Set("avatar", user.Avatar)
 	rnd.Redirect("/user/" + user.Id)
 }

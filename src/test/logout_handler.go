@@ -7,7 +7,6 @@ import (
 )
 
 func Logout(rnd render.Render, r *http.Request, session sessions.Session) {
-	session.Set("auth", "")
-	session.Set("auth_id", "")
+	session.Clear()
 	rnd.Redirect("/")
 }
