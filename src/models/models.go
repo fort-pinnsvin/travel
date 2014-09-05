@@ -17,6 +17,14 @@ type User struct {
 	About	  string
 }
 
+type Marker struct {
+	Id        string `bson:"_id,omitempty"`
+	Owner     string
+	Name      string
+	Latitude  string
+	Longitude string
+}
+
 func ConnectToDataBase() {
 	url := os.Getenv("DB_URL")
 	if url == "" {
@@ -32,5 +40,5 @@ func ConnectToDataBase() {
 		panic(err)
 	}
 	UserCollection = session.DB(database).C("users")
-
+	MarkerCollection = session.DB(database).C("markers")
 }
