@@ -7,6 +7,7 @@ import (
 )
 
 var UserCollection *mgo.Collection
+var MarkerCollection *mgo.Collection
 
 func GenerateId() string {
 	b := make([]byte, 16)

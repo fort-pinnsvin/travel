@@ -35,6 +35,8 @@ func main() {
 	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
 	m.Get("/search", oauth2.LoginRequired, handlers.Search)
+	m.Get("/markers", oauth2.LoginRequired, handlers.GetMarkers)
+	m.Get("/markers/create", oauth2.LoginRequired, handlers.CreateMarker)
 
 	m.Run()
 }

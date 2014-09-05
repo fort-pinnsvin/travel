@@ -33,6 +33,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			"last_name": user.LastName,
 			"email": user.Email,
 			"avatar": user.Avatar,
+			"id": user.Id,
 			"auth_user": b,
 		})
 	} else {
