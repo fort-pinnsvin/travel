@@ -31,7 +31,7 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		user.Id = string(dat["id"])
 		user.FirstName = string(dat["given_name"])
 		user.LastName = string(dat["family_name"])
-		user.Email = string(dat["link"])
+		user.Email = string("")
 		user.Avatar = string(dat["picture"])
 	}
 	findUser := &models.User{}

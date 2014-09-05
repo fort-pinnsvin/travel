@@ -34,7 +34,7 @@ func main() {
 	m.Get("/signin", oauth2.LoginRequired, handlers.GetData)
 	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
-	m.Get("/")
+	m.Get("/search", oauth2.LoginRequired, handlers.Search)
 
 	m.Run()
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/martini-contrib/sessions"
 	"models"
 	"net/http"
+	"fmt"
 )
 
 func Edit(rnd render.Render, session sessions.Session, r *http.Request) {
@@ -28,6 +29,8 @@ func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request
 		session.Set("last_name", user.LastName)
 		session.Set("avatar", user.Avatar)
 		models.UserCollection.UpdateId(session.Get("auth_id"), user)
-		res.Write([]byte(`{"error":0, "url":"/"}`))
+		res.Write([]byte(fmt.Sprintf(`{"url": "%s", "error": 0}`, "/edit?ok")))
+	} else {
+		res.Write([]byte(fmt.Sprintf(`{"url": "%s", "error": 1}`, "/edit?error")))
 	}
 }
