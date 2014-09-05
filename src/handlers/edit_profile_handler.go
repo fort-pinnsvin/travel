@@ -6,7 +6,7 @@ import (
 	"models"
 )
 
-func Edit(rnd render.Render,session sessions.Session) {
+func Edit(rnd render.Render, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		userData := &models.User{}
 		models.UserCollection.FindId(session.Get("auth_id")).One(&userData)

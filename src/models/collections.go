@@ -13,5 +13,3 @@ func GenerateId() string {
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
 }
-
-

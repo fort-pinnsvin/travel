@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"net/http"
-	"log"
-	"io/ioutil"
-	"fmt"
-	"github.com/martini-contrib/oauth2"
-	gooauth2 "github.com/golang/oauth2"
 	"encoding/json"
-	"models"
-	"github.com/martini-contrib/sessions"
+	"fmt"
+	gooauth2 "github.com/golang/oauth2"
+	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
+	"io/ioutil"
+	"log"
+	"models"
+	"net/http"
 )
 
 func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) {
@@ -26,7 +26,7 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		log.Fatal(err)
 	}
 	var dat map[string]string
-	user := &models.User{};
+	user := &models.User{}
 	if err := json.Unmarshal(robots, &dat); err == nil {
 		user.Id = string(dat["id"])
 		user.FirstName = string(dat["given_name"])
@@ -34,18 +34,20 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		user.Email = string(dat["link"])
 		user.Avatar = string(dat["picture"])
 	}
-	findUser := &models.User{};
+	findUser := &models.User{}
 	models.UserCollection.FindId(user.Id).One(&findUser)
 	fmt.Println(findUser)
 
+	url := "/"
 	if findUser.Id == "" {
 		models.UserCollection.Insert(&user)
-	}else {
+		url = "/?newbie"
+	} else {
 		models.UserCollection.UpdateId(user.Id, &user)
 	}
 	session.Set("auth_id", user.Id)
 	session.Set("first_name", user.FirstName)
 	session.Set("last_name", user.LastName)
 	session.Set("avatar", user.Avatar)
-	rnd.Redirect("/user/" + user.Id)
+	rnd.Redirect(url)
 }
