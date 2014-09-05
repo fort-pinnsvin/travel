@@ -126,6 +126,7 @@
         $.ajax({
             type: "GET",
             url: "../markers",
+            data: "id={{ .id }}",
             success: function (msg) {
                 array = JSON.parse(msg)
                 console.log(array)
