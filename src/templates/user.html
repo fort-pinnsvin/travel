@@ -33,7 +33,9 @@
             <li><a href="/feed">Feed</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            {{if .auth_user}}
             <li><a href="/edit">Edit</a></li>
+            {{end}}
             <li><a href="/logout">Log Out!</a></li>
         </ul>
     </div>
