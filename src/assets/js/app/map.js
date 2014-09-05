@@ -22,14 +22,18 @@ function loadMarkers(map) {
             array = JSON.parse(msg)
             console.log(array)
 
-            var markers = []
             for (var i = 0; i < array.length; i++) {
                 var el = array[i]
-                markers.push(new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(parseFloat(el.Latitude), parseFloat(el.Longitude)),
                     map: map,
-                    title: el.Name
-                }))
+                    title: el.Name,
+                    id: el.Id
+                })
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    window.location.href = '/album/' + el.Id;
+                });
             }
         }
     });
@@ -48,6 +52,9 @@ function placeMarker(location) {
                     position: location,
                     map: map,
                     title: "New Album"
+                });
+                google.maps.event.addListener(marker, 'click', function() {
+                    window.location.href = '/album/' + result.id;
                 });
             }
         }

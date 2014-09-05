@@ -81,8 +81,14 @@
 
     <blockquote>
         <p><strong>I am go to Milan</strong></p>
-        <p>The reason to choose Sails is best put by the Sails creator, Mike McNeil, "Sails was created out of necessity". Many frameworks you see around, are built almost for the academic side of things, these frameworks usually foster best practices, and create a platform for developers to create things faster, or better.
-            Sails on the other hand, was created for production, it's not trying to feed you a new syntax or platform, it's a solid base, meant for creating 'client-work' with speed. The contrast may be subtle, but there are a few distinct differences.</p>
+
+        <p>The reason to choose Sails is best put by the Sails creator, Mike McNeil, "Sails was created out of
+            necessity". Many frameworks you see around, are built almost for the academic side of things, these
+            frameworks usually foster best practices, and create a platform for developers to create things faster, or
+            better.
+            Sails on the other hand, was created for production, it's not trying to feed you a new syntax or platform,
+            it's a solid base, meant for creating 'client-work' with speed. The contrast may be subtle, but there are a
+            few distinct differences.</p>
     </blockquote>
     <p class="text-right">Like&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12</p>
 
@@ -120,19 +126,22 @@
         $.ajax({
             type: "GET",
             url: "../markers",
-            data: "id={{ .id }}",
             success: function (msg) {
                 array = JSON.parse(msg)
                 console.log(array)
 
-                var markers = []
                 for (var i = 0; i < array.length; i++) {
                     var el = array[i]
-                    markers.push(new google.maps.Marker({
+                    var marker = new google.maps.Marker({
                         position: new google.maps.LatLng(parseFloat(el.Latitude), parseFloat(el.Longitude)),
                         map: map,
-                        title: el.Name
-                    }))
+                        title: el.Name,
+                        id: el.Id
+                    })
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        window.location.href = '/album/' + el.Id;
+                    });
                 }
             }
         });
