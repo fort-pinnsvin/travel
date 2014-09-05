@@ -27,27 +27,23 @@
 <body>
 
 <!-- Static navbar -->
-<div class="navbar navbar-default navbar-static-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            Hi, {{ .FirstName }} {{ .LastName }}!
-            <ul class="nav navbar-nav">
-                <li><a href="/user/{{ .Id }}">Profile</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/logout">Logout!</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Travel</a>
+        <a class="navbar-brand" href="/user/{{ .Id }}"><img src="{{ .Avatar }}" height ="150%" style="margin-top:-5px;" /> {{ .FirstName }} {{ .LastName}}</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="/feed">Feed</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Log Out!</a></li>
+        </ul>
     </div>
 </div>
 

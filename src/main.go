@@ -34,10 +34,5 @@ func main() {
 	m.Get("/signin", oauth2.LoginRequired, handlers.GetData)
 	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)
 
-	// Routes that require a logged in user
-	// can be protected with oauth2.LoginRequired handler.
-	// If the user is not authenticated, they will be
-	// redirected to the login path.
-
 	m.Run()
 }
