@@ -14,26 +14,19 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3">
             <h1 style="text-align:center;">Profile</h1>
-            <div class="panel panel-default">
-                <div class="panel-heading">First Name : </div>
-                <div class="panel-body">
-                {{ .FirstName }}
-                </div>
+            <div class="well well-sm">
+                <img src="{{ .Avatar }}" width ="100%" style="margin-top:-5px;" />
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Family Name : </div>
-                <div class="panel-body">
-                    {{ .LastName }}
-                </div>
+            <div class="well well-sm">
+                {{.FirstName}} {{.LastName}}
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Email : </div>
-                <div class="panel-body">
-                    {{ .Email }}
-                </div>
+            {{if .Email}}
+            <div class="well well-sm">
+                {{.Email}}
             </div>
+            {{end}}
         </div>
     </div>
 </div>

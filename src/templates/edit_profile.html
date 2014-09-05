@@ -17,17 +17,17 @@
     <div class="row">
         <div class="col-md-12">
             <div class="well well-sm">
-                <form class="form-horizontal" method="post">
+                <div class="form-horizontal">
                     <fieldset>
                         <legend class="text-center header">Contact us</legend>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <input id="fname" name="name" type="text" placeholder="First Name" class="form-control" value="{{.FirstName}}">
+                                <input id="first_name" name="first_name" type="text" placeholder="First Name" class="form-control" value="{{.FirstName}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <input id="lname" name="name" type="text" placeholder="Last Name" class="form-control" value="{{.LastName}}">
+                                <input id="last_name" name="last_name" type="text" placeholder="Last Name" class="form-control" value="{{.LastName}}">
                             </div>
                         </div>
 
@@ -41,11 +41,11 @@
 
                         <div class="form-group">
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                <button class="btn btn-primary btn-lg" onclick="post()">Submit</button>
                             </div>
                         </div>
                     </fieldset>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -53,3 +53,22 @@
 
 </body>
 </html>
+        <script>
+            var post = function() {
+                console.log(1111)
+                $.ajax({
+                    type: "POST",
+                    url: "edit_post",
+                    data: getParams("first_name") + getParams("last_name") + getParams("email"),
+                    success: function(msg){
+                        var rdr = JSON.parse(msg)
+                        console.log(rdr.error)
+                        window.location.href=rdr.url;
+                    }
+                });
+            }
+
+            var getParams = function (id) {
+                return $('#'+ id).attr('name') + "=" + $('#'+ id).val() + "&"
+            }
+        </script>

@@ -19,6 +19,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			rnd.Redirect("/")
 			return
 		}
+
 		rnd.HTML(200, "user", user)
 	} else {
 		rnd.HTML(200, "not_allowed", map[string]string{"error": "Not authorized"})

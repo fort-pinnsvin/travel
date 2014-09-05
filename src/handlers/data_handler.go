@@ -40,9 +40,8 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 
 	if findUser.Id == "" {
 		models.UserCollection.Insert(&user)
-	}else {
-		models.UserCollection.UpdateId(user.Id, &user)
 	}
+
 	session.Set("auth_id", user.Id)
 	session.Set("first_name", user.FirstName)
 	session.Set("last_name", user.LastName)
