@@ -26,6 +26,7 @@ func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request
 		user.Email = email
 		session.Set("first_name", user.FirstName)
 		session.Set("last_name", user.LastName)
+		session.Set("avatar", user.Avatar)
 		models.UserCollection.UpdateId(session.Get("auth_id"),user)
 		res.Write([]byte(`{"error":0, "url":"/"}`))
 	}
