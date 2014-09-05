@@ -24,9 +24,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../">Travel</a>
-        <a class="navbar-brand" href="/user/{{ .Id }}"><img src="{{ .Avatar }}" height="150%" style="margin-top:-5px;"/>
-            {{ .FirstName }} {{ .LastName}}</a>
+        <a class="navbar-brand" href="#">Travel</a>
+        <a class="navbar-brand" href="/user/{{ .auth_id }}"><img src="{{ .auth_avatar }}" height="150%"
+                                                                 style="margin-top:-5px;"/>
+            {{ .auth_first_name }} {{ .auth_last_name }}</a>
     </div>
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
@@ -44,15 +45,16 @@
     <div class="row">
         <div class="col-md-3">
             <h1 style="text-align:center;">Profile</h1>
+
             <div class="well well-sm">
-                <img src="{{ .Avatar }}" width ="100%" style="margin-top:-5px;" />
+                <img src="{{ .avatar }}" width="100%" style="margin-top:-5px;"/>
             </div>
             <div class="well well-sm">
-                {{.FirstName}} {{.LastName}}
+                {{.first_name}} {{.last_name}}
             </div>
-            {{if .Email}}
+            {{if .email}}
             <div class="well well-sm">
-                {{.Email}}
+                {{.email}}
             </div>
             {{end}}
         </div>
@@ -73,7 +75,8 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik Tsyrkunov</a>.</p>
+                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                    Tsyrkunov</a>.</p>
             </div>
         </div>
 
