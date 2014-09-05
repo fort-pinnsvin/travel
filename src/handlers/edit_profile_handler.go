@@ -22,13 +22,17 @@ func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request
 		firstName := r.FormValue("first_name")
 		lastName := r.FormValue("last_name")
 		email := r.FormValue("email")
-		user.FirstName = firstName
-		user.LastName = lastName
-		user.Email = email
+		country := r.FormValue("country")
+		birthday := r.FormValue("birthday")
+		about := r.FormValue("about")
+
+		edit_user := models.User{user.Id,firstName,lastName,email,user.Avatar,birthday,country,user.Status,about}
+
+
 		session.Set("first_name", user.FirstName)
 		session.Set("last_name", user.LastName)
 		session.Set("avatar", user.Avatar)
-		models.UserCollection.UpdateId(session.Get("auth_id"), user)
+		models.UserCollection.UpdateId(session.Get("auth_id"), edit_user)
 		res.Write([]byte(fmt.Sprintf(`{"url": "%s", "error": 0}`, "/edit?ok")))
 	} else {
 		res.Write([]byte(fmt.Sprintf(`{"url": "%s", "error": 1}`, "/edit?error")))

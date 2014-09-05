@@ -11,6 +11,10 @@ type User struct {
 	LastName  string
 	Email     string
 	Avatar    string
+	Birthday  string
+	Country   string
+	Status    string
+	About	  string
 }
 
 func ConnectToDataBase() {

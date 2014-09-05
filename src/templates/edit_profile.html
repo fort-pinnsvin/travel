@@ -59,7 +59,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <label for="first_name">Last Name:</label>
+                                <label for="last_name">Last Name:</label>
                                 <input id="last_name" name="last_name" type="text" placeholder="{{.LastName}}"
                                        class="form-control" value="{{.LastName}}">
                             </div>
@@ -67,9 +67,33 @@
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <label for="first_name">Your email:</label>
+                                <label for="email">Your email:</label>
                                 <input id="email" name="email" type="text" placeholder="{{.Email}}"
                                        class="form-control" value="{{.Email}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                <label for="country">Country:</label>
+                                <input id="country" name="country" type="text" placeholder="{{.Country}}"
+                                       class="form-control" value="{{.Country}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                <label for="birthday">Birthday:</label>
+                                <input id="birthday" name="birthday" type="date" placeholder="{{.Birthday}}"
+                                       class="form-control" value="{{.Birthday}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-10 col-md-offset-1">
+                                <label for="about">About:</label>
+                                <input id="about" name="about" type="text" placeholder="{{.About}}"
+                                       class="form-control" value="{{.About}}">
                             </div>
                         </div>
 
@@ -109,7 +133,8 @@
         $.ajax({
             type: "POST",
             url: "update",
-            data: getParams("first_name") + getParams("last_name") + getParams("email"),
+            data: getParams("first_name") + getParams("last_name") + getParams("email")+getParams("country")+
+                  getParams("about")+getParams("birthday"),
             success: function (msg) {
                 var rdr = JSON.parse(msg)
                 console.log(rdr)
