@@ -33,7 +33,8 @@ func main() {
 	m.Get("/user/:id", oauth2.LoginRequired, handlers.UserProfile)
 	m.Get("/signin", oauth2.LoginRequired, handlers.GetData)
 	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)
-	m.Post("/edit_post",oauth2.LoginRequired, handlers.EditPost)
+	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
+	m.Get("/")
 
 	m.Run()
 }

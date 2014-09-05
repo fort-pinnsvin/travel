@@ -21,7 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Travel</a>
+        <a class="navbar-brand" href="../">Travel</a>
         <a class="navbar-brand" href="/user/{{ .Id }}"><img src="{{ .Avatar }}" height="150%" style="margin-top:-5px;"/>
             {{ .FirstName }} {{ .LastName}}</a>
     </div>
@@ -44,21 +44,23 @@
                         <legend class="text-center header">Contact us</legend>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <input id="first_name" name="first_name" type="text" placeholder="First Name" class="form-control" value="{{.FirstName}}">
+                                <input id="first_name" name="first_name" type="text" placeholder="First Name"
+                                       class="form-control" value="{{.FirstName}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <input id="last_name" name="last_name" type="text" placeholder="Last Name" class="form-control" value="{{.LastName}}">
+                                <input id="last_name" name="last_name" type="text" placeholder="Last Name"
+                                       class="form-control" value="{{.LastName}}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <input id="email" name="email" type="text" placeholder="Email Address" class="form-control" value="{{.Email}}">
+                                <input id="email" name="email" type="text" placeholder="Email Address"
+                                       class="form-control" value="{{.Email}}">
                             </div>
                         </div>
-
 
 
                         <div class="form-group">
@@ -75,7 +77,8 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik Tsyrkunov</a>.</p>
+                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                    Tsyrkunov</a>.</p>
             </div>
         </div>
 
@@ -85,22 +88,22 @@
 
 </body>
 </html>
-        <script>
-            var post = function() {
-                console.log(1111)
-                $.ajax({
-                    type: "POST",
-                    url: "edit_post",
-                    data: getParams("first_name") + getParams("last_name") + getParams("email"),
-                    success: function(msg){
-                        var rdr = JSON.parse(msg)
-                        console.log(rdr.error)
-                        window.location.href=rdr.url;
-                    }
-                });
+<script>
+    var post = function () {
+        console.log(1111)
+        $.ajax({
+            type: "POST",
+            url: "update",
+            data: getParams("first_name") + getParams("last_name") + getParams("email"),
+            success: function (msg) {
+                var rdr = JSON.parse(msg)
+                console.log(rdr.error)
+                window.location.href = rdr.url;
             }
+        });
+    }
 
-            var getParams = function (id) {
-                return $('#'+ id).attr('name') + "=" + $('#'+ id).val() + "&"
-            }
-        </script>
+    var getParams = function (id) {
+        return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
+    }
+</script>
