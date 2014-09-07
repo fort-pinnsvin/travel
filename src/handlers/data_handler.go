@@ -48,5 +48,6 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 	session.Set("first_name", user.FirstName)
 	session.Set("last_name", user.LastName)
 	session.Set("avatar", user.Avatar)
+
 	rnd.Redirect(redirectUrl)
 }

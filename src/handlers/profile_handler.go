@@ -5,7 +5,10 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"labix.org/v2/mgo/bson"
 	"models"
+	"net/http"
+	"strconv"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -24,22 +27,58 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 		if id == session.Get("auth_id") {
 			b = "true"
 		}
-		rnd.HTML(200, "user", map[string]string{
-			"auth_first_name": user_auth.FirstName,
-			"auth_last_name": user_auth.LastName,
-			"auth_avatar": user_auth.Avatar,
-			"auth_id": user_auth.Id,
-			"first_name": user.FirstName,
-			"last_name": user.LastName,
-			"email": user.Email,
-			"avatar": user.Avatar,
-			"id": user.Id,
-			"auth_user": b,
-			"country": user_auth.Country,
-			"birthday": user_auth.Birthday,
-			"about": user_auth.About,
-		})
+
+		allPost := []models.Post{}
+		query := make(bson.M)
+		query["owner"] = id
+		iter := models.PostCollection.Find(query).Limit(1024).Iter()
+		if err := iter.All(&allPost); err == nil {
+
+			fmt.Println("posts = ")
+			fmt.Println(allPost)
+
+			rnd.HTML(200, "user", map[string]interface{}{
+				"auth_first_name": user_auth.FirstName,
+				"auth_last_name":  user_auth.LastName,
+				"auth_avatar":     user_auth.Avatar,
+				"auth_id":         user_auth.Id,
+				"first_name":      user.FirstName,
+				"last_name":       user.LastName,
+				"email":           user.Email,
+				"avatar":          user.Avatar,
+				"id":              user.Id,
+				"auth_user":       b,
+				"country":         user_auth.Country,
+				"birthday":        user_auth.Birthday,
+				"about":           user_auth.About,
+				"posts":           allPost,
+			})
+		}
 	} else {
 		rnd.HTML(200, "not_allowed", map[string]string{"error": "Not authorized"})
+	}
+}
+
+func SavePost(rnd render.Render, r *http.Request,session sessions.Session){
+	if session.Get("auth_id") != "" {
+		text := r.FormValue("text_post")
+		fmt.Println(text)
+		new_post := models.Post{}
+
+		new_post.Id = models.GenerateId()
+		new_post.Owner = session.Get("auth_id").(string)
+		new_post.Text = text
+
+		models.PostCollection.Insert(&new_post)
+		rnd.Redirect("/user/"+session.Get("auth_id").(string) )
+	}
+}
+
+func AddLike(res http.ResponseWriter, r *http.Request,session sessions.Session){
+	if session.Get("auth_id") != "" {
+		like_s := r.FormValue("count_like")
+		like, _ := strconv.Atoi(like_s)
+		like += 1
+		res.Write([]byte(fmt.Sprintf(`{"counter": %d}`, like)))
 	}
 }

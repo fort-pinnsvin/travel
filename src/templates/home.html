@@ -10,7 +10,7 @@
 
     <title>Travel</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS-->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
@@ -93,6 +93,15 @@
             <div class="col-lg-12">
                 <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
+                <form  style="margin-top: -40px;" method="POST" action="/set_theme">
+                    <p class="pull-right">
+                        <select class="form-control" id="theme" name="theme">
+                            <option>Black</option>
+                            <option>White</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-xs">Save</button>
+                    </p>
+                </form>
             </div>
         </div>
 

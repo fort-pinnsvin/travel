@@ -14,6 +14,7 @@ func main() {
 	models.ConnectToDataBase()
 	store := sessions.NewCookieStore([]byte("yLiCQYG7CAflDavqGH461IO0MHp7TEbpg6TwHBWdJzNwYod1i5ZTbrIF5bEoO3oP"))
 	m := martini.Classic()
+
 	m.Use(martini.Static("assets"))
 	m.Use(sessions.Sessions("auth", store))
 	m.Use(oauth2.Google(&gooauth2.Options{
@@ -37,6 +38,9 @@ func main() {
 	m.Get("/search", oauth2.LoginRequired, handlers.Search)
 	m.Get("/markers", oauth2.LoginRequired, handlers.GetMarkers)
 	m.Get("/markers/create", oauth2.LoginRequired, handlers.CreateMarker)
-
+	m.Get("/css/bootstrap.min.css", handlers.LoadTheme)
+	m.Post("/set_theme",oauth2.LoginRequired, handlers.SetTheme)
+	m.Post("/save_post",oauth2.LoginRequired, handlers.SavePost)
+	m.Post("/add_like",oauth2.LoginRequired, handlers.AddLike)
 	m.Run()
 }
