@@ -28,15 +28,15 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			b = "true"
 		}
 
-		allPost := []models.Post{}
+		posts := []models.Post{}
 		query := make(bson.M)
 		query["owner"] = id
 		iter := models.PostCollection.Find(query).Limit(1024).Iter()
-		if err := iter.All(&allPost); err == nil {
-
-			fmt.Println("posts = ")
-			fmt.Println(allPost)
-
+		if err := iter.All(&posts); err == nil {
+			allPost := [1000]models.Post{}
+			for i := 0 ; i<len(posts) ; i++ {
+				allPost[len(posts)-(i+1)] = posts[i]
+			}
 			rnd.HTML(200, "user", map[string]interface{}{
 				"auth_first_name": user_auth.FirstName,
 				"auth_last_name":  user_auth.LastName,
