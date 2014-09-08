@@ -114,12 +114,12 @@
     <h1 style="text-align:center;">News</h1>
     {{range $element := .posts }}
     <blockquote>
-        <p><strong>I am go to Milan</strong></p>
+        <p><strong>{{ $element.Title }}</strong></p>
 
         <p>{{$element.Text}}</p>
 
-        <h4 class="pull-right" id="count_like">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$element.Like}}</h4>
-        <button class="pull-right" id="like" onclick="add_like()">Like</button>
+        <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">{{$element.Like}}</h4>
+        <button class="btn btn-primary btn-sm pull-right" id="like" onclick='add_like({{ $element.Id }})'>Like</button>
     </blockquote>
 
     {{end}}
@@ -160,7 +160,7 @@
             data: "id={{ .id }}",
             success: function (msg) {
                 array = JSON.parse(msg)
-                console.log(array)
+                console.table(array)
 
                 for (var i = 0; i < array.length; i++) {
                     var el = array[i]
@@ -189,7 +189,7 @@
             data: getParams("text_post")+getParams("title") ,
             success: function (msg) {
                 var rdr = JSON.parse(msg)
-                console.log(rdr)
+                console.table(rdr)
                 if (rdr.error == 0) {
                     var form = document.getElementById("tooltip")
                     form.style.display = ""
@@ -205,15 +205,15 @@
         return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
     }
 
-    var add_like = function () {
+    var add_like = function (id) {
         $.ajax({
             type: "POST",
             url: "../add_like",
-            data: getParams("count_like")+,
+            data: getParams("count_like") + "&id=" + id,
             success: function (msg) {
-                console.log(msg)
+                console.table(msg)
                     var obj = JSON.parse(msg);
-                    var d = document.getElementById("count_like");
+                    var d = document.getElementById("count_like-" + id);
                     d.innerHTML = obj.counter;
             }
         });

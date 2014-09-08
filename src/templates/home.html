@@ -87,25 +87,28 @@
         <small><cite title="Source Title">Augustine of Hippo</cite></small>
     </blockquote>
     <a href="/signin" class="btn btn-primary btn-lg">Sign In with Google+</a>
-    <hr>
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
+    <div class="row">
+        <hr>
+        <footer>
+            <div class="col-lg-8">
                 <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
-                <form  style="margin-top: -40px;" method="POST" action="/set_theme">
-                    <p class="pull-right">
-                        <select class="form-control" id="theme" name="theme">
-                            <option>Black</option>
-                            <option>White</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary btn-xs">Save</button>
-                    </p>
-                </form>
             </div>
-        </div>
+            <div class="col-lg-4 pull-right" style="margin-top:20px;">
+                <p>
 
-    </footer>
+                <form style="margin-top: -40px;" method="POST" action="set_theme">
+                    <select class="form-control pull-right" id="theme" name="theme" style="width: 100px;">
+                        <option>Black</option>
+                        <option>White</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary pull-right">Save</button>
+                </form>
+                </p>
+            </div>
+
+        </footer>
+    </div>
 </div>
 <!-- /container -->
 

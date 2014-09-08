@@ -33,9 +33,9 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 		query["owner"] = id
 		iter := models.PostCollection.Find(query).Limit(1024).Iter()
 		if err := iter.All(&posts); err == nil {
-			allPost := [1000]models.Post{}
-			for i := 0 ; i<len(posts) ; i++ {
-				allPost[len(posts)-(i+1)] = posts[i]
+			allPost := []models.Post{}
+			for i := len(posts) - 1; i >= 0; i-- {
+				allPost = append(allPost, posts[i])
 			}
 			rnd.HTML(200, "user", map[string]interface{}{
 				"auth_first_name": user_auth.FirstName,
@@ -59,7 +59,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 	}
 }
 
-func SavePost(rnd render.Render, r *http.Request,session sessions.Session){
+func SavePost(rnd render.Render, r *http.Request, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")
 		fmt.Println(text)
@@ -70,13 +70,14 @@ func SavePost(rnd render.Render, r *http.Request,session sessions.Session){
 		new_post.Text = text
 
 		models.PostCollection.Insert(&new_post)
-		rnd.Redirect("/user/"+session.Get("auth_id").(string) )
+		rnd.Redirect("/user/" + session.Get("auth_id").(string))
 	}
 }
 
-func AddLike(res http.ResponseWriter, r *http.Request,session sessions.Session){
+func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		like_s := r.FormValue("count_like")
+		//like_id := r.FormValue("id")
 		like, _ := strconv.Atoi(like_s)
 		like += 1
 
