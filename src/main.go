@@ -39,7 +39,7 @@ func main() {
 	m.Get("/markers", oauth2.LoginRequired, handlers.GetMarkers)
 	m.Get("/markers/create", oauth2.LoginRequired, handlers.CreateMarker)
 	m.Get("/css/bootstrap.min.css", handlers.LoadTheme)
-	m.Post("/set_theme",oauth2.LoginRequired, handlers.SetTheme)
+	m.Post("/set_theme", handlers.SetTheme)
 	m.Post("/save_post",oauth2.LoginRequired, handlers.SavePost)
 	m.Post("/add_like",oauth2.LoginRequired, handlers.AddLike)
 	m.Run()

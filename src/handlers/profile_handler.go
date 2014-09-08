@@ -79,6 +79,7 @@ func AddLike(res http.ResponseWriter, r *http.Request,session sessions.Session){
 		like_s := r.FormValue("count_like")
 		like, _ := strconv.Atoi(like_s)
 		like += 1
+
 		res.Write([]byte(fmt.Sprintf(`{"counter": %d}`, like)))
 	}
 }
