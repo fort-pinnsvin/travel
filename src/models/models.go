@@ -6,15 +6,15 @@ import (
 )
 
 type User struct {
-	Id        string `bson:"_id,omitempty"`
-	FirstName string
-	LastName  string
-	Email     string
-	Avatar    string
-	Birthday  string
-	Country   string
-	Status    string
-	About	  string
+	Id         string `bson:"_id,omitempty"`
+	FirstName  string
+	LastName   string
+	Email      string
+	Avatar     string
+	Birthday   string
+	Country    string
+	Status     string
+	About      string
 }
 
 type Marker struct {
@@ -29,7 +29,8 @@ type Post struct {
 	Id        string `bson:"_id,omitempty"`
 	Owner     string
 	Text      string
-	Like	  int
+	Title     string
+	Like      int
 }
 
 func ConnectToDataBase() {
