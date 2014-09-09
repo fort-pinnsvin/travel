@@ -28,6 +28,7 @@ type Marker struct {
 type Post struct {
 	Id        string `bson:"_id,omitempty"`
 	Owner     string
+	Title     string
 	Text      string
 	Title     string
 	Like      int
