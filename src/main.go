@@ -41,6 +41,7 @@ func main() {
 	m.Get("/css/bootstrap.min.css", handlers.LoadTheme)
 	m.Post("/set_theme", handlers.SetTheme)
 	m.Post("/save_post",oauth2.LoginRequired, handlers.SavePost)
+	m.Post("/remove_post",oauth2.LoginRequired, handlers.RemovePost)
 	m.Post("/add_like",oauth2.LoginRequired, handlers.AddLike)
 	m.Run()
 }

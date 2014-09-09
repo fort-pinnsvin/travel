@@ -9,6 +9,7 @@ import (
 	"models"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -36,6 +37,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			allPost := []models.Post{}
 			for i := len(posts) - 1; i >= 0; i-- {
 				allPost = append(allPost, posts[i])
+				fmt.Printf("%v", posts[i])
 			}
 			rnd.HTML(200, "user", map[string]interface{}{
 				"auth_first_name": user_auth.FirstName,
@@ -62,12 +64,15 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 func SavePost(rnd render.Render, r *http.Request, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")
+		title := r.FormValue("title_post")
 		fmt.Println(text)
 		new_post := models.Post{}
 
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
 		new_post.Text = text
+		new_post.Title = title
+		new_post.Date = time.Now().Format("Jan 2, 2006 at 3:04pm")
 
 		models.PostCollection.Insert(&new_post)
 		rnd.Redirect("/user/" + session.Get("auth_id").(string))
@@ -82,5 +87,13 @@ func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session)
 		like += 1
 
 		res.Write([]byte(fmt.Sprintf(`{"counter": %d}`, like)))
+	}
+}
+
+func RemovePost(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		post_id := r.FormValue("id")
+		models.PostCollection.RemoveId(post_id)
+		res.Write([]byte(fmt.Sprintf(`{"error": %d}`, 0)))
 	}
 }

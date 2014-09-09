@@ -30,7 +30,7 @@ type Post struct {
 	Owner     string
 	Title     string
 	Text      string
-	Title     string
+	Date      string
 	Like      int
 }
 
