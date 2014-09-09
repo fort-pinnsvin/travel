@@ -8,7 +8,6 @@ import (
 	"labix.org/v2/mgo/bson"
 	"models"
 	"net/http"
-	"strconv"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -59,28 +58,50 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 	}
 }
 
-func SavePost(rnd render.Render, r *http.Request, session sessions.Session) {
+func SavePost(res http.ResponseWriter, rnd render.Render, r *http.Request, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")
-		fmt.Println(text)
+		title := r.FormValue("title_post")
+		fmt.Println(title)
 		new_post := models.Post{}
 
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
 		new_post.Text = text
+		new_post.Title = title
+
 
 		models.PostCollection.Insert(&new_post)
-		rnd.Redirect("/user/" + session.Get("auth_id").(string))
+		res.Write([]byte(fmt.Sprintf(`{"id_user": %s}`, session.Get("auth_id").(string))))
 	}
 }
 
 func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	like_id := r.FormValue("id")
+	q := make(bson.M)
+	q["liker"] = session.Get("auth_id").(string)
+	q["idpost"] = like_id
+	like_arr := models.LikeCollection.Find(q).Limit(10).Iter()
+	likes := []models.Like{}
+	_ = like_arr.All(&likes)
+	fmt.Println(likes)
+	status := false
 	if session.Get("auth_id") != "" {
-		like_s := r.FormValue("count_like")
-		//like_id := r.FormValue("id")
-		like, _ := strconv.Atoi(like_s)
-		like += 1
+		post := models.Post{}
+		models.PostCollection.FindId(like_id).One(&post)
+		if len(likes) == 0 {
+			like := models.Like{session.Get("auth_id").(string), like_id}
+			models.LikeCollection.Insert(&like)
+			post.Like += 1
+			status = true
+		}else{
+			models.LikeCollection.Remove(q)
+			post.Like -= 1
+			status = false
+		}
+		models.PostCollection.UpdateId(like_id,post)
 
-		res.Write([]byte(fmt.Sprintf(`{"counter": %d}`, like)))
+		res.Write([]byte(fmt.Sprintf(`{"counter": %d,"status_like": %v}`, post.Like, status)))
 	}
 }
+

@@ -30,8 +30,13 @@ type Post struct {
 	Owner     string
 	Title     string
 	Text      string
-	Title     string
 	Like      int
+}
+
+type Like struct {
+	Liker        string
+	IdPost       string
+
 }
 
 func ConnectToDataBase() {
@@ -51,4 +56,5 @@ func ConnectToDataBase() {
 	UserCollection = session.DB(database).C("users")
 	MarkerCollection = session.DB(database).C("markers")
 	PostCollection = session.DB(database).C("post")
+	LikeCollection = session.DB(database).C("like")
 }

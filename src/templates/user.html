@@ -89,24 +89,22 @@
     </div>
 
     {{if .auth_user }}
-    <form class="form-horizontal" method="post" action="/save_post">
         <fieldset>
             <div class="form-group">
                 <div class="col-lg-12">
                     <h2 style="text-align:center;">New Post</h2>
-                    <input class="form-control" id="title" type="text" value="Title...">
+                    <input class="form-control" id="title_post" type="text" name="title_post"/>
                     <br>
                     <textarea class="form-control" style="resize:none; height: 150px;" rows="3" id="text_post" name="text_post" ></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-12 pager">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" onclick="post_add()">Submit</button>
                     <button class="btn btn-default">Cancel</button>
                 </div>
             </div>
         </fieldset>
-    </form>
     {{end}}
 
 
@@ -119,13 +117,15 @@
         <p>{{$element.Text}}</p>
 
         <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">{{$element.Like}}</h4>
-        <button class="btn btn-primary btn-sm pull-right" id="like" onclick='add_like({{ $element.Id }})'>Like</button>
+        <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
+        <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
     </blockquote>
 
     {{end}}
 
-    <hr>
-    <footer>
+
+    <footer style="margin-top: 40px;">
+        <hr>
         <div class="row">
             <div class="col-lg-12">
                 <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
@@ -182,21 +182,13 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 
 
-    var post = function () {
+    var post_add = function () {
         $.ajax({
             type: "POST",
-            url: "save_post",
-            data: getParams("text_post")+getParams("title") ,
+            url: "../save_post",
+            data: getParams("text_post")+getParams("title_post"),
             success: function (msg) {
-                var rdr = JSON.parse(msg)
-                console.table(rdr)
-                if (rdr.error == 0) {
-                    var form = document.getElementById("tooltip")
-                    form.style.display = ""
-                    setInterval(function () {
-                        form.style.display = "none"
-                    }, 5000)
-                }
+                window.location.href = '/user/' + {{.auth_id}};
             }
         });
     }
@@ -215,9 +207,20 @@
                     var obj = JSON.parse(msg);
                     var d = document.getElementById("count_like-" + id);
                     d.innerHTML = obj.counter;
+                    console.log(obj.status_like)
+                    if (obj.status_like) {
+                        $("#like-" + id).hide()
+                        $("#unlike-" + id).show()
+                    }else{
+                        $("#unlike-" + id).hide()
+                        $("#like-" + id).show()
+                    }
+
+
             }
         });
     }
+
 </script>
 <script src="../js/app/tooltip.js"></script>
 </body>
