@@ -91,13 +91,11 @@
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <label for="about">About:</label>
-                                <input id="about" name="about" type="text" placeholder="{{.About}}"
-                                       class="form-control" value="{{.About}}">
+                                <label for="about">About me:</label>
+                                <textarea id="about" name="about" type="text" placeholder="{{.About}}"
+                                       class="form-control" rows="4">{{.About}}</textarea>
                             </div>
                         </div>
-
-
 
 
                         <div class="form-group">
@@ -135,8 +133,8 @@
         $.ajax({
             type: "POST",
             url: "update",
-            data: getParams("first_name") + getParams("last_name") + getParams("email")+getParams("country")+
-                  getParams("about")+getParams("birthday"),
+            data: getParams("first_name") + getParams("last_name") + getParams("email") + getParams("country") +
+                    getParams("about") + getParams("birthday"),
             success: function (msg) {
                 var rdr = JSON.parse(msg)
                 console.log(rdr)

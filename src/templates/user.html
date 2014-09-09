@@ -72,6 +72,21 @@
                 {{.country}}
             </div>
             {{end}}
+            {{if .about}}
+            <div class="well well-sm">
+                {{.about}}
+            </div>
+            {{end}}
+            {{if not .auth_user }}
+            <div class="well well-sm" id="follow_btn" style="display: none;">
+                Do you know this user?
+                <button class="btn-xs btn-primary pull-right" onclick="update_follow_status()">Follow</button>
+            </div>
+            <div class="well well-sm" id="unfollow_btn" style="display: none;">
+                Not your friend?
+                <button class="btn-xs btn-danger pull-right" onclick="update_follow_status()">Unfollow</button>
+            </div>
+            {{end}}
         </div>
 
         <div class="col-md-9">
@@ -89,38 +104,76 @@
     </div>
 
     {{if .auth_user }}
+    <form class="form-horizontal" method="post" action="/save_post" id="post_form" style="display: none">
         <fieldset>
             <div class="form-group">
                 <div class="col-lg-12">
                     <h2 style="text-align:center;">New Post</h2>
                     <input class="form-control" id="title_post" type="text" name="title_post"/>
+                    <input class="form-control" id="title" name="title_post" type="text" placeholder="Title..."
+                           required>
                     <br>
-                    <textarea class="form-control" style="resize:none; height: 150px;" rows="3" id="text_post" name="text_post" ></textarea>
+                    <textarea class="form-control" style="resize:none; height: 150px;" rows="3" id="text_post"
+                              name="text_post" required placeholder="What do you think?"></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-lg-12 pager">
                     <button type="submit" class="btn btn-primary" onclick="post_add()">Submit</button>
                     <button class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a class="btn btn-default" onclick="hide_form()">Hide</a>
                 </div>
             </div>
         </fieldset>
+    </form>
+    <div id="show_form">
+        <a class="btn btn-default" onclick="show_form()">New Post</a>
+    </div>
     {{end}}
 
+    {{if .auth_user }}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 style="text-align:center;">News</h1>
+            {{range $element := .posts }}
+            <blockquote>
+                    <button type="button" class="close" title="Remove Post" data-dismiss="alert" onclick="remove_post({{ $element.Id }})">×
+                    </button>
+                <p><strong>{{ $element.Title }}</strong></p>
 
+                <p>{{$element.Text}}</p>
+                <hr>
+                <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
+                    {{$element.Like}}</h4>
+                <button class="btn btn-primary btn-sm pull-right" id="like" onclick='add_like({{ $element.Id }})'>Like
+                </button>
+                <h5>{{$element.Date}}</h5>
+            </blockquote>
+            <br>
+            {{end}}
+        </div>
+    </div>
+    {{else}}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 style="text-align:center;">News</h1>
+            {{range $element := .posts }}
+            <blockquote>
+                <p><strong>{{ $element.Title }}</strong></p>
 
-    <h1 style="text-align:center;">News</h1>
-    {{range $element := .posts }}
-    <blockquote>
-        <p><strong>{{ $element.Title }}</strong></p>
-
-        <p>{{$element.Text}}</p>
-
-        <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">{{$element.Like}}</h4>
-        <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
-        <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
-    </blockquote>
-
+                <p>{{$element.Text}}</p>
+                <hr>
+                <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
+                    {{$element.Like}}</h4>
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                <h5>{{$element.Date}}</h5>
+            </blockquote>
+            <br>
+            {{end}}
+        </div>
+    </div>
     {{end}}
 
 
@@ -187,8 +240,11 @@
             type: "POST",
             url: "../save_post",
             data: getParams("text_post")+getParams("title_post"),
+      
             success: function (msg) {
                 window.location.href = '/user/' + {{.auth_id}};
+                var rdr = JSON.parse(msg)
+                console.table(rdr)
             }
         });
     }
@@ -216,10 +272,67 @@
                         $("#like-" + id).show()
                     }
 
-
             }
         });
     }
+
+    var remove_post = function (id) {
+        $.ajax({
+            type: "POST",
+            url: "../remove_post",
+            data: "id=" + id,
+            success: function (msg) {
+                console.table(msg)
+            }
+        });
+    }
+
+    var update_follow_status = function () {
+        $.ajax({
+            type: "GET",
+            url: "../update_follow_status",
+            data: "id={{ .id }}",
+            success: function (msg) {
+                var rdr = JSON.parse(msg)
+                console.table(rdr)
+                if (rdr.follow_status) {
+                    $("#follow_btn").hide()
+                    $("#unfollow_btn").show()
+                } else {
+                    $("#follow_btn").show()
+                    $("#unfollow_btn").hide()
+                }
+            }
+        });
+    }
+
+    var hide_form = function () {
+        $("#post_form").hide()
+        $("#show_form").show()
+    }
+
+    var show_form = function () {
+        $("#post_form").show()
+        $("#show_form").hide()
+    }
+
+    // Follow buttons
+    $.ajax({
+        type: "GET",
+        url: "../follow_status",
+        data: "id={{ .id }}",
+        success: function (msg) {
+            var rdr = JSON.parse(msg)
+            console.table(rdr)
+            if (rdr.follow_status) {
+                $("#follow_btn").hide()
+                $("#unfollow_btn").show()
+            } else {
+                $("#follow_btn").show()
+                $("#unfollow_btn").hide()
+            }
+        }
+    });
 
 </script>
 <script src="../js/app/tooltip.js"></script>

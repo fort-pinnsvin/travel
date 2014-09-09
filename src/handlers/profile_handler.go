@@ -8,6 +8,8 @@ import (
 	"labix.org/v2/mgo/bson"
 	"models"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -35,6 +37,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			allPost := []models.Post{}
 			for i := len(posts) - 1; i >= 0; i-- {
 				allPost = append(allPost, posts[i])
+				fmt.Printf("%v", posts[i])
 			}
 			rnd.HTML(200, "user", map[string]interface{}{
 				"auth_first_name": user_auth.FirstName,
@@ -49,7 +52,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 				"auth_user":       b,
 				"country":         user_auth.Country,
 				"birthday":        user_auth.Birthday,
-				"about":           user_auth.About,
+				"about":           user.About,
 				"posts":           allPost,
 			})
 		}
@@ -62,13 +65,14 @@ func SavePost(res http.ResponseWriter, rnd render.Render, r *http.Request, sessi
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")
 		title := r.FormValue("title_post")
-		fmt.Println(title)
 		new_post := models.Post{}
 
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
 		new_post.Text = text
 		new_post.Title = title
+		new_post.Date = time.Now().Format(models.Layout)
+		new_post.Nano = time.Now().Nanosecond()
 
 
 		models.PostCollection.Insert(&new_post)
@@ -105,3 +109,45 @@ func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session)
 	}
 }
 
+func RemovePost(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		post_id := r.FormValue("id")
+		models.PostCollection.RemoveId(post_id)
+		res.Write([]byte(fmt.Sprintf(`{"error": %d}`, 0)))
+	}
+}
+
+func GetFollowStatus(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		my_id := session.Get("auth_id").(string)
+		user_id := r.FormValue("id")
+		query := make(bson.M)
+		query["follower"] = my_id
+		query["following"] = user_id
+		count,_ := models.FollowCollection.Find(query).Count()
+		status := count > 0
+		res.Write([]byte(fmt.Sprintf(`{"follow_status": %v}`, status)))
+	}
+}
+
+func UpdateFollowStatus(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		my_id := session.Get("auth_id").(string)
+		user_id := r.FormValue("id")
+		query := make(bson.M)
+		query["follower"] = my_id
+		query["following"] = user_id
+		count,_ := models.FollowCollection.Find(query).Count()
+		status := count > 0
+		if status {
+			models.FollowCollection.Remove(query)
+		} else {
+			follow_edge := models.FollowEdge{}
+			follow_edge.Id = models.GenerateId()
+			follow_edge.Follower = my_id
+			follow_edge.Following = user_id
+			models.FollowCollection.Insert(&follow_edge)
+		}
+		res.Write([]byte(fmt.Sprintf(`{"follow_status": %v}`, !status)))
+	}
+}
