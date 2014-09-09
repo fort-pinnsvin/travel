@@ -125,7 +125,7 @@
             <h1 style="text-align:center;">News</h1>
             {{range $element := .posts }}
             <blockquote>
-                    <button type="button" class="close" title="Remove Post" onclick="remove_post({{ $element.Id }})">×
+                    <button type="button" class="close" title="Remove Post" data-dismiss="alert" onclick="remove_post({{ $element.Id }})">×
                     </button>
                 <p><strong>{{ $element.Title }}</strong></p>
 
