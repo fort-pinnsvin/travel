@@ -43,5 +43,8 @@ func main() {
 	m.Post("/save_post",oauth2.LoginRequired, handlers.SavePost)
 	m.Post("/remove_post",oauth2.LoginRequired, handlers.RemovePost)
 	m.Post("/add_like",oauth2.LoginRequired, handlers.AddLike)
+	m.Get("/follow_status", oauth2.LoginRequired, handlers.GetFollowStatus)
+	m.Get("/update_follow_status", oauth2.LoginRequired, handlers.UpdateFollowStatus)
+	m.Get("/feed", oauth2.LoginRequired, handlers.FeedHandler)
 	m.Run()
 }

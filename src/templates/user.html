@@ -77,6 +77,16 @@
                 {{.about}}
             </div>
             {{end}}
+            {{if not .auth_user }}
+            <div class="well well-sm" id="follow_btn" style="display: none;">
+                Do you know this user?
+                <button class="btn-xs btn-primary pull-right" onclick="update_follow_status()">Follow</button>
+            </div>
+            <div class="well well-sm" id="unfollow_btn" style="display: none;">
+                Not your friend?
+                <button class="btn-xs btn-danger pull-right" onclick="update_follow_status()">Unfollow</button>
+            </div>
+            {{end}}
         </div>
 
         <div class="col-md-9">
@@ -263,6 +273,25 @@
         });
     }
 
+    var update_follow_status = function () {
+        $.ajax({
+            type: "GET",
+            url: "../update_follow_status",
+            data: "id={{ .id }}",
+            success: function (msg) {
+                var rdr = JSON.parse(msg)
+                console.table(rdr)
+                if (rdr.follow_status) {
+                    $("#follow_btn").hide()
+                    $("#unfollow_btn").show()
+                } else {
+                    $("#follow_btn").show()
+                    $("#unfollow_btn").hide()
+                }
+            }
+        });
+    }
+
     var hide_form = function () {
         $("#post_form").hide()
         $("#show_form").show()
@@ -272,6 +301,25 @@
         $("#post_form").show()
         $("#show_form").hide()
     }
+
+    // Follow buttons
+    $.ajax({
+        type: "GET",
+        url: "../follow_status",
+        data: "id={{ .id }}",
+        success: function (msg) {
+            var rdr = JSON.parse(msg)
+            console.table(rdr)
+            if (rdr.follow_status) {
+                $("#follow_btn").hide()
+                $("#unfollow_btn").show()
+            } else {
+                $("#follow_btn").show()
+                $("#unfollow_btn").hide()
+            }
+        }
+    });
+
 </script>
 <script src="../js/app/tooltip.js"></script>
 </body>
