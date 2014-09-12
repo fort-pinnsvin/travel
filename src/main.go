@@ -46,5 +46,6 @@ func main() {
 	m.Get("/follow_status", oauth2.LoginRequired, handlers.GetFollowStatus)
 	m.Get("/update_follow_status", oauth2.LoginRequired, handlers.UpdateFollowStatus)
 	m.Get("/feed", oauth2.LoginRequired, handlers.FeedHandler)
+	m.Post("/avatar/upload", oauth2.LoginRequired, handlers.UploadAvatar)
 	m.Run()
 }
