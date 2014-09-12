@@ -15,6 +15,7 @@ type User struct {
 	Country    string
 	Status     string
 	About      string
+	Language   string
 }
 
 type Marker struct {
