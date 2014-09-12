@@ -54,7 +54,13 @@
                 <hr>
                 <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
                     {{$element.Like}}</h4>
-                <button class="btn btn-primary btn-sm pull-right" id="like" onclick='add_like({{ $element.Id }})'>Like
+                {{ if not $element.IsLiked }}
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                {{ else }}
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Like</button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                {{end}}
                 </button>
                 <h5>
                     <img src="{{$element.OwnerUser.Avatar}}" height="18px;" style="margin-top: -5px;"/>&nbsp;
@@ -83,3 +89,32 @@
 
 </body>
 </html>
+
+        <script>
+            var getParams = function (id) {
+                return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
+            }
+
+            var add_like = function (id) {
+                $.ajax({
+                    type: "POST",
+                    url: "../add_like",
+                    data: getParams("count_like") + "&id=" + id,
+                    success: function (msg) {
+                        console.table(msg)
+                        var obj = JSON.parse(msg);
+                        var d = document.getElementById("count_like-" + id);
+                        d.innerHTML = obj.counter;
+                        console.log(obj.status_like)
+                        if (obj.status_like) {
+                            $("#like-" + id).hide()
+                            $("#unlike-" + id).show()
+                        }else{
+                            $("#unlike-" + id).hide()
+                            $("#like-" + id).show()
+                        }
+
+                    }
+                });
+            }
+        </script>

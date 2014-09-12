@@ -22,6 +22,7 @@ func FeedHandler(rnd render.Render, params martini.Params, session sessions.Sess
 		models.PostCollection.Find(bson.M{"owner": id}).All(&allPosts)
 		for i := len(allPosts) - 1; i >= 0; i-- {
 			allPosts[i].OwnerUser = user
+			allPosts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), allPosts[i].Id)
 		}
 		models.FollowCollection.Find(bson.M{"follower": id}).All(&followingList)
 		for _, element := range followingList {
@@ -32,9 +33,13 @@ func FeedHandler(rnd render.Render, params martini.Params, session sessions.Sess
 				user := models.User{}
 				models.UserCollection.FindId(element.Following).One(&user)
 				posts[i].OwnerUser = user
+				posts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), posts[i].Id)
 				allPosts = append(allPosts, posts[i])
 			}
 		}
+
+
+
 		sort.Sort(models.ByPost(allPosts))
 
 		rnd.HTML(200, "feed", map[string]interface{}{"user": user, "posts": allPosts, "following": followingList})
