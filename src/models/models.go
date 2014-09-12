@@ -35,6 +35,7 @@ type Post struct {
 	Nano      int
 	Like      int
 	OwnerUser User
+	IsLiked bool
 }
 
 type Like struct {

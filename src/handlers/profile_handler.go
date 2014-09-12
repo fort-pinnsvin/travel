@@ -35,6 +35,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 		if err := iter.All(&posts); err == nil {
 			allPost := []models.Post{}
 			for i := len(posts) - 1; i >= 0; i-- {
+				posts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), posts[i].Id)
 				allPost = append(allPost, posts[i])
 				fmt.Printf("%v", posts[i])
 			}
@@ -49,8 +50,8 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 				"avatar":          user.Avatar,
 				"id":              user.Id,
 				"auth_user":       b,
-				"country":         user_auth.Country,
-				"birthday":        user_auth.Birthday,
+				"country":         user.Country,
+				"birthday":        user.Birthday,
 				"about":           user.About,
 				"posts":           allPost,
 			})
@@ -106,6 +107,14 @@ func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session)
 
 		res.Write([]byte(fmt.Sprintf(`{"counter": %d,"status_like": %v}`, post.Like, status)))
 	}
+}
+
+func IsPostLiked(my_id string, post_id string) bool {
+	query := make(bson.M)
+	query["liker"] = my_id
+	query["idpost"] = post_id
+	count,_ := models.LikeCollection.Find(query).Count()
+	return count > 0
 }
 
 func RemovePost(res http.ResponseWriter, r *http.Request, session sessions.Session) {
