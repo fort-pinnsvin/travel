@@ -28,12 +28,13 @@ function loadMarkers(map) {
                     position: new google.maps.LatLng(parseFloat(el.Latitude), parseFloat(el.Longitude)),
                     map: map,
                     title: el.Name,
-                    id: el.Id
+                    id: el.Id,
+                    clickListener: function () {
+                        window.location.href = '/album/' + this.id;
+                    }
                 })
 
-                google.maps.event.addListener(marker, 'click', function() {
-                    window.location.href = '/album/' + el.Id;
-                });
+                google.maps.event.addListener(marker, 'click', marker.clickListener);
             }
         }
     });
@@ -53,7 +54,7 @@ function placeMarker(location) {
                     map: map,
                     title: "New Album"
                 });
-                google.maps.event.addListener(marker, 'click', function() {
+                google.maps.event.addListener(marker, 'click', function () {
                     window.location.href = '/album/' + result.id;
                 });
             }

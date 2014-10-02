@@ -42,10 +42,13 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 
 		fmt.Fprintf(w, "File uploaded successfully : ")
 		fmt.Fprintf(w, header.Filename)
-		width, height := getImageDimension("avatar/" + id + "/" + header.Filename)
+		filename := "avatar/" + id + "/" + header.Filename;
+		width, height := getImageDimension(filename)
 		if width != height {
 			return "Image not square"
 		}
+
+		session.Set("avatar", filename)
 		return "OK"
 	}
 	return "no auth"

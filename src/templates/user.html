@@ -106,7 +106,7 @@
     </div>
 
     {{if .auth_user }}
-    <form class="form-horizontal" method="post"  id="post_form" style="display: none">
+    <form class="form-horizontal" method="post" id="post_form" style="display: none">
         <fieldset>
             <div class="form-group">
                 <div class="col-lg-12">
@@ -138,8 +138,9 @@
             <h1 style="text-align:center;">News</h1>
             {{range $element := .posts }}
             <blockquote>
-                    <button type="button" class="close" title="Remove Post" data-dismiss="alert" onclick="remove_post({{ $element.Id }})">×
-                    </button>
+                <button type="button" class="close" title="Remove Post" data-dismiss="alert"
+                        onclick="remove_post({{ $element.Id }})">×
+                </button>
                 <p><strong>{{ $element.Title }}</strong></p>
 
                 <p>{{$element.Text}}</p>
@@ -147,11 +148,19 @@
                 <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
                     {{$element.Like}}</h4>
                 {{ if not $element.IsLiked }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}"
+                        onclick='add_like({{ $element.Id }})'>Like
+                </button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none"
+                        onclick='add_like({{ $element.Id }})'>Unlike
+                </button>
                 {{ else }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Like</button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none"
+                        onclick='add_like({{ $element.Id }})'>Like
+                </button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}"
+                        onclick='add_like({{ $element.Id }})'>Unlike
+                </button>
                 {{end}}
                 <h5>{{$element.Date}}</h5>
             </blockquote>
@@ -172,11 +181,19 @@
                 <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
                     {{$element.Like}}</h4>
                 {{ if not $element.IsLiked }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}"
+                        onclick='add_like({{ $element.Id }})'>Like
+                </button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none"
+                        onclick='add_like({{ $element.Id }})'>Unlike
+                </button>
                 {{ else }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Like</button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none"
+                        onclick='add_like({{ $element.Id }})'>Like
+                </button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}"
+                        onclick='add_like({{ $element.Id }})'>Unlike
+                </button>
                 {{end}}
                 <h5>{{$element.Date}}</h5>
             </blockquote>
@@ -249,14 +266,19 @@
         $.ajax({
             type: "POST",
             url: "../save_post",
-            data: getParams("text_post")+getParams("title_post"),
-      
+            data: getParams("text_post") + getParams("title_post"),
+
             success: function (msg) {
-                window.location.href = '/user/' + {{.auth_id}};
-                var rdr = JSON.parse(msg)
-                console.table(rdr)
-            }
-        });
+                window.location.href = '/user/' + {
+                {.
+                    auth_id
+                }
+            };
+        var rdr = JSON.parse(msg)
+        console.table(rdr)
+    }
+    })
+    ;
     }
 
     var getParams = function (id) {
@@ -270,17 +292,17 @@
             data: getParams("count_like") + "&id=" + id,
             success: function (msg) {
                 console.table(msg)
-                    var obj = JSON.parse(msg);
-                    var d = document.getElementById("count_like-" + id);
-                    d.innerHTML = obj.counter;
-                    console.log(obj.status_like)
-                    if (obj.status_like) {
-                        $("#like-" + id).hide()
-                        $("#unlike-" + id).show()
-                    }else{
-                        $("#unlike-" + id).hide()
-                        $("#like-" + id).show()
-                    }
+                var obj = JSON.parse(msg);
+                var d = document.getElementById("count_like-" + id);
+                d.innerHTML = obj.counter;
+                console.log(obj.status_like)
+                if (obj.status_like) {
+                    $("#like-" + id).hide()
+                    $("#unlike-" + id).show()
+                } else {
+                    $("#unlike-" + id).hide()
+                    $("#like-" + id).show()
+                }
 
             }
         });
@@ -289,7 +311,7 @@
     var remove_post = function (id) {
         $.ajax({
             type: "POST",
-            url: "../like_status",
+            url: "../remove_post",
             data: "id=" + id,
             success: function (msg) {
                 console.table(msg)
