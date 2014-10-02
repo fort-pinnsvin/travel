@@ -20,14 +20,14 @@ function loadMarkers(map) {
         url: "markers",
         success: function (msg) {
             array = JSON.parse(msg)
-            console.log(array)
+            console.table(array)
 
             for (var i = 0; i < array.length; i++) {
                 var el = array[i]
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(parseFloat(el.Latitude), parseFloat(el.Longitude)),
                     map: map,
-                    title: el.Name,
+                    title: el.Id,
                     id: el.Id
                 })
 
