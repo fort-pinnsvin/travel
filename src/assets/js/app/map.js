@@ -32,11 +32,11 @@ function loadMarkers(map) {
                     clickListener: function () {
                         window.location.href = '/album/' + this.id;
                     }
-
+                });
                 google.maps.event.addListener(marker, 'click', marker.clickListener);
+
             }
-        }
-    });
+        }});
 }
 
 function placeMarker(location) {
