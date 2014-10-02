@@ -20,7 +20,7 @@ function loadMarkers(map) {
         url: "markers",
         success: function (msg) {
             array = JSON.parse(msg)
-            console.log(array)
+            console.table(array)
 
             for (var i = 0; i < array.length; i++) {
                 var el = array[i]
@@ -32,7 +32,6 @@ function loadMarkers(map) {
                     clickListener: function () {
                         window.location.href = '/album/' + this.id;
                     }
-                })
 
                 google.maps.event.addListener(marker, 'click', marker.clickListener);
             }
