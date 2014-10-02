@@ -269,16 +269,11 @@
             data: getParams("text_post") + getParams("title_post"),
 
             success: function (msg) {
-                window.location.href = '/user/' + {
-                {.
-                    auth_id
-                }
-            };
-        var rdr = JSON.parse(msg)
-        console.table(rdr)
-    }
-    })
-    ;
+                window.location.href = '/user/' + {{.auth_id }};
+                var rdr = JSON.parse(msg)
+                console.table(rdr)
+            }
+        });
     }
 
     var getParams = function (id) {
