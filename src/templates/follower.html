@@ -46,7 +46,7 @@
     <div class="row">
         <h2>Following : </h2>
         {{range $element := .follower }}
-        <div class="col-xs-6 col-md-3">
+        <div class="col-xs-6 col-md-2">
             <a href="/user/{{ $element.Id }}" class="thumbnail">
                 <img  src="{{ $element.Avatar }}" alt="...">
             </a>
@@ -59,7 +59,7 @@
     <div class="row">
         <h2>Follower : </h2>
         {{range $element := .following }}
-        <div class="col-xs-6 col-md-3">
+        <div class="col-xs-6 col-md-2">
             <a href="/user/{{ $element.Id }}" class="thumbnail">
                 <img src="{{ $element.Avatar }}" alt="...">
             </a>
