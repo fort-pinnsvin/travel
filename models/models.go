@@ -50,7 +50,7 @@ type ByPost []Post
 
 func (a ByPost) Len() int { return len(a) }
 func (a ByPost) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-func (a ByPost) Less(i, j int) bool { return a[i].Nano < a[j].Nano }
+func (a ByPost) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
 
 type FollowEdge struct {
 	Id        string `bson:"_id,omitempty"`
