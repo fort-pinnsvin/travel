@@ -1,1 +1,1 @@
-web: Travel
+web: travel

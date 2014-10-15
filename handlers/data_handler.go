@@ -9,7 +9,7 @@ import (
 	"github.com/martini-contrib/sessions"
 	"io/ioutil"
 	"log"
-	"github.com/FortPinnsvin/Travel/models"
+	"github.com/fort-pinnsvin/travel/models"
 	"net/http"
 )
 

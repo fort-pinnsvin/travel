@@ -5,7 +5,7 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
-	"github.com/FortPinnsvin/Travel/models"
+	"github.com/fort-pinnsvin/travel/models"
 	"sort"
 )
 
