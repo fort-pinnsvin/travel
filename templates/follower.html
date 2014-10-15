@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Search: {{ .query }}</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../">Travel</a>
+        <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%"
+                                                                 style="margin-top:-5px;"/>
+            {{ .user.FirstName }} {{ .user.LastName}}</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="/following">Following</a></li>
+            <li><a href="/feed">Feed</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Log Out!</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" action="../search" method="get">
+            <input type="text" class="form-control col-lg-8" placeholder="Search User" name="q">
+        </form>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <h2>Following : </h2>
+        {{range $element := .follower }}
+        <div class="col-xs-6 col-md-2">
+            <a href="/user/{{ $element.Id }}" class="thumbnail">
+                <img  src="{{ $element.Avatar }}" alt="...">
+            </a>
+            <p class="text-center" ><a href="/user/{{ $element.Id }}">{{ $element.FirstName }} {{ $element.LastName}}</a></p>
+        </div>
+
+        {{end}}
+    </div>
+    <hr>
+    <div class="row">
+        <h2>Follower : </h2>
+        {{range $element := .following }}
+        <div class="col-xs-6 col-md-2">
+            <a href="/user/{{ $element.Id }}" class="thumbnail">
+                <img src="{{ $element.Avatar }}" alt="...">
+            </a>
+            <p class="text-center" ><a href="/user/{{ $element.Id }}">{{ $element.FirstName }} {{ $element.LastName}}</a></p>
+        </div>
+
+        {{end}}
+    </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                    Tsyrkunov</a>.</p>
+            </div>
+        </div>
+
+    </footer>
+
+</div>
+
+</body>
+</html>
