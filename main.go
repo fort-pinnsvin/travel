@@ -6,8 +6,8 @@ import (
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"Travel/handlers"
-	"Travel/models"
+	"github.com/FortPinnsvin/Travel/models"
+	"github.com/FortPinnsvin/Travel/handlers"
 )
 
 func main() {

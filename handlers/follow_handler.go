@@ -4,8 +4,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-
-	"models"
+	"github.com/FortPinnsvin/Travel/models"
 	"labix.org/v2/mgo/bson"
 	"fmt"
 )

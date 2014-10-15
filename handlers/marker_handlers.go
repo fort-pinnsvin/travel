@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"github.com/martini-contrib/oauth2"
 	"labix.org/v2/mgo/bson"
-	"models"
+	"github.com/FortPinnsvin/Travel/models"
 	"encoding/json"
 	"fmt"
 )

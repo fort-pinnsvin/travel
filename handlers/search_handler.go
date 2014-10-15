@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"models"
+	"github.com/FortPinnsvin/Travel/models"
 	"github.com/martini-contrib/sessions"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
