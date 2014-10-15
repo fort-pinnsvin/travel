@@ -2,7 +2,7 @@
 	"ImportPath": "github.com/fort-pinnsvin/travel",
 	"GoVersion": "go1.3",
 	"Packages": [
-		"./"
+		"./..."
 	],
 	"Deps": [
 		{
@@ -54,6 +54,10 @@
 		{
 			"ImportPath": "github.com/oxtoacart/bpool",
 			"Rev": "0f78ff9152c03745d1a47c9023af1b424e202c07"
+		},
+		{
+			"ImportPath": "github.com/robfig/config",
+			"Rev": "09efbd4617d1beb41b72f6668403b1e383b6a4cf"
 		},
 		{
 			"ImportPath": "labix.org/v2/mgo",
