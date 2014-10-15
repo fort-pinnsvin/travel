@@ -20,7 +20,7 @@ func main() {
 	m.Use(oauth2.Google(&gooauth2.Options{
 		ClientID:     utils.GetValue("CLIENT_ID", "903364406910-m1b4j2vjkfd3qj1npusv6p2qk38fqb3q"),
 		ClientSecret: utils.GetValue("CLIENT_SECRET", "iofaFDfJuJRkPTjPu4NuHx61"),
-		RedirectURL:  utils.GetValue("REDIRECT", "http://travel-wth.herokuapp.com/oauth2callback"),
+		RedirectURL:  utils.GetValue("REDIRECT", "http://localhost:3000/oauth2callback"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.profile"},
 	}))
 	m.Use(render.Renderer(render.Options{
