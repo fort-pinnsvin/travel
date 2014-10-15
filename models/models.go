@@ -2,7 +2,6 @@ package models
 
 import (
 	"labix.org/v2/mgo"
-	"os"
 	"github.com/fort-pinnsvin/travel/utils"
 )
 
