@@ -8,19 +8,19 @@ import (
 	"github.com/martini-contrib/sessions"
 	"github.com/fort-pinnsvin/travel/handlers"
 	"github.com/fort-pinnsvin/travel/models"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func main() {
 	models.ConnectToDataBase()
 	store := sessions.NewCookieStore([]byte("yLiCQYG7CAflDavqGH461IO0MHp7TEbpg6TwHBWdJzNwYod1i5ZTbrIF5bEoO3oP"))
 	m := martini.Classic()
-
 	m.Use(martini.Static("assets"))
 	m.Use(sessions.Sessions("auth", store))
 	m.Use(oauth2.Google(&gooauth2.Options{
-		ClientID:     "903364406910-m1b4j2vjkfd3qj1npusv6p2qk38fqb3q",
-		ClientSecret: "iofaFDfJuJRkPTjPu4NuHx61",
-		RedirectURL:  "http://travel-wth.herokuapp.com/oauth2callback",
+		ClientID:     utils.GetValue("CLIENT_ID", "903364406910-m1b4j2vjkfd3qj1npusv6p2qk38fqb3q"),
+		ClientSecret: utils.GetValue("CLIENT_SECRET", "iofaFDfJuJRkPTjPu4NuHx61"),
+		RedirectURL:  utils.GetValue("REDIRECT", "http://travel-wth.herokuapp.com/oauth2callback"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.profile"},
 	}))
 	m.Use(render.Renderer(render.Options{

@@ -3,6 +3,7 @@ package models
 import (
 	"labix.org/v2/mgo"
 	"os"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 type User struct {
@@ -59,14 +60,8 @@ type FollowEdge struct {
 }
 
 func ConnectToDataBase() {
-	url := os.Getenv("DB_URL")
-	if url == "" {
-		url = "localhost"
-	}
-	database := os.Getenv("DB")
-	if database == "" {
-		database = "travel"
-	}
+	url := utils.GetValue("DB_URL", "localhost")
+	database := utils.GetValue("DB", "travel")
 
 	session, err := mgo.Dial(url)
 	if err != nil {
