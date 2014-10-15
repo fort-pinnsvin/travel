@@ -72,7 +72,7 @@ func SavePost(res http.ResponseWriter, rnd render.Render, r *http.Request, sessi
 		new_post.Text = text
 		new_post.Title = title
 		new_post.Date = time.Now().Format(models.Layout)
-		new_post.Nano = time.Now().Nanosecond()
+		new_post.Nano = time.Now().Unix()
 
 
 		models.PostCollection.Insert(&new_post)

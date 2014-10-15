@@ -32,7 +32,7 @@ type Post struct {
 	Title     string
 	Text      string
 	Date      string
-	Nano      int
+	Nano      int64
 	Like      int
 	OwnerUser User
 	IsLiked bool
