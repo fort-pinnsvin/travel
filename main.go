@@ -20,7 +20,7 @@ func main() {
 	m.Use(oauth2.Google(&gooauth2.Options{
 		ClientID:     "903364406910-m1b4j2vjkfd3qj1npusv6p2qk38fqb3q",
 		ClientSecret: "iofaFDfJuJRkPTjPu4NuHx61",
-		RedirectURL:  "http://localhost:3000/oauth2callback",
+		RedirectURL:  "http://travel-wth.herokuapp.com/oauth2callback",
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.profile"},
 	}))
 	m.Use(render.Renderer(render.Options{
