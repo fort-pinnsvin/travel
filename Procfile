@@ -1,1 +1,1 @@
-web: travel-wth
+web: travel
