@@ -1,6 +1,9 @@
 {
 	"ImportPath": "github.com/fort-pinnsvin/travel",
 	"GoVersion": "go1.3",
+	"Packages": [
+		"./"
+	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/boj/redistore",
