@@ -99,16 +99,18 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-10 col-md-offset-1">
-                                <label for="lang">Choose preferred language:</label>
-                                <select class="form-control pull-right" id="lang" name="lang" style="width: 100px;">
-                                    <option>English</option>
-                                    <option>Russian</option>
-                                </select>
+                        <form action="/avatar/upload" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <div class="col-md-12 col-md-offset-2">
+                                    <div class="col-md-6">
+                                    <input type="file" class="text-center btn btn-info" name="file"
+                                           id="file"></div>
+                                    <div class="col-md-6">
+                                    <input type="submit" class="btn btn-info col-md-offset-1" name="submit" value="Update avatar">
+                                        </div>
+                                </div>
                             </div>
-                        </div>
-
+                        </form>
 
                         <div class="form-group">
                             <div class="col-md-12 text-center">
@@ -119,6 +121,7 @@
                                 </a>
                             </div>
                         </div>
+
                     </fieldset>
                 </div>
             </div>
@@ -164,4 +167,9 @@
     var getParams = function (id) {
         return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
     }
+
+
+
+
+
 </script>

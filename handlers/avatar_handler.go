@@ -10,26 +10,32 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"github.com/fort-pinnsvin/travel/models"
+	"path/filepath"
+	"github.com/fort-pinnsvin/travel/utils"
+	"github.com/martini-contrib/render"
 )
 
-func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Request) string {
+func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Request, rnd render.Render) {
 	if session.Get("auth_id") != "" {
 		id := session.Get("auth_id").(string)
 		file, header, err := r.FormFile("file") // the FormFile function takes in the POST input id file
 		defer file.Close()
 
 		if err != nil {
-			fmt.Fprintln(w, err)
-			return "Error"
+			rnd.Redirect("/edit?fail")
+			return
 		}
 
-		if os.MkdirAll("avatar/"+id+"/", 0777) != nil {
+		if os.MkdirAll("assets/avatar/"+id+"/", 0777) != nil {
 			panic("Unable to create directory for tagfile!" + err.Error())
 		}
-		out, err := os.Create("avatar/" + id + "/" + header.Filename)
+		file_id := models.GenerateId()
+		extension := filepath.Ext(header.Filename)
+		out, err := os.Create("assets/avatar/" + id + "/" + file_id + extension)
 		if err != nil {
-			fmt.Fprintf(w, "Unable to create the file for writing. Check your write access privilege")
-			return "Error"
+			rnd.Redirect("/edit?fail")
+			return
 		}
 
 		defer out.Close()
@@ -40,18 +46,23 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 			fmt.Fprintln(w, err)
 		}
 
-		fmt.Fprintf(w, "File uploaded successfully : ")
-		fmt.Fprintf(w, header.Filename)
-		filename := "avatar/" + id + "/" + header.Filename
+		filename := "assets/avatar/" + id + "/" + file_id + extension
 		width, height := getImageDimension(filename)
 		if width != height {
-			return "Image not square"
+			os.Remove(filename)
+			rnd.Redirect("/edit?avatar=not_square")
+			return
 		}
 
-		session.Set("avatar", filename)
-		return "OK"
+		user := &models.User{}
+		models.UserCollection.FindId(session.Get("auth_id")).One(&user)
+		user.Avatar = "//" +utils.GetValue("WWW", "localhost:3000") + "/avatar/" + id + "/" + file_id + extension
+		models.UserCollection.UpdateId(session.Get("auth_id"), user)
+		session.Set("avatar",  "//" +utils.GetValue("WWW", "localhost:3000") + "/avatar/" + id + "/" + file_id + extension)
+		rnd.Redirect("/edit?avatar=ok")
+		return
 	}
-	return "no auth"
+	rnd.Redirect("/edit?avatar=fail")
 }
 
 func getImageDimension(imagePath string) (int, int) {

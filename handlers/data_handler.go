@@ -25,6 +25,7 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 	if err != nil {
 		log.Fatal(err)
 	}
+	redirectUrl := "/"
 	var dat map[string]string
 	user := &models.User{}
 	if err := json.Unmarshal(robots, &dat); err == nil {
@@ -33,17 +34,18 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		user.LastName = string(dat["family_name"])
 		user.Email = string("")
 		user.Avatar = string(dat["picture"])
-	}
-	findUser := &models.User{}
-	models.UserCollection.FindId(user.Id).One(&findUser)
-	fmt.Println(findUser)
 
-	redirectUrl := "/"
-	if findUser.Id == "" {
-		models.UserCollection.Insert(&user)
-		redirectUrl = "/?newbie"
-	}
+		findUser := &models.User{}
+		models.UserCollection.FindId(user.Id).One(&findUser)
+		fmt.Println(findUser)
 
+		if findUser.Id == "" {
+			models.UserCollection.Insert(&user)
+			redirectUrl = "/?newbie"
+		} else {
+			user = findUser
+		}
+	}
 	session.Set("auth_id", user.Id)
 	session.Set("first_name", user.FirstName)
 	session.Set("last_name", user.LastName)
