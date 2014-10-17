@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="navbar-static-top.css" rel="stylesheet">
+    <link href="../css/navbar-static-top.css" rel="stylesheet">
+    <link href="../css/map.css" rel="stylesheet">
     <title>{{ .first_name}} {{.last_name}} - User Profile</title>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,15 +24,22 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="../">Travel</a>
-        <a class="navbar-brand" href="/user/{{ .auth_id }}"><img src="{{ .auth_avatar }}" height="150%"
-                                                                 style="margin-top:-5px;"/>
-            {{ .auth_first_name }} {{ .auth_last_name }}</a>
+        <a class="navbar-brand" href="../">yo-journey</a>
     </div>
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
+            {{if .auth_user }}
+            <li class="active"><a class="navbar-brand" href="/user/{{ .auth_id }}"><img src="{{ .auth_avatar }}" height="150%"
+                                                                         style="margin-top:-5px;"/>
+                {{ .auth_first_name }} {{ .auth_last_name }}</a></li>
+            {{else}}
+            <li><a class="navbar-brand" href="/user/{{ .auth_id }}"><img src="{{ .auth_avatar }}" height="150%"
+                                                                                        style="margin-top:-5px;"/>
+                {{ .auth_first_name }} {{ .auth_last_name }}</a></li>
+            <li class="active"><a href="#">{{.first_name}}'s profile </a></li>
+            {{end}}
             <li><a href="/">Home</a></li>
-            <li><a href="/following">Following</a></li>
+            <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -96,7 +104,7 @@
             <div class="form-group">
                 <div class="alert alert-dismissable alert-info" style="display:none;" id="tooltip">
                     <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>Hey You! Do you know how to use Travel?</strong> Zoom and move map center to necessary
+                    <strong>Hey You! Do you know how to use yo-journey?</strong> Zoom and move map center to necessary
                     place.
                     Click on free space to create album. Click on marker to edit and watch existing album.
                 </div>
@@ -212,7 +220,7 @@
         <hr>
         <div class="row">
             <div class="col-lg-12">
-                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
             </div>
         </div>
@@ -229,19 +237,34 @@
     function initialize() {
         var mapProp = {
             center: new google.maps.LatLng(51.508742, -0.120850),
-            zoom: 5,
+            zoom: 2,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         loadMarkers(map)
     }
 
+
+    function getInfoWindow(name, desc, id) {
+        var result = '<div id="content" style="color: black; width: 200px">'+
+                           '<div id="siteNotice">'+
+                           '</div>'+
+                           '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' +name + '</h1>'+
+                           '<div id="bodyContent">'+
+                           '<p>' + (desc || '') + '</p>'+
+                           '<p><a href="/album/' +id + '">'+
+                           'Open album...</a></p>'+
+                           '</div>'+
+                           '</div>';
+
+        return result;
+    }
+
     function loadMarkers(map) {
         var array = [];
         $.ajax({
             type: "GET",
-            url: "../markers",
-            data: "id={{ .id }}",
+            url: "../markers?id={{ .id }}",
             success: function (msg) {
                 array = JSON.parse(msg)
                 console.table(array)
@@ -252,19 +275,22 @@
                         position: new google.maps.LatLng(parseFloat(el.Latitude), parseFloat(el.Longitude)),
                         map: map,
                         title: el.Name,
-                        id: el.Id
-                    })
-
-                    google.maps.event.addListener(marker, 'click', function () {
-                        window.location.href = '/album/' + el.Id;
+                        id: el.Id,
+                        infoWindow: new google.maps.InfoWindow({
+                           content: getInfoWindow(el.Name, el.Description, el.Id)
+                        }),
+                        clickListener: function() {
+                            this.infoWindow.open(map, this);
+                        }
                     });
+
+                    google.maps.event.addListener(marker, 'click', marker.clickListener);
+
                 }
-            }
-        });
+            }});
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
-
 
     var post_add = function () {
         $.ajax({

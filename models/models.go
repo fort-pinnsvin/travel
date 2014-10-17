@@ -24,6 +24,7 @@ type Marker struct {
 	Name      string
 	Latitude  string
 	Longitude string
+	Description string
 }
 
 type Post struct {
