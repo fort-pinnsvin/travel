@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"github.com/martini-contrib/sessions"
-	"net/http"
-	"github.com/martini-contrib/oauth2"
-	"labix.org/v2/mgo/bson"
-	"github.com/fort-pinnsvin/travel/models"
 	"encoding/json"
 	"fmt"
+	"github.com/fort-pinnsvin/travel/models"
+	"github.com/martini-contrib/oauth2"
+	"github.com/martini-contrib/sessions"
+	"labix.org/v2/mgo/bson"
+	"net/http"
 )
 
 func GetMarkers(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session) {

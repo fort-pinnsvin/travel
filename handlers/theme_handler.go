@@ -1,18 +1,18 @@
 package handlers
 
 import (
+	"fmt"
+	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"net/http"
 	"os"
-	"fmt"
-	"github.com/martini-contrib/render"
 )
 
 func LoadTheme(res http.ResponseWriter, session sessions.Session) {
 	fi, _ := os.Open("assets/css/bootstrap.css")
 	if session.Get("theme") == "White" {
 		fi, _ = os.Open("assets/css/w_bootstrap.mi.css")
-	} else  {
+	} else {
 		fi, _ = os.Open("assets/css/b_bootstrap.mi.css")
 	}
 

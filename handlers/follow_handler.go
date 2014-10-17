@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"fmt"
+	"github.com/fort-pinnsvin/travel/models"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/fort-pinnsvin/travel/models"
 	"labix.org/v2/mgo/bson"
-	"fmt"
 )
 
 func FollowingHandler(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -49,6 +49,6 @@ func FollowingHandler(rnd render.Render, params martini.Params, session sessions
 				following_user = append(following_user, user)
 			}
 		}
-		rnd.HTML(200, "follower", map[string]interface{}{"user": user, "follower":follower_user, "following":following_user})
+		rnd.HTML(200, "follower", map[string]interface{}{"user": user, "follower": follower_user, "following": following_user})
 	}
 }

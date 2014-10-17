@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/fort-pinnsvin/travel/models"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
-	"github.com/fort-pinnsvin/travel/models"
 	"net/http"
 	"time"
 )
@@ -74,7 +74,6 @@ func SavePost(res http.ResponseWriter, rnd render.Render, r *http.Request, sessi
 		new_post.Date = time.Now().Format(models.Layout)
 		new_post.Nano = time.Now().Unix()
 
-
 		models.PostCollection.Insert(&new_post)
 		res.Write([]byte(fmt.Sprintf(`{"id_user": %s}`, session.Get("auth_id").(string))))
 	}
@@ -98,12 +97,12 @@ func AddLike(res http.ResponseWriter, r *http.Request, session sessions.Session)
 			models.LikeCollection.Insert(&like)
 			post.Like += 1
 			status = true
-		}else{
+		} else {
 			models.LikeCollection.Remove(q)
 			post.Like -= 1
 			status = false
 		}
-		models.PostCollection.UpdateId(like_id,post)
+		models.PostCollection.UpdateId(like_id, post)
 
 		res.Write([]byte(fmt.Sprintf(`{"counter": %d,"status_like": %v}`, post.Like, status)))
 	}
@@ -113,7 +112,7 @@ func IsPostLiked(my_id string, post_id string) bool {
 	query := make(bson.M)
 	query["liker"] = my_id
 	query["idpost"] = post_id
-	count,_ := models.LikeCollection.Find(query).Count()
+	count, _ := models.LikeCollection.Find(query).Count()
 	return count > 0
 }
 
@@ -132,7 +131,7 @@ func GetFollowStatus(res http.ResponseWriter, r *http.Request, session sessions.
 		query := make(bson.M)
 		query["follower"] = my_id
 		query["following"] = user_id
-		count,_ := models.FollowCollection.Find(query).Count()
+		count, _ := models.FollowCollection.Find(query).Count()
 		status := count > 0
 		res.Write([]byte(fmt.Sprintf(`{"follow_status": %v}`, status)))
 	}
@@ -145,7 +144,7 @@ func UpdateFollowStatus(res http.ResponseWriter, r *http.Request, session sessio
 		query := make(bson.M)
 		query["follower"] = my_id
 		query["following"] = user_id
-		count,_ := models.FollowCollection.Find(query).Count()
+		count, _ := models.FollowCollection.Find(query).Count()
 		status := count > 0
 		if status {
 			models.FollowCollection.Remove(query)

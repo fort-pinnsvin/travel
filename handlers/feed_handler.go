@@ -1,19 +1,19 @@
 package handlers
 
 import (
+	"github.com/fort-pinnsvin/travel/helpfunc"
+	"github.com/fort-pinnsvin/travel/models"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
-	"github.com/fort-pinnsvin/travel/models"
 	"sort"
-	"github.com/fort-pinnsvin/travel/helpfunc"
 )
 
 func FeedHandler(rnd render.Render, params martini.Params, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		id := session.Get("auth_id").(string)
-		user := helpfunc.GetAuthUser(session);
+		user := helpfunc.GetAuthUser(session)
 		allPosts := []models.Post{}
 		followingList := []models.FollowEdge{}
 		models.PostCollection.Find(bson.M{"owner": id}).All(&allPosts)
@@ -34,8 +34,6 @@ func FeedHandler(rnd render.Render, params martini.Params, session sessions.Sess
 				allPosts = append(allPosts, posts[i])
 			}
 		}
-
-
 
 		sort.Sort(models.ByPost(allPosts))
 

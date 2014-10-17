@@ -10,6 +10,11 @@ import (
 	"io"
 	"os"
 	"github.com/fort-pinnsvin/travel/models"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
+	"path/filepath"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
@@ -23,20 +28,20 @@ func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.P
 		user := helpfunc.GetAuthUser(session)
 
 		// Check, who owner this album
-		checkOwner := false
+		isOwner := false
 		if (markerAlbum.Owner == user.Id){
-			checkOwner = true
+			isOwner = true
 		}
 
 		rnd.HTML(200, "album_empty", map[string]interface {}{
 			"id" : id,
 			"user" : user,
-			"owner" : checkOwner,
+			"owner" : isOwner,
 		})
 	}
 }
 
-func LoadPhotoAlbum(r *http.Request, session sessions.Session){
+func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
 	if session.Get("auth_id") != "" {
 
 		album_id := r.FormValue("id")
@@ -51,8 +56,9 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session){
 		if os.MkdirAll("album/" +album_id+ "/", 0777) != nil {
 			fmt.Println("Unable to create directory for tagfile!")
 		}
-
-		out, err := os.Create("album/" +album_id+"/"+ name_file.Filename)
+		file_id := models.GenerateId()
+		extension := filepath.Ext(name_file.Filename)
+		out, err := os.Create("album/" +album_id+"/"+ file_id + extension)
 
 		if err != nil {
 			fmt.Println("Unable to create the file for writing. Check your write access privilege")
@@ -65,6 +71,22 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session){
 		if err != nil {
 			fmt.Println(err)
 		}
+		if (isValidImage("album/" +album_id+"/"+ file_id + extension)) {
+			// ...
+			return "ok"
+		} else {
+			os.Remove("album/" +album_id+"/"+ file_id + extension)
+			return "error"
+		}
 	}
+	return ""
 }
 
+func isValidImage(filename string) bool {
+	file, err := os.Open(filename)
+	if err != nil {
+		return false
+	}
+	_, _, err_img := image.DecodeConfig(file)
+	return (err_img == nil)
+}

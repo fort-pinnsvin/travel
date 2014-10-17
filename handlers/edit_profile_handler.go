@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"fmt"
+	"github.com/fort-pinnsvin/travel/models"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/fort-pinnsvin/travel/models"
 	"net/http"
-	"fmt"
 )
 
 func Edit(rnd render.Render, session sessions.Session, r *http.Request) {
@@ -29,7 +29,6 @@ func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request
 		lang := r.FormValue("lang")
 
 		edit_user := models.User{user.Id, firstName, lastName, email, user.Avatar, birthday, country, user.Status, about, lang}
-
 
 		session.Set("first_name", user.FirstName)
 		session.Set("last_name", user.LastName)

@@ -2,15 +2,15 @@ package handlers
 
 import (
 	"github.com/fort-pinnsvin/travel/models"
-	"github.com/martini-contrib/sessions"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
-	"strings"
 	"net/http"
+	"strings"
 )
 
-func Search(rnd render.Render, params martini.Params, session sessions.Session, r* http.Request) {
+func Search(rnd render.Render, params martini.Params, session sessions.Session, r *http.Request) {
 	query := r.FormValue("q")
 	users := []models.User{}
 	q := make(bson.M)
@@ -40,9 +40,9 @@ func Search(rnd render.Render, params martini.Params, session sessions.Session, 
 			query = "[empty query]"
 		}
 		if len(users) != 0 {
-			rnd.HTML(200, "search", map[string]interface{}{"user": user, "result":users, "query":query})
+			rnd.HTML(200, "search", map[string]interface{}{"user": user, "result": users, "query": query})
 		} else {
-			rnd.HTML(200, "search_empty", map[string]interface{}{"user": user, "query":query})
+			rnd.HTML(200, "search_empty", map[string]interface{}{"user": user, "query": query})
 		}
 	}
 }

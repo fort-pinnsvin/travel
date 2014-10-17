@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/fort-pinnsvin/travel/handlers"
+	"github.com/fort-pinnsvin/travel/models"
+	"github.com/fort-pinnsvin/travel/utils"
 	"github.com/go-martini/martini"
 	gooauth2 "github.com/golang/oauth2"
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/fort-pinnsvin/travel/handlers"
-	"github.com/fort-pinnsvin/travel/models"
-	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func main() {
@@ -40,9 +40,9 @@ func main() {
 	m.Get("/markers/create", oauth2.LoginRequired, handlers.CreateMarker)
 	m.Get("/css/bootstrap.min.css", handlers.LoadTheme)
 	m.Post("/set_theme", handlers.SetTheme)
-	m.Post("/save_post",oauth2.LoginRequired, handlers.SavePost)
-	m.Post("/remove_post",oauth2.LoginRequired, handlers.RemovePost)
-	m.Post("/add_like",oauth2.LoginRequired, handlers.AddLike)
+	m.Post("/save_post", oauth2.LoginRequired, handlers.SavePost)
+	m.Post("/remove_post", oauth2.LoginRequired, handlers.RemovePost)
+	m.Post("/add_like", oauth2.LoginRequired, handlers.AddLike)
 	m.Get("/follow_status", oauth2.LoginRequired, handlers.GetFollowStatus)
 	m.Get("/update_follow_status", oauth2.LoginRequired, handlers.UpdateFollowStatus)
 	m.Get("/feed", oauth2.LoginRequired, handlers.FeedHandler)

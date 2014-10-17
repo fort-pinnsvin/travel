@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"github.com/fort-pinnsvin/travel/models"
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"github.com/fort-pinnsvin/travel/models"
 	"net/http"
 )
 

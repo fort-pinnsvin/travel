@@ -2,14 +2,14 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
-	"os"
-	"io"
 	"github.com/martini-contrib/sessions"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
+	"io"
+	"net/http"
+	"os"
 )
 
 func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Request) string {
@@ -23,7 +23,7 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 			return "Error"
 		}
 
-		if os.MkdirAll("avatar/" + id + "/", 0777) != nil {
+		if os.MkdirAll("avatar/"+id+"/", 0777) != nil {
 			panic("Unable to create directory for tagfile!" + err.Error())
 		}
 		out, err := os.Create("avatar/" + id + "/" + header.Filename)
@@ -42,7 +42,7 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 
 		fmt.Fprintf(w, "File uploaded successfully : ")
 		fmt.Fprintf(w, header.Filename)
-		filename := "avatar/" + id + "/" + header.Filename;
+		filename := "avatar/" + id + "/" + header.Filename
 		width, height := getImageDimension(filename)
 		if width != height {
 			return "Image not square"

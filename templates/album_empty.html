@@ -61,7 +61,7 @@
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
         <label for="file">Filename:</label>
         <input type="file" name="file" id="file">
-        <input type="hidden" value="{{ . }}" name="id"/>
+        <input type="hidden" value="{{ .id }}" name="id"/>
         <input type="submit" name="submit" value="Submit">
     </form>
     {{end}}
