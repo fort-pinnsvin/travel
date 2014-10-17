@@ -23,7 +23,7 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 		defer file.Close()
 
 		if err != nil {
-			rnd.Redirect("/edit?fail")
+			rnd.Redirect("/edit?avatar=fail")
 			return
 		}
 
@@ -34,7 +34,7 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 		extension := filepath.Ext(header.Filename)
 		out, err := os.Create("assets/avatar/" + id + "/" + file_id + extension)
 		if err != nil {
-			rnd.Redirect("/edit?fail")
+			rnd.Redirect("/edit?avatar=fail")
 			return
 		}
 

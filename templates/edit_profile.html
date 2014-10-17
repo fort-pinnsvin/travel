@@ -50,6 +50,10 @@
                         <button type="button" class="close" data-dismiss="alert">×</button>
                         <strong>All good!</strong> Your profile is updated!
                     </div>
+                    <div class="alert alert-dismissable alert-danger" style="display:none;" id="tooltip_avatar">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>All good!</strong> Your profile is updated!
+                    </div>
                     <fieldset>
                         <legend>Update your profile:</legend>
                         <div class="form-group">
@@ -156,6 +160,7 @@
                 if (rdr.error == 0) {
                     var form = document.getElementById("tooltip")
                     form.style.display = ""
+                    form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>All good!</strong> Your profile is updated!'
                     setInterval(function () {
                         form.style.display = "none"
                     }, 5000)
@@ -168,8 +173,27 @@
         return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
     }
 
-
-
-
-
+    var url = document.URL
+    if (url.indexOf("?avatar=fail") != -1) {
+        var form = document.getElementById("tooltip_avatar")
+        form.style.display = ""
+        form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>Error!</strong> Something went wrong with avatar uploading!'
+        setInterval(function () {
+            form.style.display = "none"
+        }, 5000)
+    } else if (url.indexOf("?avatar=not_square") != -1) {
+        var form = document.getElementById("tooltip_avatar")
+        form.style.display = ""
+        form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>Error!</strong> Your image hasn\'t square size!'
+        setInterval(function () {
+            form.style.display = "none"
+        }, 5000)
+    } else if (url.indexOf("?avatar=ok") != -1) {
+        var form = document.getElementById("tooltip")
+        form.style.display = ""
+        form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>Success!</strong> Your avatar was changed!'
+        setInterval(function () {
+            form.style.display = "none"
+        }, 5000)
+    }
 </script>
