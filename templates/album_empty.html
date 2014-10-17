@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS-->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar-static-top.css" rel="stylesheet">
@@ -41,9 +42,9 @@
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li class="active"><a href="#">Albums</a></li>
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
+            <li class="active"><a href="#">Albums</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout">Log Out!</a></li>
@@ -57,14 +58,32 @@
 
 <div class="container">
 
-    {{if .owner}}
+    <!--#M albums-->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 style="text-align:center;">{{.info_album.Name}}</h1>
+        </div>
+    </div>
+
+    <hr>
+
+
+    <div class="row">
+        {{range $element := .photos }}
+        <div class="col-sm-6 col-md-3">
+            <a class="thumbnail">
+                <img src="{{$element.Name}}" alt="">
+            </a>
+        </div>
+        {{end}}
+    </div>
+
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
         <label for="file">Filename:</label>
         <input type="file" name="file" id="file">
         <input type="hidden" value="{{ .id }}" name="id"/>
         <input type="submit" name="submit" value="Submit">
     </form>
-    {{end}}
 
     <div class="row">
         <hr>
