@@ -90,3 +90,13 @@ func isValidImage(filename string) bool {
 	_, _, err_img := image.DecodeConfig(file)
 	return (err_img == nil)
 }
+
+
+func GetLastPhoto(r *http.Request, session sessions.Session) string {
+	if session.Get("auth_id") != "" {
+		album_id := r.FormValue("id")
+
+	} else {
+		return "{}"
+	}
+}

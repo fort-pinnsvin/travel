@@ -50,6 +50,7 @@ func main() {
 	m.Post("/avatar/upload", oauth2.LoginRequired, handlers.UploadAvatar)
 	m.Get("/friends", oauth2.LoginRequired, handlers.FollowingHandler)
 	m.Get("/album/:id", oauth2.LoginRequired, handlers.AlbumHandler)
+	m.Get("/album/lastImage", oauth2.LoginRequired, handlers.GetLastPhoto)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Run()
 }
