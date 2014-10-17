@@ -11,7 +11,7 @@
     <title>Album</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/b_bootstrap.mi.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar-static-top.css" rel="stylesheet">
@@ -56,6 +56,24 @@
 </div>
 
 <div class="container">
+
+
+    <!--#M albums-->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 style="text-align:center;">News</h1>
+            <hr>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <a class="thumbnail">
+                <img src="http://placehold.it/300x200" alt="">
+            </a>
+        </div>
+    </div>
 
     {{if .owner}}
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
