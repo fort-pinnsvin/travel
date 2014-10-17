@@ -59,7 +59,7 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
 	if session.Get("auth_id") != "" {
 
 		album_id := r.FormValue("id")
-		fmt.Println(album_id + "------12123123123123")
+		fmt.Println(album_id + "------9999999")
 
 		file, name_file , err := r.FormFile("file") // the FormFile function takes in the POST input id file
 		defer file.Close()
