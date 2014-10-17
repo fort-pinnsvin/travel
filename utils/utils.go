@@ -13,3 +13,5 @@ func GetValue(variable string, def string) string {
 	fmt.Printf("[utils] var: %s, result: %s\n", variable, str)
 	return str
 }
+
+

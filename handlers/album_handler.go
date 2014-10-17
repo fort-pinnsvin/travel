@@ -4,18 +4,35 @@ import (
 	"github.com/martini-contrib/sessions"
 	"github.com/martini-contrib/render"
 	"github.com/go-martini/martini"
+	"github.com/fort-pinnsvin/travel/helpfunc"
 	"net/http"
 	"fmt"
 	"io"
 	"os"
+	"github.com/fort-pinnsvin/travel/models"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
 	if session.Get("auth_id") != "" {
+		// Id album
 		id := params["id"]
-		// So fucking output
-		fmt.Println(id + "    222222222222");
-		rnd.HTML(200, "album_empty", id)
+		// Get markerAlbum by Id
+		markerAlbum := models.Marker{};
+		models.MarkerCollection.FindId(id).One(&markerAlbum)
+
+		user := helpfunc.GetAuthUser(session)
+
+		// Check, who owner this album
+		checkOwner := false
+		if (markerAlbum.Owner == user.Id){
+			checkOwner = true
+		}
+
+		rnd.HTML(200, "album_empty", map[string]interface {}{
+			"id" : id,
+			"user" : user,
+			"owner" : checkOwner,
+		})
 	}
 }
 
