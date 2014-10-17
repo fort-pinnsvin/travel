@@ -3,14 +3,31 @@ var map = {};
 function initialize() {
     var mapProp = {
         center: new google.maps.LatLng(51.508742, -0.120850),
-        zoom: 5,
-        mapTypeId: google.maps.MapTypeId.TERRAIN
+        zoom: 2,
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        disableDoubleClickZoom: true
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
     loadMarkers(map)
     google.maps.event.addListener(map, 'dblclick', function (event) {
         placeMarker(event.latLng);
     });
+}
+
+
+function getInfoWindow(name, desc, id) {
+    var result = '<div id="content" style="color: black; width: 200px">'+
+                       '<div id="siteNotice">'+
+                       '</div>'+
+                       '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' +name + '</h1>'+
+                       '<div id="bodyContent">'+
+                       '<p>' + (desc || '') + '</p>'+
+                       '<p><a href="/album/' +id + '">'+
+                       'Open album...</a></p>'+
+                       '</div>'+
+                       '</div>';
+
+    return result;
 }
 
 function loadMarkers(map) {
@@ -29,10 +46,14 @@ function loadMarkers(map) {
                     map: map,
                     title: el.Name,
                     id: el.Id,
-                    clickListener: function () {
-                        window.location.href = '/album/' + this.id;
+                    infoWindow: new google.maps.InfoWindow({
+                       content: getInfoWindow(el.Name, el.Description, el.Id)
+                    }),
+                    clickListener: function() {
+                        this.infoWindow.open(map, this);
                     }
                 });
+
                 google.maps.event.addListener(marker, 'click', marker.clickListener);
 
             }
@@ -51,11 +72,16 @@ function placeMarker(location) {
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    title: "New Album"
+                    title: "New Album",
+                    id: result.id,
+                    infoWindow: new google.maps.InfoWindow({
+                       content: getInfoWindow("New Album", "", result.id)
+                    }),
+                    clickListener: function() {
+                        this.infoWindow.open(map, this);
+                    }
                 });
-                google.maps.event.addListener(marker, 'click', function () {
-                    window.location.href = '/album/' + result.id;
-                });
+                google.maps.event.addListener(marker, 'click', marker.clickListener);
             }
         }
     });

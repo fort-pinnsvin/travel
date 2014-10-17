@@ -1,0 +1,11 @@
+.album-content {
+        width: 250px;
+        height: auto;
+        color: black;
+}
+
+.album-column {
+        width: 125px;
+        padding: 5px;
+        display: inline;
+}

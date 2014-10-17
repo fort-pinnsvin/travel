@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Travel</title>
+    <title>yo-journey</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -37,15 +37,16 @@
         <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%"
                                                                  style="margin-top:-5px;"/>
             {{ .user.FirstName }} {{ .user.LastName}}</a>
+        <a class="navbar-brand" href="#">yo-journey</a>
     </div>
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/following">Following</a></li>
-            <li><a href="/feed">Feed</a></li>
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#acbout">About</a></li>
+            <li><a href="#contacts">Contact Us</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/logout">Log Out!</a></li>
+            <li><a href="/signin">Sign In</a></li>
         </ul>
         <form class="navbar-form navbar-left" action="../search" method="get">
             <input type="text" class="form-control col-lg-8" placeholder="Search User" name="q">
@@ -69,7 +70,7 @@
         <hr>
         <footer>
             <div class="col-lg-8">
-                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
             </div>
             <div class="col-lg-4 pull-right" style="margin-top:20px;">
