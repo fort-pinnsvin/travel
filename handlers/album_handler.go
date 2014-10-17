@@ -115,3 +115,36 @@ func isValidImage(filename string) bool {
 	_, _, err_img := image.DecodeConfig(file)
 	return (err_img == nil)
 }
+
+func AlbumSettingsHandler(rnd render.Render, session sessions.Session, r *http.Request,  params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		userData := &models.User{}
+		marker := &models.Marker{}
+		models.UserCollection.FindId(session.Get("auth_id")).One(&userData)
+		models.MarkerCollection.FindId(id).One(&marker)
+		rnd.HTML(200, "album_settings", map[string]interface{}{
+			"Id": userData.Id,
+			"Avatar":     userData.Avatar,
+			"FirstName":      userData.FirstName,
+			"LastName":       userData.LastName,
+			"title": marker.Name,
+			"description": marker.Description,
+			"album_id":marker.Id,
+		})
+	}
+}
+
+func AlbumSettingsSaveHandler(res http.ResponseWriter, session sessions.Session, r *http.Request,  params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		marker := &models.Marker{}
+		models.MarkerCollection.FindId(id).One(&marker)
+		marker.Name = r.FormValue("title")
+		marker.Description = r.FormValue("description")
+		models.MarkerCollection.UpdateId(id, marker)
+		res.Write([]byte(`{"error": 0}`))
+	} else {
+		res.Write([]byte(`{"error": 1}`))
+	}
+}

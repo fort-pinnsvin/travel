@@ -16,13 +16,13 @@ function initialize() {
 
 
 function getInfoWindow(name, desc, id, url_) {
-    var result = '<div id="content" style="color: black; width: 260px">' +
+    var result = '<div id="content" style="color: black; ">' +
         '<div id="siteNotice">' +
         '</div>' +
         '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' + name + '</h1>' +
         '<div id="bodyContent">' +
         '<p>' + (desc || '') + '</p>' +
-        '<p><a class="thumbnail"><img src="' + url_ + '" alt=""></a></p>' +
+        '<p><a class="thumbnail"><img src="' + url_ + '" alt="" width="200px"></a></p>' +
         '<p><a href="/album/' + id + '">' +
         'Open album...</a></p>' +
         '</div>' +

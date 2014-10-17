@@ -86,6 +86,9 @@
         <input type="hidden" value="{{ .id }}" name="id"/>
         <input type="submit" name="submit" value="Submit">
     </form>
+    <a href="/album/{{ .id }}/settings">
+        <button class="btn btn-danger">Settings</button>
+    </a>
     {{end}}
 
     <div class="row">
