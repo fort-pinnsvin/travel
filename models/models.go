@@ -44,6 +44,11 @@ type Like struct {
 	IdPost string
 }
 
+type Photo struct {
+	AlbumId		string
+	Name		string
+}
+
 const Layout = "Jan 2, 2006 at 3:04pm"
 
 type ByPost []Post
@@ -71,4 +76,5 @@ func ConnectToDataBase() {
 	PostCollection = session.DB(database).C("post")
 	FollowCollection = session.DB(database).C("followers")
 	LikeCollection = session.DB(database).C("like")
+	PhotoCollection = session.DB(database).C("photo")
 }

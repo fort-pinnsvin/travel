@@ -6,11 +6,12 @@ import (
 	"labix.org/v2/mgo"
 )
 
-var UserCollection *mgo.Collection
-var MarkerCollection *mgo.Collection
-var PostCollection *mgo.Collection
-var LikeCollection *mgo.Collection
-var FollowCollection *mgo.Collection
+var UserCollection 		*mgo.Collection
+var MarkerCollection 	*mgo.Collection
+var PostCollection 		*mgo.Collection
+var LikeCollection 		*mgo.Collection
+var FollowCollection 	*mgo.Collection
+var PhotoCollection 	*mgo.Collection
 
 func GenerateId() string {
 	b := make([]byte, 16)
