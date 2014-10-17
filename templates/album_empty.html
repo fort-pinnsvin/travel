@@ -42,6 +42,7 @@
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
+       
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
             <li class="active"><a href="#">Albums</a></li>
@@ -78,12 +79,14 @@
         {{end}}
     </div>
 
+    {{if .owner}}
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
         <label for="file">Filename:</label>
         <input type="file" name="file" id="file">
         <input type="hidden" value="{{ .id }}" name="id"/>
         <input type="submit" name="submit" value="Submit">
     </form>
+    {{end}}
 
     <div class="row">
         <hr>
