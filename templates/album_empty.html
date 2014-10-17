@@ -42,7 +42,6 @@
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-       
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
             <li class="active"><a href="#">Albums</a></li>
@@ -73,6 +72,9 @@
         {{range $element := .photos }}
         <div class="col-sm-6 col-md-3">
             <a class="thumbnail">
+                <button type="button" class="close" title="{{ $element.Name }}" data-dismiss="alert"
+                        onclick="remove_photo({{ $element.Name }}, {{$element.AlbumId}})">×
+                </button>
                 <img src="{{$element.Name}}" alt="">
             </a>
         </div>
@@ -101,6 +103,8 @@
 <!-- /container -->
 
 
+
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -108,3 +112,17 @@
 <script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
+
+<script>
+    var remove_photo = function (name_photo, album_id) {
+        console.log(name_photo);
+        $.ajax({
+            type: "POST",
+            url: "../../remove_photo",
+            data: "name_photo=" + name_photo,
+            success: function (msg) {
+                window.location.href = "/album/"+album_id;
+            }
+        });
+    }
+</script>

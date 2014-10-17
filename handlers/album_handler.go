@@ -55,7 +55,7 @@ func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.P
 	}
 }
 
-func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
+func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render) string {
 	if session.Get("auth_id") != "" {
 
 		album_id := r.FormValue("id")
@@ -92,6 +92,7 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
 			photo.AlbumId = album_id
 			photo.Name = file_id + extension
 			models.PhotoCollection.Insert(&photo)
+			rnd.Redirect("/album/"+album_id)
 			return "ok"
 		} else {
 			os.Remove("assets/album/" +album_id+"/"+ file_id + extension)
@@ -110,12 +111,15 @@ func isValidImage(filename string) bool {
 	return (err_img == nil)
 }
 
-
-func GetLastPhoto(r *http.Request, session sessions.Session) string {
+func RemovePhoto(r *http.Request, session sessions.Session){
 	if session.Get("auth_id") != "" {
-		album_id := r.FormValue("id")
-
-	} else {
-		return "{}"
+		photo_name := r.FormValue("name_photo")
+		query := make(bson.M)
+		query["name"] = photo_name
+		photo := models.Photo{}
+		models.PhotoCollection.Find(query).One(&photo)
+		models.PhotoCollection.Remove(query)
+		os.Remove("assets/album/"+photo.AlbumId+"/"+photo.Name)
 	}
 }
+
