@@ -16,6 +16,7 @@ import (
 	_ "image/png"
 	"path/filepath"
 	"labix.org/v2/mgo/bson"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
@@ -92,6 +93,11 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render
 			photo.AlbumId = album_id
 			photo.Name = file_id + extension
 			models.PhotoCollection.Insert(&photo)
+
+			marker := &models.Marker{}
+			models.MarkerCollection.FindId(album_id).One(&marker)
+			marker.FullAddress = "//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/"+ file_id + extension
+			models.MarkerCollection.UpdateId(album_id, marker)
 			rnd.Redirect("/album/"+album_id)
 			return "ok"
 		} else {
@@ -111,6 +117,39 @@ func isValidImage(filename string) bool {
 	return (err_img == nil)
 }
 
+func AlbumSettingsHandler(rnd render.Render, session sessions.Session, r *http.Request,  params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		userData := &models.User{}
+		marker := &models.Marker{}
+		models.UserCollection.FindId(session.Get("auth_id")).One(&userData)
+		models.MarkerCollection.FindId(id).One(&marker)
+		rnd.HTML(200, "album_settings", map[string]interface{}{
+			"Id": userData.Id,
+			"Avatar":     userData.Avatar,
+			"FirstName":      userData.FirstName,
+			"LastName":       userData.LastName,
+			"title": marker.Name,
+			"description": marker.Description,
+			"album_id":marker.Id,
+		})
+	}
+}
+
+func AlbumSettingsSaveHandler(res http.ResponseWriter, session sessions.Session, r *http.Request,  params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		marker := &models.Marker{}
+		models.MarkerCollection.FindId(id).One(&marker)
+		marker.Name = r.FormValue("title")
+		marker.Description = r.FormValue("description")
+		models.MarkerCollection.UpdateId(id, marker)
+		res.Write([]byte(`{"error": 0}`))
+	} else {
+		res.Write([]byte(`{"error": 1}`))
+	}
+}
+
 func RemovePhoto(r *http.Request, session sessions.Session){
 	if session.Get("auth_id") != "" {
 		photo_name := r.FormValue("name_photo")
@@ -122,4 +161,3 @@ func RemovePhoto(r *http.Request, session sessions.Session){
 		os.Remove("assets/album/"+photo.AlbumId+"/"+photo.Name)
 	}
 }
-

@@ -15,27 +15,18 @@ function initialize() {
 }
 
 
-function getInfoWindow(name, desc, id) {
-    var url_ = "http://placehold.it/250x130";
-    $.ajax({
-        type: "GET",
-        url: "/album/lastImage?id=" + id,
-        success: function(msg) {
-            url_ = msg.url
-        }
-    });
-    var result = '<div id="content" style="color: black; width: 260px">' +
+function getInfoWindow(name, desc, id, url_) {
+    var result = '<div id="content" style="color: black; ">' +
         '<div id="siteNotice">' +
         '</div>' +
         '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' + name + '</h1>' +
         '<div id="bodyContent">' +
         '<p>' + (desc || '') + '</p>' +
-        '<p><a class="thumbnail"><img src="' + url_ + '" alt=""></a></p>' +
+        '<p><a class="thumbnail"><img src="' + url_ + '" alt="" width="200px"></a></p>' +
         '<p><a href="/album/' + id + '">' +
         'Open album...</a></p>' +
         '</div>' +
         '</div>';
-
     return result;
 }
 
@@ -60,13 +51,11 @@ function loadMarkers(map) {
                         $.ajax({
                             type: "GET",
                             url: "markers/update?lat=" + this.position.lat() + "&long=" + this.position.lng() + "&id=" + this.id,
-                            success: function(msg) {
-
-                            }
+                            success: function(msg) {}
                         });
                     },
                     infoWindow: new google.maps.InfoWindow({
-                        content: getInfoWindow(el.Name, el.Description, el.Id)
+                        content: getInfoWindow(el.Name, el.Description, el.Id, el.FullAddress)
                     }),
                     clickListener: function() {
                         this.infoWindow.open(map, this);
@@ -106,7 +95,7 @@ function placeMarker(location) {
                         });
                     },
                     infoWindow: new google.maps.InfoWindow({
-                        content: getInfoWindow("New Album", "", result.id)
+                        content: getInfoWindow("New Album", "", result.id, result.url)
                     }),
                     clickListener: function() {
                         this.infoWindow.open(map, this);

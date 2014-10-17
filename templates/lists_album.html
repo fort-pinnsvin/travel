@@ -8,11 +8,10 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Album</title>
+    <title>Travel</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../assets/css/b_bootstrap.mi.css" rel="stylesheet">
-    <link href="../../assets/css/b_bootstrap.mi.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar-static-top.css" rel="stylesheet">
@@ -34,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">yo-journey</a>
+        <a class="navbar-brand" href="../">yo-journey</a>
         <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%"
                                                                  style="margin-top:-5px;"/>
             {{ .user.FirstName }} {{ .user.LastName}}</a>
@@ -42,6 +41,7 @@
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
+
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
             <li class="active"><a href="#">Albums</a></li>
@@ -56,42 +56,26 @@
 
 </div>
 
+
 <div class="container">
 
     <!--#M albums-->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 style="text-align:center;">{{.info_album.Name}}</h1>
-        </div>
-    </div>
-
+    <h1 style="text-align:center;">Альбомы пользователя X</h1>
     <hr>
 
-
-    <div class="row">
-        {{range $element := .photos }}
-        <div class="col-sm-6 col-md-3">
-            <a class="thumbnail">
-                <button type="button" class="close" title="{{ $element.Name }}" data-dismiss="alert"
-                        onclick="remove_photo({{ $element.Name }}, {{$element.AlbumId}})">×
-                </button>
-                <img src="{{$element.Name}}" alt="">
-            </a>
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="col-sm-6 col-md-3"> <!--Взять в цикл -->
+                <a class="thumbnail">
+                    <img src="{{$element.Name}}" alt="">
+                </a>
+                <div class="caption">
+                    <h3>Header</h3>
+                </div>
+            </div>
         </div>
-        {{end}}
     </div>
 
-    {{if .owner}}
-    <form action="/load_photo_album" method="post" enctype="multipart/form-data">
-        <label for="file">Filename:</label>
-        <input type="file" name="file" id="file">
-        <input type="hidden" value="{{ .id }}" name="id"/>
-        <input type="submit" name="submit" value="Submit">
-    </form>
-    <a href="/album/{{ .id }}/settings">
-        <button class="btn btn-danger">Settings</button>
-    </a>
-    {{end}}
 
     <div class="row">
         <hr>
@@ -100,12 +84,23 @@
                 <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
             </div>
+            <div class="col-lg-4 pull-right" style="margin-top:20px;">
+                <p>
+
+                <form style="margin-top: -40px;" method="POST" action="set_theme">
+                    <select class="form-control pull-right" id="theme" name="theme" style="width: 100px;">
+                        <option>Black</option>
+                        <option>White</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary pull-right">Save</button>
+                </form>
+                </p>
+            </div>
+
         </footer>
     </div>
 </div>
 <!-- /container -->
-
-
 
 
 <!-- Bootstrap core JavaScript
@@ -115,17 +110,3 @@
 <script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
-
-<script>
-    var remove_photo = function (name_photo, album_id) {
-        console.log(name_photo);
-        $.ajax({
-            type: "POST",
-            url: "../../remove_photo",
-            data: "name_photo=" + name_photo,
-            success: function (msg) {
-                window.location.href = "/album/"+album_id;
-            }
-        });
-    }
-</script>
