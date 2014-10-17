@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"travel/models"
+	"github.com/fort-pinnsvin/travel/models"
 	"net/http"
 	"fmt"
 )
