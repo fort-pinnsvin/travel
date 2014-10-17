@@ -2,7 +2,7 @@ package models
 
 import (
 	"labix.org/v2/mgo"
-	"github.com/fort-pinnsvin/travel/utils"
+	"travel/utils"
 )
 
 type User struct {

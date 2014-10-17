@@ -5,8 +5,6 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/go-martini/martini"
 	"net/http"
-	//"os"
-	//"io"
 	"fmt"
 	"io"
 	"os"
@@ -15,6 +13,7 @@ import (
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
 	if session.Get("auth_id") != "" {
 		id := params["id"]
+		// So fucking output
 		fmt.Println(id + "    222222222222");
 		rnd.HTML(200, "album_empty", id)
 	}
