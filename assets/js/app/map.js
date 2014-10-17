@@ -9,23 +9,23 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
     loadMarkers(map)
-    google.maps.event.addListener(map, 'dblclick', function (event) {
+    google.maps.event.addListener(map, 'dblclick', function(event) {
         placeMarker(event.latLng);
     });
 }
 
 
 function getInfoWindow(name, desc, id) {
-    var result = '<div id="content" style="color: black; width: 200px">'+
-                       '<div id="siteNotice">'+
-                       '</div>'+
-                       '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' +name + '</h1>'+
-                       '<div id="bodyContent">'+
-                       '<p>' + (desc || '') + '</p>'+
-                       '<p><a href="/album/' +id + '">'+
-                       'Open album...</a></p>'+
-                       '</div>'+
-                       '</div>';
+    var result = '<div id="content" style="color: black; width: 200px">' +
+        '<div id="siteNotice">' +
+        '</div>' +
+        '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' + name + '</h1>' +
+        '<div id="bodyContent">' +
+        '<p>' + (desc || '') + '</p>' +
+        '<p><a href="/album/' + id + '">' +
+        'Open album...</a></p>' +
+        '</div>' +
+        '</div>';
 
     return result;
 }
@@ -35,7 +35,7 @@ function loadMarkers(map) {
     $.ajax({
         type: "GET",
         url: "markers",
-        success: function (msg) {
+        success: function(msg) {
             array = JSON.parse(msg)
             console.table(array)
 
@@ -46,8 +46,18 @@ function loadMarkers(map) {
                     map: map,
                     title: el.Name,
                     id: el.Id,
+                    draggable: true,
+                    drag: function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "markers/update?lat=" + this.position.lat() + "&long=" + this.position.lng() + "&id=" + this.id,
+                            success: function(msg) {
+
+                            }
+                        });
+                    },
                     infoWindow: new google.maps.InfoWindow({
-                       content: getInfoWindow(el.Name, el.Description, el.Id)
+                        content: getInfoWindow(el.Name, el.Description, el.Id)
                     }),
                     clickListener: function() {
                         this.infoWindow.open(map, this);
@@ -55,9 +65,11 @@ function loadMarkers(map) {
                 });
 
                 google.maps.event.addListener(marker, 'click', marker.clickListener);
+                google.maps.event.addListener(marker, 'drag', marker.drag);
 
             }
-        }});
+        }
+    });
 }
 
 function placeMarker(location) {
@@ -65,7 +77,7 @@ function placeMarker(location) {
         type: "GET",
         url: "markers/create",
         data: "name=New+Album&lat=" + location.lat() + "&long=" + location.lng(),
-        success: function (msg) {
+        success: function(msg) {
             result = JSON.parse(msg)
             console.log(result)
             if (result.error == 0) {
@@ -74,14 +86,25 @@ function placeMarker(location) {
                     map: map,
                     title: "New Album",
                     id: result.id,
+                    draggable: true,
+                    drag: function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "markers/update?lat=" + this.position.lat() + "&long=" + this.position.lng() + "&id=" + this.id,
+                            success: function(msg) {
+
+                            }
+                        });
+                    },
                     infoWindow: new google.maps.InfoWindow({
-                       content: getInfoWindow("New Album", "", result.id)
+                        content: getInfoWindow("New Album", "", result.id)
                     }),
                     clickListener: function() {
                         this.infoWindow.open(map, this);
                     }
                 });
                 google.maps.event.addListener(marker, 'click', marker.clickListener);
+                google.maps.event.addListener(marker, 'drag', marker.drag);
             }
         }
     });

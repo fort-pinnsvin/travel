@@ -46,3 +46,19 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		res.Write([]byte(`some errors`))
 	}
 }
+
+func UpdateMarkerLocation(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		id := r.FormValue("id")
+		lat := r.FormValue("lat")
+		long := r.FormValue("long")
+		marker := &models.Marker{}
+		models.MarkerCollection.FindId(id).One(&marker)
+		marker.Latitude = lat
+		marker.Longitude = long
+		models.MarkerCollection.UpdateId(id, marker)
+		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `"}`))
+	} else {
+		res.Write([]byte(`some errors`))
+	}
+}

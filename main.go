@@ -38,6 +38,7 @@ func main() {
 	m.Get("/search", oauth2.LoginRequired, handlers.Search)
 	m.Get("/markers", oauth2.LoginRequired, handlers.GetMarkers)
 	m.Get("/markers/create", oauth2.LoginRequired, handlers.CreateMarker)
+	m.Get("/markers/update", oauth2.LoginRequired, handlers.UpdateMarkerLocation)
 	m.Get("/css/bootstrap.min.css", handlers.LoadTheme)
 	m.Post("/set_theme", handlers.SetTheme)
 	m.Post("/save_post", oauth2.LoginRequired, handlers.SavePost)
