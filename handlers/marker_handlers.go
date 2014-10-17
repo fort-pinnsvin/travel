@@ -39,9 +39,10 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		marker.Latitude = r.FormValue("lat")
 		marker.Longitude = r.FormValue("long")
 		marker.Description = ""
+		marker.FullAddress = "http://placehold.it/250x130"
 		models.MarkerCollection.Insert(&marker)
 
-		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `"}`))
+		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `", "url": "http://placehold.it/250x130"}`))
 	} else {
 		res.Write([]byte(`some errors`))
 	}

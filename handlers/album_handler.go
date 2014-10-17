@@ -16,6 +16,7 @@ import (
 	_ "image/png"
 	"path/filepath"
 	"labix.org/v2/mgo/bson"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
@@ -92,6 +93,11 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
 			photo.AlbumId = album_id
 			photo.Name = file_id + extension
 			models.PhotoCollection.Insert(&photo)
+
+			marker := &models.Marker{}
+			models.MarkerCollection.FindId(album_id).One(&marker)
+			marker.FullAddress = "//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/"+ file_id + extension
+			models.MarkerCollection.UpdateId(album_id, marker)
 			return "ok"
 		} else {
 			os.Remove("assets/album/" +album_id+"/"+ file_id + extension)
@@ -108,14 +114,4 @@ func isValidImage(filename string) bool {
 	}
 	_, _, err_img := image.DecodeConfig(file)
 	return (err_img == nil)
-}
-
-
-func GetLastPhoto(r *http.Request, session sessions.Session) string {
-	if session.Get("auth_id") != "" {
-		album_id := r.FormValue("id")
-
-	} else {
-		return "{}"
-	}
 }
