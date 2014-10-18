@@ -52,7 +52,7 @@ func main() {
 	m.Get("/user/:id/home", oauth2.LoginRequired, handlers.GetHomePosition)
 	m.Get("/mini_blog/:id",oauth2.LoginRequired,handlers.MiniBlogHandler)
 	m.Get("/mini_blog_list",oauth2.LoginRequired,handlers.MiniBlogListHandler)
-	m.Get("/mini_blog/:id/edit",oauth2.LoginRequired,handlers.MiniBlogEdit)
+	m.Get("/mini_blog/:id/edit",oauth2.LoginRequired, handlers.MiniBlogEdit)
 	m.Post("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsSaveHandler)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
