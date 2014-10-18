@@ -54,5 +54,6 @@ func main() {
 	m.Post("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsSaveHandler)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/remove_photo",oauth2.LoginRequired, handlers.RemovePhoto)
+	m.Get("/album_list",oauth2.LoginRequired,handlers.AlbumListHandler)
 	m.Run()
 }
