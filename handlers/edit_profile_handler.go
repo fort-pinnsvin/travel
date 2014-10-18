@@ -6,6 +6,7 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"net/http"
+	"github.com/martini-contrib/oauth2"
 )
 
 func Edit(rnd render.Render, session sessions.Session, r *http.Request) {
@@ -16,7 +17,7 @@ func Edit(rnd render.Render, session sessions.Session, r *http.Request) {
 	}
 }
 
-func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request) {
+func EditPost(tokens oauth2.Tokens, res http.ResponseWriter, session sessions.Session, r *http.Request) {
 	if session.Get("auth_id") != "" {
 		user := &models.User{}
 		models.UserCollection.FindId(session.Get("auth_id")).One(&user)
@@ -27,8 +28,9 @@ func EditPost(res http.ResponseWriter, session sessions.Session, r *http.Request
 		birthday := r.FormValue("birthday")
 		about := r.FormValue("about")
 		lang := r.FormValue("lang")
+		lat, lng := GetLatLngByAddress(tokens, country)
 
-		edit_user := models.User{user.Id, firstName, lastName, email, user.Avatar, birthday, country, user.Status, about, lang}
+		edit_user := models.User{user.Id, firstName, lastName, email, user.Avatar, birthday, country, user.Status, about, lang, lat, lng}
 
 		session.Set("first_name", user.FirstName)
 		session.Set("last_name", user.LastName)

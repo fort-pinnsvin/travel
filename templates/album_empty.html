@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Album</title>
+    <title>Album: {{.info_album.Name}}</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -44,6 +44,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
+            <li><a href="/advice/country">Advices</a></li>
             <li class="active"><a href="#">Albums</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -89,7 +90,10 @@
         <input type="submit" name="submit" value="Submit">
     </form>
     <a href="/album/{{ .id }}/settings">
-        <button class="btn btn-danger">Settings</button>
+        <button class="btn btn-info">Settings</button>
+    </a>
+    <a href="/album/{{ .id }}/delete">
+        <button class="btn btn-danger">Delete album, photos and marker</button>
     </a>
     {{end}}
 

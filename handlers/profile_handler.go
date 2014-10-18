@@ -9,6 +9,7 @@ import (
 	"labix.org/v2/mgo/bson"
 	"net/http"
 	"time"
+	"html/template"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -36,6 +37,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			allPost := []models.Post{}
 			for i := len(posts) - 1; i >= 0; i-- {
 				posts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), posts[i].Id)
+				posts[i].Html = template.HTML(posts[i].Text)
 				allPost = append(allPost, posts[i])
 				fmt.Printf("%v", posts[i])
 			}
@@ -156,5 +158,18 @@ func UpdateFollowStatus(res http.ResponseWriter, r *http.Request, session sessio
 			models.FollowCollection.Insert(&follow_edge)
 		}
 		res.Write([]byte(fmt.Sprintf(`{"follow_status": %v}`, !status)))
+	}
+}
+
+func GetHomePosition(res http.ResponseWriter, params martini.Params, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		user := models.User{}
+		err := models.UserCollection.FindId(id).One(&user)
+		if err == nil {
+			res.Write([]byte(fmt.Sprintf(`{"lat": %.8f, "lng": %.8f}`, user.Latitude, user.Longitude)))
+		} else {
+			res.Write([]byte(fmt.Sprintf(`{"lat": %.8f, "lng": %.8f}`, 100000, 100000)))
+		}
 	}
 }

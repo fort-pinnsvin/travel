@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/fort-pinnsvin/travel/utils"
 	"labix.org/v2/mgo"
+	"html/template"
 )
 
 type User struct {
@@ -16,6 +17,8 @@ type User struct {
 	Status    string
 	About     string
 	Language  string
+	Latitude  float64
+	Longitude float64
 }
 
 type Marker struct {
@@ -26,6 +29,8 @@ type Marker struct {
 	Longitude   string
 	Description string
 	FullAddress string
+	Date      	string
+	Nano      	int64
 }
 
 type Post struct {
@@ -38,6 +43,7 @@ type Post struct {
 	Like      int
 	OwnerUser User
 	IsLiked   bool
+	Html      template.HTML
 }
 
 type Like struct {
@@ -47,6 +53,12 @@ type Like struct {
 
 type Photo struct {
 	AlbumId		string
+	Name		string
+}
+
+type Country struct {
+	Code        string `bson:"_id,omitempty"`
+	Count		int
 	Name		string
 }
 
@@ -70,11 +82,19 @@ type Blog struct {
 
 const Layout = "Jan 2, 2006 at 3:04pm"
 
+// Sort Posts by Time
 type ByPost []Post
 
 func (a ByPost) Len() int           { return len(a) }
 func (a ByPost) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByPost) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
+
+// Sort Countryes by Count
+type ByCountry []Country
+
+func (a ByCountry) Len() int           { return len(a) }
+func (a ByCountry) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByCountry) Less(i, j int) bool { return a[i].Count > a[j].Count }
 
 type FollowEdge struct {
 	Id        string `bson:"_id,omitempty"`
@@ -96,6 +116,7 @@ func ConnectToDataBase() {
 	FollowCollection = session.DB(database).C("followers")
 	LikeCollection = session.DB(database).C("like")
 	PhotoCollection = session.DB(database).C("photo")
+	CountryCollection = session.DB(database).C("country")
 	PostBlogCollection = session.DB(database).C("blog_post")
 	BlogCollection = session.DB(database).C("blog")
 }

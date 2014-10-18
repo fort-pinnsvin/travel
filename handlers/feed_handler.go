@@ -8,6 +8,7 @@ import (
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
 	"sort"
+	"html/template"
 )
 
 func FeedHandler(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -18,6 +19,7 @@ func FeedHandler(rnd render.Render, params martini.Params, session sessions.Sess
 		followingList := []models.FollowEdge{}
 		models.PostCollection.Find(bson.M{"owner": id}).All(&allPosts)
 		for i := len(allPosts) - 1; i >= 0; i-- {
+			allPosts[i].Html = template.HTML(allPosts[i].Text)
 			allPosts[i].OwnerUser = user
 			allPosts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), allPosts[i].Id)
 		}
@@ -31,6 +33,7 @@ func FeedHandler(rnd render.Render, params martini.Params, session sessions.Sess
 				models.UserCollection.FindId(element.Following).One(&user)
 				posts[i].OwnerUser = user
 				posts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), posts[i].Id)
+				posts[i].Html = template.HTML(posts[i].Text)
 				allPosts = append(allPosts, posts[i])
 			}
 		}

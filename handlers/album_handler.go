@@ -17,6 +17,7 @@ import (
 	"path/filepath"
 	"labix.org/v2/mgo/bson"
 	"github.com/fort-pinnsvin/travel/utils"
+	"time"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.Params){
@@ -94,6 +95,19 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render
 			photo.Name = file_id + extension
 			models.PhotoCollection.Insert(&photo)
 
+			// Add marker to feed
+			new_post := models.Post{}
+			new_post.Id = models.GenerateId()
+			new_post.Owner = session.Get("auth_id").(string)
+			new_post.Text = `I upload new photo to <a href="` +
+					"//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/" +
+					`">album</a><br/><img src="` +
+					"//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/"+ file_id + extension + `" height="130px">`
+			new_post.Title = "I create New Album!"
+			new_post.Date = time.Now().Format(models.Layout)
+			new_post.Nano = time.Now().Unix()
+			models.PostCollection.Insert(&new_post)
+
 			marker := &models.Marker{}
 			models.MarkerCollection.FindId(album_id).One(&marker)
 			// Adress last photo
@@ -160,5 +174,22 @@ func RemovePhoto(r *http.Request, session sessions.Session){
 		models.PhotoCollection.Find(query).One(&photo)
 		models.PhotoCollection.Remove(query)
 		os.Remove("assets/album/"+photo.AlbumId+"/"+photo.Name)
+	}
+}
+
+func AlbumDeleteHandler(res http.ResponseWriter, session sessions.Session, r *http.Request,  params martini.Params, rnd render.Render) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		// Remove files
+		os.RemoveAll("assets/album/" + id + "/")
+		query := make(bson.M)
+		query["albumid"] = id
+		models.PhotoCollection.RemoveAll(query)
+		models.MarkerCollection.RemoveId(id)
+		// TODO
+		// Delete posts from feed
+		// Modify advices
+		println("OK")
+		rnd.Redirect("/")
 	}
 }

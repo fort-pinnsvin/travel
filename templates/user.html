@@ -41,6 +41,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
+            <li><a href="/advice/country">Advices</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
@@ -158,7 +159,7 @@
                 </button>
                 <p><strong>{{ $element.Title }}</strong></p>
 
-                <p>{{$element.Text}}</p>
+                <p>{{$element.Html}}</p>
                 <hr>
                 <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
                     {{$element.Like}}</h4>
@@ -245,17 +246,32 @@
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         loadMarkers(map)
+
+        $.ajax({
+            type: "GET",
+            url: "/user/{{.id}}/home",
+            success: function (msg) {
+                var res = JSON.parse(msg);
+                var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(res.lat, res.lng),
+                    map: map,
+                    icon: iconBase + 'schools_maps.png',
+                    title: "{{.first_name}}'s home"
+                });
+            }
+        })
     }
 
 
     function getInfoWindow(name, desc, id, url_) {
-        var result = '<div id="content" style="color: black; width: 260px">' +
+        var result = '<div id="content" style="color: black;">' +
             '<div id="siteNotice">' +
             '</div>' +
             '<h1 id="firstHeading" class="firstHeading" style="font-size: 18px;">' + name + '</h1>' +
             '<div id="bodyContent">' +
             '<p>' + (desc || '') + '</p>' +
-            '<p><a class="thumbnail"><img src="' + url_ + '" alt=""></a></p>' +
+            '<p><a class="thumbnail"><img src="' + url_ + '" alt="" width="200px"></a></p>' +
             '<p><a href="/album/' + id + '">' +
             'Open album...</a></p>' +
             '</div>' +
