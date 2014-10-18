@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/fort-pinnsvin/travel/models"
+	"github.com/fort-pinnsvin/travel/utils"
 	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
 	"net/http"
 	"time"
-	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func GetMarkers(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session) {
@@ -50,7 +50,7 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
 		new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
-				"//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +marker.Id+"/"+ `">here</a>.`
+			"//" + utils.GetValue("WWW", "localhost:3000") + "/album/" + marker.Id + "/" + `">here</a>.`
 		new_post.Title = "I create New Album!"
 		new_post.Date = time.Now().Format(models.Layout)
 		new_post.Nano = time.Now().Unix()

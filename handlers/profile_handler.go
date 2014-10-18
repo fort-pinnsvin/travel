@@ -6,12 +6,12 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"labix.org/v2/mgo/bson"
-	"net/http"
-	"time"
 	"html/template"
+	"labix.org/v2/mgo/bson"
 	"math"
+	"net/http"
 	"strconv"
+	"time"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -58,7 +58,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 				"birthday":        user.Birthday,
 				"about":           user.About,
 				"posts":           allPost,
-				"rate": 		   GetRate(id),
+				"rate":            GetRate(id),
 			})
 		}
 	} else {
@@ -193,7 +193,7 @@ func GetRate(id string) float64 {
 			query["owner"] = id
 			iter := models.MarkerCollection.Find(query).Limit(1024).Iter()
 			if err := iter.All(&markers); err == nil {
-				for i := 0; i < len(markers); i ++ {
+				for i := 0; i < len(markers); i++ {
 					x, _ := strconv.ParseFloat(markers[i].Latitude, 64)
 					y, _ := strconv.ParseFloat(markers[i].Longitude, 64)
 					dist += math.Hypot(x-local_x, y-local_y)

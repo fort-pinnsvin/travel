@@ -74,7 +74,6 @@ func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Req
 	}
 }
 
-
 func GetLatLngByAddress(tokens oauth2.Tokens, address string) (float64, float64) {
 	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
 	client := http.Client{Transport: tr}

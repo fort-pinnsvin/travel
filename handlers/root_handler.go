@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/fort-pinnsvin/travel/models"
 	"github.com/fort-pinnsvin/travel/utils"
 	"github.com/martini-contrib/oauth2"
@@ -8,7 +9,6 @@ import (
 	"github.com/martini-contrib/sessions"
 	"net/http"
 	"time"
-	"fmt"
 )
 
 func Root(tokens oauth2.Tokens, rnd render.Render, r *http.Request, session sessions.Session) {
@@ -39,7 +39,7 @@ func Root(tokens oauth2.Tokens, rnd render.Render, r *http.Request, session sess
 			new_post.Id = models.GenerateId()
 			new_post.Owner = session.Get("auth_id").(string)
 			new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
-					"//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +marker.Id+"/"+ `">here</a>.`
+				"//" + utils.GetValue("WWW", "localhost:3000") + "/album/" + marker.Id + "/" + `">here</a>.`
 			new_post.Title = "I create New Album!"
 			new_post.Date = time.Now().Format(models.Layout)
 			new_post.Nano = time.Now().Unix()

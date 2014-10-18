@@ -6,9 +6,9 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"html/template"
 	"labix.org/v2/mgo/bson"
 	"sort"
-	"html/template"
 )
 
 func FeedHandler(rnd render.Render, params martini.Params, session sessions.Session) {

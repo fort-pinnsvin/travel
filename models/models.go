@@ -2,8 +2,8 @@ package models
 
 import (
 	"github.com/fort-pinnsvin/travel/utils"
-	"labix.org/v2/mgo"
 	"html/template"
+	"labix.org/v2/mgo"
 )
 
 type User struct {
@@ -29,8 +29,8 @@ type Marker struct {
 	Longitude   string
 	Description string
 	FullAddress string
-	Date      	string
-	Nano      	int64
+	Date        string
+	Nano        int64
 }
 
 type Post struct {
@@ -52,32 +52,32 @@ type Like struct {
 }
 
 type Photo struct {
-	AlbumId		string
-	Name		string
+	AlbumId string
+	Name    string
 }
 
 type Country struct {
-	Code        string `bson:"_id,omitempty"`
-	Count		int
-	Name		string
+	Code  string `bson:"_id,omitempty"`
+	Count int
+	Name  string
 }
 
 type PostBlog struct {
-	Id        string `bson:"_id,omitempty"`
-	IdBlog    string
-	Owner     string
-	Title     string
-	Text      string
-	Date      string
-	Nano      int64
+	Id     string `bson:"_id,omitempty"`
+	IdBlog string
+	Owner  string
+	Title  string
+	Text   string
+	Date   string
+	Nano   int64
 }
 
 type Blog struct {
-	Id        string `bson:"_id,omitempty"`
-	Owner     string
-	Name      string
-	Date      string
-	Nano      int64
+	Id    string `bson:"_id,omitempty"`
+	Owner string
+	Name  string
+	Date  string
+	Nano  int64
 }
 
 const Layout = "Jan 2, 2006 at 3:04pm"
@@ -89,21 +89,17 @@ func (a ByPost) Len() int           { return len(a) }
 func (a ByPost) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByPost) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
 
-
-
 type ByPostBlog []PostBlog
 
 func (a ByPostBlog) Len() int           { return len(a) }
 func (a ByPostBlog) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByPostBlog) Less(i, j int) bool { return a[i].Nano < a[j].Nano}
+func (a ByPostBlog) Less(i, j int) bool { return a[i].Nano < a[j].Nano }
 
 type ByBlog []Blog
 
 func (a ByBlog) Len() int           { return len(a) }
 func (a ByBlog) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByBlog) Less(i, j int) bool { return a[i].Nano > a[j].Nano}
-
-
+func (a ByBlog) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
 
 // Sort Countryes by Count
 type ByCountry []Country

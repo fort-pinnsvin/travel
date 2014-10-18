@@ -3,10 +3,10 @@ package handlers
 import (
 	"fmt"
 	"github.com/fort-pinnsvin/travel/models"
+	"github.com/martini-contrib/oauth2"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"net/http"
-	"github.com/martini-contrib/oauth2"
 )
 
 func Edit(rnd render.Render, session sessions.Session, r *http.Request) {

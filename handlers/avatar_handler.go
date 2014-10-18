@@ -2,6 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/fort-pinnsvin/travel/models"
+	"github.com/fort-pinnsvin/travel/utils"
+	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"image"
 	_ "image/gif"
@@ -10,10 +13,7 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"github.com/fort-pinnsvin/travel/models"
 	"path/filepath"
-	"github.com/fort-pinnsvin/travel/utils"
-	"github.com/martini-contrib/render"
 )
 
 func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Request, rnd render.Render) {
@@ -56,9 +56,9 @@ func UploadAvatar(session sessions.Session, w http.ResponseWriter, r *http.Reque
 
 		user := &models.User{}
 		models.UserCollection.FindId(session.Get("auth_id")).One(&user)
-		user.Avatar = "//" +utils.GetValue("WWW", "localhost:3000") + "/avatar/" + id + "/" + file_id + extension
+		user.Avatar = "//" + utils.GetValue("WWW", "localhost:3000") + "/avatar/" + id + "/" + file_id + extension
 		models.UserCollection.UpdateId(session.Get("auth_id"), user)
-		session.Set("avatar",  "//" +utils.GetValue("WWW", "localhost:3000") + "/avatar/" + id + "/" + file_id + extension)
+		session.Set("avatar", "//"+utils.GetValue("WWW", "localhost:3000")+"/avatar/"+id+"/"+file_id+extension)
 		rnd.Redirect("/edit?avatar=ok")
 		return
 	}
