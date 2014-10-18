@@ -55,5 +55,8 @@ func main() {
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/remove_photo",oauth2.LoginRequired, handlers.RemovePhoto)
 	m.Get("/album_list",oauth2.LoginRequired,handlers.AlbumListHandler)
+	m.Get("/mini_blog/:id",oauth2.LoginRequired,handlers.MiniBlogHandler)
+	m.Post("/blog_create",oauth2.LoginRequired, handlers.CreateMiniBlog)
+	m.Post("/save_post_miniblog",oauth2.LoginRequired, handlers.SavePostMiniblog)
 	m.Run()
 }

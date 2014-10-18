@@ -138,7 +138,9 @@
 
     <div id="show_form">
         <a class="btn btn-default" onclick="show_form()">New Post</a>
+        <a class="btn btn-default" onclick="add_miniblog()">New Story</a>
     </div>
+
     {{end}}
 
     {{if .auth_user }}
@@ -292,6 +294,18 @@
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
+
+    var add_miniblog = function () {
+        $.ajax({
+            type: "POST",
+            url: "../blog_create",
+            success: function (msg) {
+                alert(msg)
+                rnd = JSON.parse(msg);
+                window.location.href = "/mini_blog/"+ rnd.id_blog;
+            }
+        });
+    }
 
     var post_add = function () {
         $.ajax({
