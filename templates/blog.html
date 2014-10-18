@@ -46,7 +46,7 @@
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
             <li><a href="/album_list">Albums</a></li>
-            <li><a href="/mini_blog_list">Stories</a></li>
+            <li class="active"><a href="/mini_blog_list">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/mini_blog/{{ .blog.Id }}/edit">Edit</a></li>
@@ -127,7 +127,19 @@
         </div>
     </div>
     {{end}}
+
+
+    <div class="row">
+        <hr>
+        <footer>
+            <div class="col-lg-8">
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                    Tsyrkunov</a>.</p>
+            </div>
+        </footer>
+    </div>
 </div>
+
 <!-- /container -->
 
 

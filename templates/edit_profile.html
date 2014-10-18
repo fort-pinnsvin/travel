@@ -167,7 +167,8 @@
                     form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>All good!</strong> Your profile is updated!'
                     setInterval(function () {
                         form.style.display = "none"
-                    }, 5000)
+                        window.location.href = "/user/{{.Id}}"
+                    }, 1500)
                 }
             }
         });

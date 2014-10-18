@@ -51,7 +51,7 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		new_post := models.Post{}
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
-		new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
+		new_post.Text = `Watch it <a href="` +
 			"//" + utils.GetValue("WWW", "localhost:3000") + "/album/" + marker.Id + "/" + `">here</a>.`
 		new_post.Title = "I opened new album!"
 		new_post.Date = time.Now().Format(models.Layout)
