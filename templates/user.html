@@ -43,6 +43,7 @@
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
+            <li><a href="/album_list">Albums</a></li>
             <li><a href="/mini_blog_list">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -68,7 +69,7 @@
                 <img src="{{ .avatar }}" width="100%" style="margin-top:-5px;"/>
             </div>
             <div class="well well-sm">
-                {{.first_name}} {{.last_name}}
+                {{.first_name}} {{.last_name}} ({{.rate}} points)
             </div>
             {{if .email}}
             <div class="well well-sm">

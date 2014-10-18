@@ -34,8 +34,8 @@ func GetData(session sessions.Session, tokens oauth2.Tokens, rnd render.Render) 
 		user.LastName = string(dat["family_name"])
 		user.Email = string("")
 		user.Avatar = string(dat["picture"])
-		user.Longitude = 10000;
-		user.Latitude = 10000;
+		user.Longitude = 10000
+		user.Latitude = 10000
 
 		findUser := &models.User{}
 		models.UserCollection.FindId(user.Id).One(&findUser)

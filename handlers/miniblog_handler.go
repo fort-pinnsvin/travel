@@ -1,19 +1,19 @@
 package handlers
 
 import (
-	"github.com/martini-contrib/sessions"
-	"github.com/martini-contrib/render"
-	"github.com/go-martini/martini"
+	"fmt"
 	"github.com/fort-pinnsvin/travel/helpfunc"
 	"github.com/fort-pinnsvin/travel/models"
-	"time"
-	"net/http"
-	"fmt"
+	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
+	"net/http"
 	"sort"
+	"time"
 )
 
-func MiniBlogHandler(rnd render.Render, session sessions.Session,  params martini.Params){
+func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini.Params) {
 	if session.Get("auth_id") != "" {
 		id_blog := params["id"]
 
@@ -28,17 +28,17 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session,  params martin
 		sort.Sort(models.ByPostBlog(postsBlog))
 
 		user_auth := helpfunc.GetAuthUser(session)
-		rnd.HTML(200, "blog", map[string]interface {}{
-			"user" : user_auth,
-			"auth_user" : true,
-			"id_blog" : id_blog,
-			"all_post" : postsBlog,
-			"blog" : blog,
-		});
+		rnd.HTML(200, "blog", map[string]interface{}{
+			"user":      user_auth,
+			"auth_user": true,
+			"id_blog":   id_blog,
+			"all_post":  postsBlog,
+			"blog":      blog,
+		})
 	}
 }
 
-func MiniBlogListHandler(rnd render.Render, session sessions.Session){
+func MiniBlogListHandler(rnd render.Render, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		id_user := session.Get("auth_id").(string)
 		blogs := []models.Blog{}
@@ -49,15 +49,15 @@ func MiniBlogListHandler(rnd render.Render, session sessions.Session){
 		sort.Sort(models.ByBlog(blogs))
 
 		user_auth := helpfunc.GetAuthUser(session)
-		rnd.HTML(200, "lists_blogs", map[string]interface {}{
-			"user" : user_auth,
-			"auth_user" : true,
-			"blogs" : blogs,
-		});
+		rnd.HTML(200, "lists_blogs", map[string]interface{}{
+			"user":      user_auth,
+			"auth_user": true,
+			"blogs":     blogs,
+		})
 	}
 }
 
-func SavePostMiniblog(res http.ResponseWriter, rnd render.Render, r *http.Request, session sessions.Session,) {
+func SavePostMiniblog(res http.ResponseWriter, rnd render.Render, r *http.Request, session sessions.Session) {
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")
 		id_blog := r.FormValue("id_blog")

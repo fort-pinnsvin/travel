@@ -1,4 +1,4 @@
 .idea/*
 
-Travel.iml
-src/Travel.go
+*.iml
+src/*

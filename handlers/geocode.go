@@ -15,9 +15,10 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
-func GetCountry(tokens oauth2.Tokens, lat string, lng string) {
+func GetCountry(tokens oauth2.Tokens, lat string, lng string) string {
 	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
 	client := http.Client{Transport: tr}
 	res, err := client.Get("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng)
@@ -40,7 +41,6 @@ func GetCountry(tokens oauth2.Tokens, lat string, lng string) {
 		country, _ := jq.String("results", strconv.Itoa(len-1), "address_components", "0", "short_name")
 		name, _ := jq.String("results", strconv.Itoa(len-1), "address_components", "0", "long_name")
 		println(name)
-
 		countryStat := &models.Country{}
 		models.CountryCollection.FindId(country).One(&countryStat)
 
@@ -53,7 +53,9 @@ func GetCountry(tokens oauth2.Tokens, lat string, lng string) {
 			countryStat.Count += 1
 			models.CountryCollection.UpdateId(country, countryStat)
 		}
+		return country
 	}
+	return ""
 }
 
 func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session, rnd render.Render) {
@@ -73,7 +75,6 @@ func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Req
 		})
 	}
 }
-
 
 func GetLatLngByAddress(tokens oauth2.Tokens, address string) (float64, float64) {
 	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
@@ -98,4 +99,20 @@ func GetLatLngByAddress(tokens oauth2.Tokens, address string) (float64, float64)
 		return lat, lng
 	}
 	return 10000, 10000
+}
+
+func DecrementCountryStat(code string) {
+	fmt.Printf("DecrementCountryStat(code = [%#v])\n", code)
+	if (code != "") {
+		countryStat := &models.Country{}
+		models.CountryCollection.FindId(code).One(&countryStat)
+		if countryStat.Code != "" {
+			if countryStat.Count <= 1 {
+				models.CountryCollection.RemoveId(code)
+			} else {
+				countryStat.Count -= 1
+				models.CountryCollection.UpdateId(code, countryStat)
+			}
+		}
+	}
 }

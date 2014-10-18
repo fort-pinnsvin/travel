@@ -43,7 +43,7 @@ func main() {
 	m.Get("/update_follow_status", oauth2.LoginRequired, handlers.UpdateFollowStatus)
 	m.Get("/feed", oauth2.LoginRequired, handlers.FeedHandler)
 	m.Get("/friends", oauth2.LoginRequired, handlers.FollowingHandler)
-	m.Get("/album_list",oauth2.LoginRequired,handlers.AlbumListHandler)
+	m.Get("/album_list", oauth2.LoginRequired, handlers.AlbumListHandler)
 	m.Get("/advice/country", oauth2.LoginRequired, handlers.GetRecommCountry)
 	m.Get("/album/:id", oauth2.LoginRequired, handlers.AlbumHandler)
 	m.Get("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsHandler)

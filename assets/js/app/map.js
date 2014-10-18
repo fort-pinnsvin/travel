@@ -9,7 +9,7 @@ function initialize() {
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
     loadMarkers(map)
-    google.maps.event.addListener(map, 'dblclick', function(event) {
+    google.maps.event.addListener(map, 'dblclick', function (event) {
         placeMarker(event.latLng);
     });
 }
@@ -35,7 +35,7 @@ function loadMarkers(map) {
     $.ajax({
         type: "GET",
         url: "markers",
-        success: function(msg) {
+        success: function (msg) {
             array = JSON.parse(msg)
             console.table(array)
 
@@ -47,17 +47,18 @@ function loadMarkers(map) {
                     title: el.Name,
                     id: el.Id,
                     draggable: true,
-                    drag: function() {
+                    drag: function () {
                         $.ajax({
                             type: "GET",
                             url: "markers/update?lat=" + this.position.lat() + "&long=" + this.position.lng() + "&id=" + this.id,
-                            success: function(msg) {}
+                            success: function (msg) {
+                            }
                         });
                     },
                     infoWindow: new google.maps.InfoWindow({
                         content: getInfoWindow(el.Name, el.Description, el.Id, el.FullAddress)
                     }),
-                    clickListener: function() {
+                    clickListener: function () {
                         this.infoWindow.open(map, this);
                     }
                 });
@@ -71,33 +72,35 @@ function loadMarkers(map) {
 }
 
 function placeMarker(location) {
+    var name = chance.sentence({words: 4}) || "New Album"
+    var albumName = encodeURIComponent(name)
     $.ajax({
         type: "GET",
         url: "markers/create",
-        data: "name=New+Album&lat=" + location.lat() + "&long=" + location.lng(),
-        success: function(msg) {
+        data: "name=" + albumName + "&lat=" + location.lat() + "&long=" + location.lng(),
+        success: function (msg) {
             result = JSON.parse(msg)
             console.log(result)
             if (result.error == 0) {
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    title: "New Album",
+                    title: name,
                     id: result.id,
                     draggable: true,
-                    drag: function() {
+                    drag: function () {
                         $.ajax({
                             type: "GET",
                             url: "markers/update?lat=" + this.position.lat() + "&long=" + this.position.lng() + "&id=" + this.id,
-                            success: function(msg) {
+                            success: function (msg) {
 
                             }
                         });
                     },
                     infoWindow: new google.maps.InfoWindow({
-                        content: getInfoWindow("New Album", "", result.id, result.url)
+                        content: getInfoWindow(name, "", result.id, result.url)
                     }),
-                    clickListener: function() {
+                    clickListener: function () {
                         this.infoWindow.open(map, this);
                     }
                 });

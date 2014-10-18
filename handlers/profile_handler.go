@@ -6,10 +6,12 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"labix.org/v2/mgo/bson"
-	"net/http"
-	"time"
 	"html/template"
+	"labix.org/v2/mgo/bson"
+	"math"
+	"net/http"
+	"strconv"
+	"time"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -56,6 +58,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 				"birthday":        user.Birthday,
 				"about":           user.About,
 				"posts":           allPost,
+				"rate":            GetRate(id),
 			})
 		}
 	} else {
@@ -172,4 +175,32 @@ func GetHomePosition(res http.ResponseWriter, params martini.Params, session ses
 			res.Write([]byte(fmt.Sprintf(`{"lat": %.8f, "lng": %.8f}`, 100000, 100000)))
 		}
 	}
+}
+
+func GetRate(id string) float64 {
+	local_x := 0.0
+	local_y := 0.0
+	dist := 0.0
+	mod := 1.0
+
+	user := models.User{}
+	err := models.UserCollection.FindId(id).One(&user)
+	if err == nil {
+		local_x = user.Latitude
+		local_y = user.Longitude
+		markers := []models.Marker{}
+		query := make(bson.M)
+		query["owner"] = id
+		iter := models.MarkerCollection.Find(query).Limit(1024).Iter()
+		if err := iter.All(&markers); err == nil {
+			for i := 0; i < len(markers); i++ {
+				x, _ := strconv.ParseFloat(markers[i].Latitude, 64)
+				y, _ := strconv.ParseFloat(markers[i].Longitude, 64)
+				dist += math.Hypot(x-local_x, y-local_y)
+			}
+		}
+		dist = math.Min(dist, 5000)
+		mod = math.Pow(dist, 1.0 / (float64(len(markers)) + float64(1)))
+	}
+	return math.Floor(dist * mod)
 }
