@@ -72,21 +72,32 @@
 
     <hr>
 
-
+    {{ if .auth_user }}
     <div class="row">
         {{range $element := .photos }}
         <div class="col-sm-6 col-md-3" >
             <a class="thumbnail" >
-                {{ if .auth_user }}
+
                 <button type="button" class="close" title="{{ $element.Name }}" data-dismiss="alert"
                         onclick="remove_photo({{ $element.Name }}, {{$element.AlbumId}})">×
                 </button>
-                {{ end }}
                 <img src="{{$element.Name}}" alt="">
             </a>
         </div>
         {{end}}
     </div>
+    {{else}}
+    <div class="row">
+        {{range $element := .photos }}
+        <div class="col-sm-6 col-md-3" >
+            <a class="thumbnail" >
+                <img src="{{$element.Name}}" alt="" width="130px">
+            </a>
+        </div>
+        {{end}}
+    </div>
+    {{end}}
+
 
     {{if .owner}}
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
