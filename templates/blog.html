@@ -8,10 +8,10 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Travel</title>
+    <title>Mini blog</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="../assets/css/b_bootstrap.mi.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar-static-top.css" rel="stylesheet">
@@ -65,8 +65,6 @@
             <div class="form-group">
                 <div class="col-lg-12">
                     <h2 style="text-align:center;">New Post</h2>
-                    <input class="form-control" id="title_post" name="title_post" type="text" placeholder="Title..."
-                           required>
                     <br>
                     <textarea class="form-control" style="resize:none; height: 150px;" rows="3" id="text_post"
                               name="text_post" required placeholder="What do you think?"></textarea>
@@ -75,7 +73,7 @@
             <div class="form-group">
                 <div class="col-lg-12 pager">
 
-                    <a class="btn btn-primary" onclick="post_add()">Submit</a>
+                    <a class="btn btn-primary" onclick="post_add_miniblog()">Submit</a>
                     <a class="btn btn-default" onclick="hide_form()">Hide</a>
                 </div>
             </div>
@@ -90,37 +88,19 @@
     {{if .auth_user }}
     <div class="row">
         <div class="col-lg-12">
-            <h1 style="text-align:center;">News</h1>
-            {{if not .posts }}
+            <h1 style="text-align:center;">{{ .blog.Name }}</h1>
+            {{if not .all_post }}
             <hr>
-            <h1 style="text-align:center;">There are no new posts. Press "New Post" to create new post.</h1>
+            <h1 style="text-align:center;">There are no new post. Press "New Story" to create new story.</h1>
             {{end}}
-            {{range $element := .posts }}
+            {{range $element := .all_post }}
             <blockquote>
                 <button type="button" class="close" title="Remove Post" data-dismiss="alert"
-                        onclick="remove_post({{ $element.Id }})">×
+                        onclick="remove_post_miniblog({{ $element.Id }})">×
                 </button>
-                <p><strong>{{ $element.Title }}</strong></p>
 
                 <p>{{$element.Text}}</p>
                 <hr>
-                <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
-                    {{$element.Like}}</h4>
-                {{ if not $element.IsLiked }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}"
-                        onclick='add_like({{ $element.Id }})'>Like
-                </button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none"
-                        onclick='add_like({{ $element.Id }})'>Unlike
-                </button>
-                {{ else }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none"
-                        onclick='add_like({{ $element.Id }})'>Like
-                </button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}"
-                        onclick='add_like({{ $element.Id }})'>Unlike
-                </button>
-                {{end}}
                 <h5>{{$element.Date}}</h5>
             </blockquote>
             <br>
@@ -131,29 +111,11 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 style="text-align:center;">News</h1>
-            {{range $element := .posts }}
+            {{range $element := .all_post }}
             <blockquote>
-                <p><strong>{{ $element.Title }}</strong></p>
 
                 <p>{{$element.Text}}</p>
                 <hr>
-                <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
-                    {{$element.Like}}</h4>
-                {{ if not $element.IsLiked }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}"
-                        onclick='add_like({{ $element.Id }})'>Like
-                </button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none"
-                        onclick='add_like({{ $element.Id }})'>Unlike
-                </button>
-                {{ else }}
-                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none"
-                        onclick='add_like({{ $element.Id }})'>Like
-                </button>
-                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}"
-                        onclick='add_like({{ $element.Id }})'>Unlike
-                </button>
-                {{end}}
                 <h5>{{$element.Date}}</h5>
             </blockquote>
             <br>
@@ -172,3 +134,51 @@
 <script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
+
+        <script>
+            var post_add_miniblog = function () {
+                $.ajax({
+                    type: "POST",
+                    url: "../save_post_miniblog",
+                    data: getParams("text_post") + getParams("title_post") + "&id_blog={{.id_blog}}",
+
+                    success: function (msg) {
+                        var rdr = JSON.parse(msg)
+                        window.location.href = '/mini_blog/' + rdr.id_blog;
+                        console.table(rdr)
+                    }
+                });
+            }
+
+            var getParams = function (id) {
+                return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
+            }
+
+
+            var remove_post_miniblog = function (id) {
+                $.ajax({
+                    type: "POST",
+                    url: "../remove_post",
+                    data: "id=" + id,
+                    success: function (msg) {
+                        console.table(msg)
+                    }
+                });
+            }
+
+
+            var hide_form = function () {
+                $("#post_form").hide()
+                $("#show_form").show()
+            }
+
+            var show_form = function () {
+                $("#post_form").show()
+                $("#show_form").hide()
+            }
+
+
+
+
+        </script>
+<script src="../js/app/tooltip.js"></script>

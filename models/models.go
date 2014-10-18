@@ -62,6 +62,24 @@ type Country struct {
 	Name		string
 }
 
+type PostBlog struct {
+	Id        string `bson:"_id,omitempty"`
+	IdBlog    string
+	Owner     string
+	Title     string
+	Text      string
+	Date      string
+	Nano      int64
+}
+
+type Blog struct {
+	Id        string `bson:"_id,omitempty"`
+	Owner     string
+	Name      string
+	Date      string
+	Nano      int64
+}
+
 const Layout = "Jan 2, 2006 at 3:04pm"
 
 // Sort Posts by Time
@@ -70,6 +88,16 @@ type ByPost []Post
 func (a ByPost) Len() int           { return len(a) }
 func (a ByPost) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByPost) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
+
+
+
+type ByPostBlog []PostBlog
+
+func (a ByPostBlog) Len() int           { return len(a) }
+func (a ByPostBlog) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByPostBlog) Less(i, j int) bool { return a[i].Nano < a[j].Nano}
+
+
 
 // Sort Countryes by Count
 type ByCountry []Country
@@ -99,4 +127,6 @@ func ConnectToDataBase() {
 	LikeCollection = session.DB(database).C("like")
 	PhotoCollection = session.DB(database).C("photo")
 	CountryCollection = session.DB(database).C("country")
+	PostBlogCollection = session.DB(database).C("blog_post")
+	BlogCollection = session.DB(database).C("blog")
 }
