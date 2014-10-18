@@ -176,3 +176,20 @@ func RemovePhoto(r *http.Request, session sessions.Session){
 		os.Remove("assets/album/"+photo.AlbumId+"/"+photo.Name)
 	}
 }
+
+func AlbumDeleteHandler(res http.ResponseWriter, session sessions.Session, r *http.Request,  params martini.Params, rnd render.Render) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		// Remove files
+		os.RemoveAll("assets/album/" + id + "/")
+		query := make(bson.M)
+		query["albumid"] = id
+		models.PhotoCollection.RemoveAll(query)
+		models.MarkerCollection.RemoveId(id)
+		// TODO
+		// Delete posts from feed
+		// Modify advices
+		println("OK")
+		rnd.Redirect("/")
+	}
+}

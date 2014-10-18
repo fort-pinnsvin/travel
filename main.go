@@ -47,6 +47,7 @@ func main() {
 	m.Get("/advice/country", oauth2.LoginRequired, handlers.GetRecommCountry)
 	m.Get("/album/:id", oauth2.LoginRequired, handlers.AlbumHandler)
 	m.Get("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsHandler)
+	m.Get("/album/:id/delete", oauth2.LoginRequired, handlers.AlbumDeleteHandler)
 	m.Post("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsSaveHandler)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
