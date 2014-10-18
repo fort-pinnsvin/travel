@@ -57,7 +57,7 @@ func AlbumHandler(rnd render.Render, session sessions.Session,  params martini.P
 	}
 }
 
-func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
+func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render) string {
 	if session.Get("auth_id") != "" {
 
 		album_id := r.FormValue("id")
@@ -110,8 +110,10 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session) string {
 
 			marker := &models.Marker{}
 			models.MarkerCollection.FindId(album_id).One(&marker)
+			// Adress last photo
 			marker.FullAddress = "//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/"+ file_id + extension
 			models.MarkerCollection.UpdateId(album_id, marker)
+			rnd.Redirect("/album/"+album_id)
 			return "ok"
 		} else {
 			os.Remove("assets/album/" +album_id+"/"+ file_id + extension)
@@ -160,5 +162,17 @@ func AlbumSettingsSaveHandler(res http.ResponseWriter, session sessions.Session,
 		res.Write([]byte(`{"error": 0}`))
 	} else {
 		res.Write([]byte(`{"error": 1}`))
+	}
+}
+
+func RemovePhoto(r *http.Request, session sessions.Session){
+	if session.Get("auth_id") != "" {
+		photo_name := r.FormValue("name_photo")
+		query := make(bson.M)
+		query["name"] = photo_name
+		photo := models.Photo{}
+		models.PhotoCollection.Find(query).One(&photo)
+		models.PhotoCollection.Remove(query)
+		os.Remove("assets/album/"+photo.AlbumId+"/"+photo.Name)
 	}
 }

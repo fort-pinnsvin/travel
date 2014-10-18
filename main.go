@@ -54,5 +54,8 @@ func main() {
 	m.Post("/remove_post", oauth2.LoginRequired, handlers.RemovePost)
 	m.Post("/add_like", oauth2.LoginRequired, handlers.AddLike)
 	m.Post("/avatar/upload", oauth2.LoginRequired, handlers.UploadAvatar)
+	m.Post("/remove_photo",oauth2.LoginRequired, handlers.RemovePhoto)
+	m.Get("/album_list",oauth2.LoginRequired,handlers.AlbumListHandler)
+
 	m.Run()
 }
