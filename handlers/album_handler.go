@@ -96,6 +96,7 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render
 
 			marker := &models.Marker{}
 			models.MarkerCollection.FindId(album_id).One(&marker)
+			// Adress last photo
 			marker.FullAddress = "//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +album_id+"/"+ file_id + extension
 			models.MarkerCollection.UpdateId(album_id, marker)
 			rnd.Redirect("/album/"+album_id)

@@ -11,7 +11,7 @@
     <title>Travel</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="../assets/css/b_bootstrap.mi.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="navbar-static-top.css" rel="stylesheet">
@@ -63,17 +63,20 @@
     <h1 style="text-align:center;">Альбомы пользователя X</h1>
     <hr>
 
-    <div class="row-fluid">
+    <div class="row">
+        {{range $element := .albums }}
         <div class="span4">
             <div class="col-sm-6 col-md-3"> <!--Взять в цикл -->
-                <a class="thumbnail">
-                    <img src="" alt="">
+                <a href="/album/{{$element.Id}}" class="thumbnail">
+                    <img src="{{$element.FullAddress}}" alt="">
+                    <div class="caption">
+                        <h3>{{$element.Name}}</h3>
+                    </div>
                 </a>
-                <div class="caption">
-                    <h3>Header</h3>
-                </div>
+
             </div>
         </div>
+        {{end}}
     </div>
 
 
