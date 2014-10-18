@@ -2,15 +2,19 @@ package handlers
 
 import (
 	"encoding/json"
+	"github.com/fort-pinnsvin/travel/models"
 	gooauth2 "github.com/golang/oauth2"
+	"github.com/jmoiron/jsonq"
 	"github.com/martini-contrib/oauth2"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 	"io/ioutil"
+	"labix.org/v2/mgo/bson"
 	"log"
 	"net/http"
-	"github.com/jmoiron/jsonq"
-	"strings"
+	"sort"
 	"strconv"
-	"github.com/fort-pinnsvin/travel/models"
+	"strings"
 )
 
 func GetCountry(tokens oauth2.Tokens, lat string, lng string) {
@@ -29,21 +33,43 @@ func GetCountry(tokens oauth2.Tokens, lat string, lng string) {
 	dec := json.NewDecoder(strings.NewReader(string(robots)))
 	dec.Decode(&dat)
 	jq := jsonq.NewQuery(dat)
-	arrOfObj, _ := jq.ArrayOfObjects("results")
-	len := len(arrOfObj)
-	country, err := jq.String("results", strconv.Itoa(len - 1), "address_components", "0", "short_name")
-	println(country)
+	status, _ := jq.String("status")
+	if status == "OK" {
+		arrOfObj, _ := jq.ArrayOfObjects("results")
+		len := len(arrOfObj)
+		country, _ := jq.String("results", strconv.Itoa(len-1), "address_components", "0", "short_name")
+		name, _ := jq.String("results", strconv.Itoa(len-1), "address_components", "0", "long_name")
+		println(name)
 
+		countryStat := &models.Country{}
+		models.CountryCollection.FindId(country).One(&countryStat)
 
-	countryStat := &models.Country{}
-	models.CountryCollection.FindId(country).One(&countryStat)
+		if countryStat.Code == "" {
+			countryStat.Code = country
+			countryStat.Name = name
+			countryStat.Count = 1
+			models.CountryCollection.Insert(&countryStat)
+		} else {
+			countryStat.Count += 1
+			models.CountryCollection.UpdateId(country, countryStat)
+		}
+	}
+}
 
-	if countryStat.Code == "" {
-		countryStat.Code = country
-		countryStat.Count = 1
-		models.CountryCollection.Insert(&countryStat)
-	} else {
-		countryStat.Count += 1
-		models.CountryCollection.UpdateId(country, countryStat)
+func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session, rnd render.Render) {
+	country := []models.Country{}
+	query := make(bson.M)
+	iter := models.CountryCollection.Find(query).Limit(10).Iter()
+	if err := iter.All(&country); err == nil {
+		sort.Sort(models.ByCountry(country))
+		user := &models.User{}
+		user.FirstName = session.Get("first_name").(string)
+		user.LastName = session.Get("last_name").(string)
+		user.Id = session.Get("auth_id").(string)
+		user.Avatar = session.Get("avatar").(string)
+		rnd.HTML(200, "advice", map[string]interface{}{
+			"user":    user,
+			"country": country,
+		})
 	}
 }

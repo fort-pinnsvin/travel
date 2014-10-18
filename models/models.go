@@ -57,15 +57,24 @@ type Photo struct {
 type Country struct {
 	Code        string `bson:"_id,omitempty"`
 	Count		int
+	Name		string
 }
 
 const Layout = "Jan 2, 2006 at 3:04pm"
 
+// Sort Posts by Time
 type ByPost []Post
 
 func (a ByPost) Len() int           { return len(a) }
 func (a ByPost) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByPost) Less(i, j int) bool { return a[i].Nano > a[j].Nano }
+
+// Sort Countryes by Count
+type ByCountry []Country
+
+func (a ByCountry) Len() int           { return len(a) }
+func (a ByCountry) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByCountry) Less(i, j int) bool { return a[i].Count > a[j].Count }
 
 type FollowEdge struct {
 	Id        string `bson:"_id,omitempty"`
