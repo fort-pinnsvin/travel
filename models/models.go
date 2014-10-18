@@ -54,6 +54,11 @@ type Photo struct {
 	Name		string
 }
 
+type Country struct {
+	Code        string `bson:"_id,omitempty"`
+	Count		int
+}
+
 const Layout = "Jan 2, 2006 at 3:04pm"
 
 type ByPost []Post
@@ -82,4 +87,5 @@ func ConnectToDataBase() {
 	FollowCollection = session.DB(database).C("followers")
 	LikeCollection = session.DB(database).C("like")
 	PhotoCollection = session.DB(database).C("photo")
+	CountryCollection = session.DB(database).C("country")
 }

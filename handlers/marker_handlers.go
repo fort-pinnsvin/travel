@@ -56,6 +56,7 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		new_post.Nano = time.Now().Unix()
 		models.PostCollection.Insert(&new_post)
 
+		GetCountry(tokens, marker.Latitude, marker.Longitude)
 		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `", "url": "http://placehold.it/250x130"}`))
 	} else {
 		res.Write([]byte(`some errors`))

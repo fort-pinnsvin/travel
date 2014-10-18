@@ -12,6 +12,7 @@ var PostCollection 		*mgo.Collection
 var LikeCollection 		*mgo.Collection
 var FollowCollection 	*mgo.Collection
 var PhotoCollection 	*mgo.Collection
+var CountryCollection 	*mgo.Collection
 
 func GenerateId() string {
 	b := make([]byte, 16)
