@@ -12,6 +12,8 @@ var PostCollection 		*mgo.Collection
 var LikeCollection 		*mgo.Collection
 var FollowCollection 	*mgo.Collection
 var PhotoCollection 	*mgo.Collection
+var PostBlogCollection	*mgo.Collection
+var BlogCollection		*mgo.Collection
 var CountryCollection 	*mgo.Collection
 
 func GenerateId() string {
