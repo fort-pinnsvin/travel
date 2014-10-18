@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"time"
 	"html/template"
+	"math"
+	"strconv"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -56,6 +58,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 				"birthday":        user.Birthday,
 				"about":           user.About,
 				"posts":           allPost,
+				"rate": 		   GetRate(id),
 			})
 		}
 	} else {
@@ -175,5 +178,29 @@ func GetHomePosition(res http.ResponseWriter, params martini.Params, session ses
 }
 
 func GetRate(id string) float64 {
+	local_x := 0.0
+	local_y := 0.0
+	dist := 0.0
 
+	user := models.User{}
+	err := models.UserCollection.FindId(id).One(&user)
+	if err == nil {
+		local_x = user.Latitude
+		local_y = user.Longitude
+		if local_x != 0.0 && local_y != 0.0 {
+			markers := []models.Marker{}
+			query := make(bson.M)
+			query["owner"] = id
+			iter := models.MarkerCollection.Find(query).Limit(1024).Iter()
+			if err := iter.All(&markers); err == nil {
+				for i := 0; i < len(markers); i ++ {
+					x, _ := strconv.ParseFloat(markers[i].Latitude, 64)
+					y, _ := strconv.ParseFloat(markers[i].Longitude, 64)
+					dist += math.Hypot(x-local_x, y-local_y)
+				}
+			}
+		}
+	}
+	println(dist * 10)
+	return math.Floor(dist * 10)
 }
