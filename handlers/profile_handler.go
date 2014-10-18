@@ -173,3 +173,7 @@ func GetHomePosition(res http.ResponseWriter, params martini.Params, session ses
 		}
 	}
 }
+
+func GetRate(id string) float64 {
+
+}
