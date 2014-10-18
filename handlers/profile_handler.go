@@ -181,26 +181,26 @@ func GetRate(id string) float64 {
 	local_x := 0.0
 	local_y := 0.0
 	dist := 0.0
+	mod := 1.0
 
 	user := models.User{}
 	err := models.UserCollection.FindId(id).One(&user)
 	if err == nil {
 		local_x = user.Latitude
 		local_y = user.Longitude
-		if local_x != 0.0 && local_y != 0.0 {
-			markers := []models.Marker{}
-			query := make(bson.M)
-			query["owner"] = id
-			iter := models.MarkerCollection.Find(query).Limit(1024).Iter()
-			if err := iter.All(&markers); err == nil {
-				for i := 0; i < len(markers); i++ {
-					x, _ := strconv.ParseFloat(markers[i].Latitude, 64)
-					y, _ := strconv.ParseFloat(markers[i].Longitude, 64)
-					dist += math.Hypot(x-local_x, y-local_y)
-				}
+		markers := []models.Marker{}
+		query := make(bson.M)
+		query["owner"] = id
+		iter := models.MarkerCollection.Find(query).Limit(1024).Iter()
+		if err := iter.All(&markers); err == nil {
+			for i := 0; i < len(markers); i++ {
+				x, _ := strconv.ParseFloat(markers[i].Latitude, 64)
+				y, _ := strconv.ParseFloat(markers[i].Longitude, 64)
+				dist += math.Hypot(x-local_x, y-local_y)
 			}
 		}
+		dist = math.Min(dist, 5000)
+		mod = math.Pow(dist, 1.0 / (float64(len(markers)) + float64(1)))
 	}
-	println(dist * 10)
-	return math.Floor(dist * 10)
+	return math.Floor(dist * mod)
 }
