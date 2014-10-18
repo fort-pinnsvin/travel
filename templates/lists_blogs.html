@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link href="../assets/css/b_bootstrap.mi.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../assets/css/navbar-static-top.css" rel="stylesheet">
+    <link href="../assets/css/map.css" rel="stylesheet">
+    <title>{{ .first_name}} {{.last_name}} - User Profile</title>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../">yo-journey</a>
+        <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%"
+                                                                 style="margin-top:-5px;"/>
+            {{ .user.FirstName }} {{ .user.LastName}}</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+
+            <li><a href="/friends">Friends</a></li>
+            <li><a href="/feed">Feed</a></li>
+            <li class="active"><a href="#">Albums</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Log Out!</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" action="../search" method="get">
+            <input type="text" class="form-control col-lg-8" placeholder="Search User" name="q">
+        </form>
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="show_form">
+                <a href="#" class="btn btn-default pull-left">New Post</a>
+            </div>
+
+            <h1 style="text-align:center;">Posts</h1>
+            <hr>
+
+            <ul>
+            <li>{{range $element := .posts }}<!--взять в цикл -->
+            <blockquote>
+                <a href="#"> <p><h3><strong>{{ $element.Title }}</strong></h3></p> </a>
+
+                <p>{{$element.Text}}</p>
+                <hr>
+                <h5>{{$element.Date}}</h5>
+            </blockquote>
+            <br>
+            {{end}}
+            </li>
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <hr>
+        <footer>
+            <div class="col-lg-8">
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                    Tsyrkunov</a>.</p>
+            </div>
+            <div class="col-lg-4 pull-right" style="margin-top:20px;">
+                <p>
+
+                </p><form style="margin-top: -40px;" method="POST" action="set_theme">
+                <select class="form-control pull-right" id="theme" name="theme" style="width: 100px;">
+                    <option>Black</option>
+                    <option>White</option>
+                </select>
+                <button type="submit" class="btn btn-primary pull-right">Save</button>
+            </form>
+                <p></p>
+            </div>
+
+        </footer>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+    var post_add = function () {
+        $.ajax({
+            type: "POST",
+            url: "../save_post",
+            data: getParams("text_post") + getParams("title_post"),
+
+            success: function (msg) {
+                window.location.href = '/user/' + {{.auth_id }};
+        var rdr = JSON.parse(msg)
+        console.table(rdr)
+    }
+    });
+    }
+
+    var getParams = function (id) {
+        return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
+    }
+
+    var add_like = function (id) {
+        $.ajax({
+            type: "POST",
+            url: "../add_like",
+            data: getParams("count_like") + "&id=" + id,
+            success: function (msg) {
+                console.table(msg)
+                var obj = JSON.parse(msg);
+                var d = document.getElementById("count_like-" + id);
+                d.innerHTML = obj.counter;
+                console.log(obj.status_like)
+                if (obj.status_like) {
+                    $("#like-" + id).hide()
+                    $("#unlike-" + id).show()
+                } else {
+                    $("#unlike-" + id).hide()
+                    $("#like-" + id).show()
+                }
+
+            }
+        });
+    }
+
+    var remove_post = function (id) {
+        $.ajax({
+            type: "POST",
+            url: "../remove_post",
+            data: "id=" + id,
+            success: function (msg) {
+                console.table(msg)
+            }
+        });
+    }
+
+    var update_follow_status = function () {
+        $.ajax({
+            type: "GET",
+            url: "../update_follow_status",
+            data: "id={{ .id }}",
+            success: function (msg) {
+                var rdr = JSON.parse(msg)
+                console.table(rdr)
+                if (rdr.follow_status) {
+                    $("#follow_btn").hide()
+                    $("#unfollow_btn").show()
+                } else {
+                    $("#follow_btn").show()
+                    $("#unfollow_btn").hide()
+                }
+            }
+        });
+    }
+
+    var hide_form = function () {
+        $("#post_form").hide()
+        $("#show_form").show()
+    }
+
+    var show_form = function () {
+        $("#post_form").show()
+        $("#show_form").hide()
+    }
+
+    // Follow buttons
+    $.ajax({
+        type: "GET",
+        url: "../follow_status",
+        data: "id={{ .id }}",
+        success: function (msg) {
+            var rdr = JSON.parse(msg)
+            console.table(rdr)
+            if (rdr.follow_status) {
+                $("#follow_btn").hide()
+                $("#unfollow_btn").show()
+            } else {
+                $("#follow_btn").show()
+                $("#unfollow_btn").hide()
+            }
+        }
+    });
+
+
+</script>
+<script src="../js/app/tooltip.js"></script>
+</body>
+</html>
