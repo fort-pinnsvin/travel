@@ -38,6 +38,25 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session,  params martin
 	}
 }
 
+func MiniBlogListHandler(rnd render.Render, session sessions.Session){
+	if session.Get("auth_id") != "" {
+		id_user := session.Get("auth_id").(string)
+		blogs := []models.Blog{}
+		query := make(bson.M)
+		query["owner"] = id_user
+		models.BlogCollection.Find(query).Limit(1024).Iter().All(&blogs)
+
+		sort.Sort(models.ByBlog(blogs))
+
+		user_auth := helpfunc.GetAuthUser(session)
+		rnd.HTML(200, "lists_blogs", map[string]interface {}{
+			"user" : user_auth,
+			"auth_user" : true,
+			"blogs" : blogs,
+		});
+	}
+}
+
 func SavePostMiniblog(res http.ResponseWriter, rnd render.Render, r *http.Request, session sessions.Session,) {
 	if session.Get("auth_id") != "" {
 		text := r.FormValue("text_post")

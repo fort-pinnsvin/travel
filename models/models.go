@@ -97,6 +97,12 @@ func (a ByPostBlog) Len() int           { return len(a) }
 func (a ByPostBlog) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByPostBlog) Less(i, j int) bool { return a[i].Nano < a[j].Nano}
 
+type ByBlog []Blog
+
+func (a ByBlog) Len() int           { return len(a) }
+func (a ByBlog) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByBlog) Less(i, j int) bool { return a[i].Nano > a[j].Nano}
+
 
 
 // Sort Countryes by Count

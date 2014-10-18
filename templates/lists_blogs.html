@@ -2,11 +2,11 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <link href="../css/b_bootstrap.mi.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="../css/navbar-static-top.css" rel="stylesheet">
     <link href="../css/map.css" rel="stylesheet">
-    <title>{{ .first_name}} {{.last_name}} - User Profile</title>
+    <title>Storys</title>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
 
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
-            <li class="active"><a href="#">Albums</a></li>
+            <li class="active"><a href="#">Storys</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout">Log Out!</a></li>
@@ -51,29 +51,24 @@
 <div class="container">
 
     <div class="row">
+        {{ if .auth_user }}
+        <div id="show_form">
+            <a href="#" class="btn btn-default pull-left">New Story</a>
+        </div>
+        {{end}}
         <div class="col-lg-12">
-            <div id="show_form">
-                <a href="#" class="btn btn-default pull-left">New Post</a>
-            </div>
 
-            <h1 style="text-align:center;">Posts</h1>
+            <h1 style="text-align:center;">Story</h1>
             <hr>
 
-            <ul>
-            <li>{{range $element := .posts }}<!--взять в цикл -->
+            {{range $element := .blogs }}<!--взять в цикл -->
             <blockquote>
-                <a href="#"> <p><h3><strong>{{ $element.Title }}</strong></h3></p> </a>
-
-                <p>{{$element.Text}}</p>
+                <a href="mini_blog/{{$element.Id}}"> <p><h3><strong>{{ $element.Name }}</strong></h3></p> </a>
                 <hr>
                 <h5>{{$element.Date}}</h5>
             </blockquote>
             <br>
             {{end}}
-            </li>
-
-
-            </ul>
         </div>
     </div>
 
@@ -104,108 +99,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
-<script>
-    var post_add = function () {
-        $.ajax({
-            type: "POST",
-            url: "../save_post",
-            data: getParams("text_post") + getParams("title_post"),
-
-            success: function (msg) {
-                window.location.href = '/user/' + {{.auth_id }};
-        var rdr = JSON.parse(msg)
-        console.table(rdr)
-    }
-    });
-    }
-
-    var getParams = function (id) {
-        return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
-    }
-
-    var add_like = function (id) {
-        $.ajax({
-            type: "POST",
-            url: "../add_like",
-            data: getParams("count_like") + "&id=" + id,
-            success: function (msg) {
-                console.table(msg)
-                var obj = JSON.parse(msg);
-                var d = document.getElementById("count_like-" + id);
-                d.innerHTML = obj.counter;
-                console.log(obj.status_like)
-                if (obj.status_like) {
-                    $("#like-" + id).hide()
-                    $("#unlike-" + id).show()
-                } else {
-                    $("#unlike-" + id).hide()
-                    $("#like-" + id).show()
-                }
-
-            }
-        });
-    }
-
-    var remove_post = function (id) {
-        $.ajax({
-            type: "POST",
-            url: "../remove_post",
-            data: "id=" + id,
-            success: function (msg) {
-                console.table(msg)
-            }
-        });
-    }
-
-    var update_follow_status = function () {
-        $.ajax({
-            type: "GET",
-            url: "../update_follow_status",
-            data: "id={{ .id }}",
-            success: function (msg) {
-                var rdr = JSON.parse(msg)
-                console.table(rdr)
-                if (rdr.follow_status) {
-                    $("#follow_btn").hide()
-                    $("#unfollow_btn").show()
-                } else {
-                    $("#follow_btn").show()
-                    $("#unfollow_btn").hide()
-                }
-            }
-        });
-    }
-
-    var hide_form = function () {
-        $("#post_form").hide()
-        $("#show_form").show()
-    }
-
-    var show_form = function () {
-        $("#post_form").show()
-        $("#show_form").hide()
-    }
-
-    // Follow buttons
-    $.ajax({
-        type: "GET",
-        url: "../follow_status",
-        data: "id={{ .id }}",
-        success: function (msg) {
-            var rdr = JSON.parse(msg)
-            console.table(rdr)
-            if (rdr.follow_status) {
-                $("#follow_btn").hide()
-                $("#unfollow_btn").show()
-            } else {
-                $("#follow_btn").show()
-                $("#unfollow_btn").hide()
-            }
-        }
-    });
 
 
-</script>
-<script src="../js/app/tooltip.js"></script>
 </body>
 </html>
+
+<script src="../js/app/tooltip.js"></script>
