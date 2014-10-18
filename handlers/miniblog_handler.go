@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"sort"
 	"time"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini.Params) {
@@ -86,6 +87,17 @@ func CreateMiniBlog(res http.ResponseWriter, rnd render.Render, r *http.Request,
 		new_blog.Date = time.Now().Format(models.Layout)
 		new_blog.Nano = time.Now().Unix()
 
+		new_post := models.Post{}
+
+		new_post.Id = models.GenerateId()
+		new_post.Owner = session.Get("auth_id").(string)
+		new_post.Text = `Read it <a href="` +
+				"//" + utils.GetValue("WWW", "localhost:3000") + "/mini_blog/" + new_blog.Id +`">here</a> .`
+		new_post.Title = "Oh, watch my new Trip!"
+		new_post.Date = time.Now().Format(models.Layout)
+		new_post.Nano = time.Now().Unix()
+
+		models.PostCollection.Insert(&new_post)
 		models.BlogCollection.Insert(&new_blog)
 		res.Write([]byte(fmt.Sprintf(`{"id_blog": "%s"}`, new_blog.Id)))
 	}

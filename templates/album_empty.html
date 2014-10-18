@@ -48,6 +48,7 @@
             <li><a href="/mini_blog_list">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li><a href="/album/{{ .id }}/settings">Edit</a></li>
             <li><a href="/logout">Log Out!</a></li>
         </ul>
         <form class="navbar-form navbar-left" action="../search" method="get">
@@ -89,12 +90,6 @@
         <input type="hidden" value="{{ .id }}" name="id"/>
         <input type="submit" name="submit" value="Submit">
     </form>
-    <a href="/album/{{ .id }}/settings">
-        <button class="btn btn-info">Settings</button>
-    </a>
-    <a href="/album/{{ .id }}/delete">
-        <button class="btn btn-danger">Delete album, photos and marker</button>
-    </a>
     {{end}}
 
     <div class="row">
