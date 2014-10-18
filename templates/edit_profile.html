@@ -10,6 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 </head>
 <body>
 
@@ -82,7 +83,7 @@
 
                         <div class="form-group">
                             <div class="col-md-10 col-md-offset-1">
-                                <label for="country">Country:</label>
+                                <label for="country">Home:</label>
                                 <input id="country" name="country" type="text" placeholder="{{.Country}}"
                                        class="form-control" value="{{.Country}}">
                             </div>
@@ -197,4 +198,8 @@
             form.style.display = "none"
         }, 5000)
     }
+
+    var country = new google.maps.places.Autocomplete(document.getElementById('country'), {
+        language: 'us',
+    });
 </script>

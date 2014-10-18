@@ -160,3 +160,16 @@ func UpdateFollowStatus(res http.ResponseWriter, r *http.Request, session sessio
 		res.Write([]byte(fmt.Sprintf(`{"follow_status": %v}`, !status)))
 	}
 }
+
+func GetHomePosition(res http.ResponseWriter, params martini.Params, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		user := models.User{}
+		err := models.UserCollection.FindId(id).One(&user)
+		if err == nil {
+			res.Write([]byte(fmt.Sprintf(`{"lat": %.8f, "lng": %.8f}`, user.Latitude, user.Longitude)))
+		} else {
+			res.Write([]byte(fmt.Sprintf(`{"lat": %.8f, "lng": %.8f}`, 100000, 100000)))
+		}
+	}
+}

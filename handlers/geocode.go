@@ -73,3 +73,29 @@ func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Req
 		})
 	}
 }
+
+
+func GetLatLngByAddress(tokens oauth2.Tokens, address string) (float64, float64) {
+	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
+	client := http.Client{Transport: tr}
+	res, err := client.Get("http://maps.googleapis.com/maps/api/geocode/json?address=" + strings.Replace(address, " ", "+", -1))
+	if err != nil {
+		log.Fatal(err)
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	dat := map[string]interface{}{}
+	dec := json.NewDecoder(strings.NewReader(string(robots)))
+	dec.Decode(&dat)
+	jq := jsonq.NewQuery(dat)
+	status, _ := jq.String("status")
+	if status == "OK" {
+		lat, _ := jq.Float("results", "0", "geometry", "location", "lat")
+		lng, _ := jq.Float("results", "0", "geometry", "location", "lng")
+		return lat, lng
+	}
+	return 10000, 10000
+}

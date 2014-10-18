@@ -17,6 +17,8 @@ type User struct {
 	Status    string
 	About     string
 	Language  string
+	Latitude  float64
+	Longitude float64
 }
 
 type Marker struct {

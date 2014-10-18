@@ -244,6 +244,21 @@
         };
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         loadMarkers(map)
+
+        $.ajax({
+            type: "GET",
+            url: "/user/{{.id}}/home",
+            success: function (msg) {
+                var res = JSON.parse(msg);
+                var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(res.lat, res.lng),
+                    map: map,
+                    icon: iconBase + 'schools_maps.png',
+                    title: "{{.first_name}}'s home"
+                });
+            }
+        })
     }
 
 
