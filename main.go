@@ -31,6 +31,7 @@ func main() {
 	}))
 
 	m.Get("/", handlers.Root)
+	m.Get("/weather", oauth2.LoginRequired, handlers.Weather)
 	m.Get("/user/:id", oauth2.LoginRequired, handlers.UserProfile)
 	m.Get("/signin", oauth2.LoginRequired, handlers.GetData)
 	m.Get("/edit", oauth2.LoginRequired, handlers.Edit)

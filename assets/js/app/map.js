@@ -1,5 +1,36 @@
 var map = {};
 
+function WeatherControl(controlDiv, map) {
+    controlDiv.style.padding = '5px';
+
+    // Set CSS for the control border
+    var controlUI = document.createElement('div');
+    controlUI.style.backgroundColor = 'white';
+    controlUI.style.borderStyle = 'solid';
+    controlUI.style.borderWidth = '2px';
+    controlUI.style.cursor = 'pointer';
+    controlUI.style.textAlign = 'center';
+    controlUI.title = 'Click to enable/disable weather preview';
+    controlDiv.appendChild(controlUI);
+
+    // Set CSS for the control interior
+    var controlText = document.createElement('div');
+    controlText.style.fontFamily = 'Arial,sans-serif';
+    controlText.style.fontSize = '12px';
+    controlText.style.paddingLeft = '4px';
+    controlText.style.paddingRight = '4px';
+    controlText.innerHTML = '<b>Weather</b>';
+    controlUI.appendChild(controlText);
+
+    google.maps.event.addDomListener(controlUI, 'click', function() {
+        var weatherLayer = new google.maps.weather.WeatherLayer({
+            temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
+        });
+        weatherLayer.setMap(map);
+    });
+
+}
+
 function initialize() {
     var mapProp = {
         center: new google.maps.LatLng(51.508742, -0.120850),
@@ -8,6 +39,7 @@ function initialize() {
         disableDoubleClickZoom: true
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
     loadMarkers(map)
     google.maps.event.addListener(map, 'dblclick', function (event) {
         placeMarker(event.latLng);
