@@ -31,6 +31,7 @@ type Marker struct {
 	FullAddress string
 	Date        string
 	Nano        int64
+	Country		string
 }
 
 type Post struct {

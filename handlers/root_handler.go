@@ -33,6 +33,8 @@ func Root(tokens oauth2.Tokens, rnd render.Render, r *http.Request, session sess
 			marker.FullAddress = "http://placehold.it/250x130"
 			marker.Date = time.Now().Format(models.Layout)
 			marker.Nano = time.Now().Unix()
+			marker.Country = GetCountry(tokens, marker.Latitude, marker.Longitude)
+			println("marker.Country", marker.Country)
 			models.MarkerCollection.Insert(&marker)
 			// Add marker to feed
 			new_post := models.Post{}
@@ -45,7 +47,6 @@ func Root(tokens oauth2.Tokens, rnd render.Render, r *http.Request, session sess
 			new_post.Nano = time.Now().Unix()
 			models.PostCollection.Insert(&new_post)
 
-			GetCountry(tokens, marker.Latitude, marker.Longitude)
 			rnd.Redirect("/")
 		}
 		rnd.HTML(200, "home_user", user)

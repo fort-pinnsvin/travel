@@ -44,6 +44,8 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		marker.FullAddress = "http://placehold.it/250x130"
 		marker.Date = time.Now().Format(models.Layout)
 		marker.Nano = time.Now().Unix()
+		marker.Country = GetCountry(tokens, marker.Latitude, marker.Longitude)
+		println("marker.Country", marker.Country)
 		models.MarkerCollection.Insert(&marker)
 		// Add marker to feed
 		new_post := models.Post{}
@@ -51,12 +53,10 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		new_post.Owner = session.Get("auth_id").(string)
 		new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
 			"//" + utils.GetValue("WWW", "localhost:3000") + "/album/" + marker.Id + "/" + `">here</a>.`
-		new_post.Title = "I create New Album!"
+		new_post.Title = "I opened new album!"
 		new_post.Date = time.Now().Format(models.Layout)
 		new_post.Nano = time.Now().Unix()
 		models.PostCollection.Insert(&new_post)
-
-		GetCountry(tokens, marker.Latitude, marker.Longitude)
 		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `", "url": "http://placehold.it/250x130"}`))
 	} else {
 		res.Write([]byte(`some errors`))
@@ -70,8 +70,10 @@ func UpdateMarkerLocation(tokens oauth2.Tokens, res http.ResponseWriter, r *http
 		long := r.FormValue("long")
 		marker := &models.Marker{}
 		models.MarkerCollection.FindId(id).One(&marker)
+		DecrementCountryStat(marker.Country)
 		marker.Latitude = lat
 		marker.Longitude = long
+		//marker.Country = GetCountry(tokens, marker.Latitude, marker.Longitude)
 		models.MarkerCollection.UpdateId(id, marker)
 		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `"}`))
 	} else {

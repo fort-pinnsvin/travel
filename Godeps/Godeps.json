@@ -40,6 +40,10 @@
 			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
 		},
 		{
+			"ImportPath": "github.com/jmoiron/jsonq",
+			"Rev": "7c27c8eb9f6831555a4209f6a7d579159e766a3c"
+		},
+		{
 			"ImportPath": "github.com/martini-contrib/oauth2",
 			"Rev": "b669555e1bcc5ee8e5148a12feeb2b031b1e1e76"
 		},

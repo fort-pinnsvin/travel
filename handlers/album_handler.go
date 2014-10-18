@@ -18,6 +18,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"strings"
 )
 
 func AlbumHandler(rnd render.Render, session sessions.Session, params martini.Params) {
@@ -174,6 +175,18 @@ func RemovePhoto(r *http.Request, session sessions.Session) {
 		models.PhotoCollection.Find(query).One(&photo)
 		models.PhotoCollection.Remove(query)
 		os.Remove("assets/album/" + photo.AlbumId + "/" + photo.Name)
+		// Remove photo from feeds
+		posts := []models.Post{}
+		query = make(bson.M)
+		query["owner"] = session.Get("auth_id").(string)
+		iter := models.PostCollection.Find(query).Limit(1024).Iter()
+		if err := iter.All(&posts); err == nil {
+			for  i := 0; i < len(posts); i ++ {
+				if strings.Contains(posts[i].Text, photo.Name) {
+					models.PostCollection.RemoveId(posts[i].Id)
+				}
+			}
+		}
 	}
 }
 
@@ -185,10 +198,23 @@ func AlbumDeleteHandler(res http.ResponseWriter, session sessions.Session, r *ht
 		query := make(bson.M)
 		query["albumid"] = id
 		models.PhotoCollection.RemoveAll(query)
+		marker := &models.Marker{}
+		models.MarkerCollection.FindId(id).One(&marker)
 		models.MarkerCollection.RemoveId(id)
 		// TODO
+		DecrementCountryStat(marker.Country)
 		// Delete posts from feed
-		// Modify advices
+		posts := []models.Post{}
+		query = make(bson.M)
+		query["owner"] = session.Get("auth_id").(string)
+		iter := models.PostCollection.Find(query).Limit(1024).Iter()
+		if err := iter.All(&posts); err == nil {
+			for  i := 0; i < len(posts); i ++ {
+				if strings.Contains(posts[i].Text, id) {
+					models.PostCollection.RemoveId(posts[i].Id)
+				}
+			}
+		}
 		println("OK")
 		rnd.Redirect("/")
 	}
