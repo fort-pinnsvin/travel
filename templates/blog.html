@@ -65,8 +65,6 @@
             <div class="form-group">
                 <div class="col-lg-12">
                     <h2 style="text-align:center;">New Post</h2>
-                    <input class="form-control" id="title_post" name="title_post" type="text" placeholder="Title..."
-                           required>
                     <br>
                     <textarea class="form-control" style="resize:none; height: 150px;" rows="3" id="text_post"
                               name="text_post" required placeholder="What do you think?"></textarea>
@@ -90,17 +88,16 @@
     {{if .auth_user }}
     <div class="row">
         <div class="col-lg-12">
-            <h1 style="text-align:center;">News</h1>
-            {{if not .posts }}
+            <h1 style="text-align:center;">{{ .blog.Name }}</h1>
+            {{if not .all_post }}
             <hr>
             <h1 style="text-align:center;">There are no new post. Press "New Story" to create new story.</h1>
             {{end}}
-            {{range $element := .posts }}
+            {{range $element := .all_post }}
             <blockquote>
                 <button type="button" class="close" title="Remove Post" data-dismiss="alert"
                         onclick="remove_post_miniblog({{ $element.Id }})">×
                 </button>
-                <p><strong>{{ $element.Title }}</strong></p>
 
                 <p>{{$element.Text}}</p>
                 <hr>
@@ -114,9 +111,8 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 style="text-align:center;">News</h1>
-            {{range $element := .posts }}
+            {{range $element := .all_post }}
             <blockquote>
-                <p><strong>{{ $element.Title }}</strong></p>
 
                 <p>{{$element.Text}}</p>
                 <hr>
