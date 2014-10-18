@@ -54,6 +54,7 @@ func AlbumHandler(rnd render.Render, session sessions.Session, params martini.Pa
 			"owner":      isOwner,
 			"photos":     allPhoto,
 			"info_album": infoAlbum,
+			"auth_user" : true,
 		})
 	}
 }
@@ -118,6 +119,7 @@ func LoadPhotoAlbum(r *http.Request, session sessions.Session, rnd render.Render
 			return "ok"
 		} else {
 			os.Remove("assets/album/" + album_id + "/" + file_id + extension)
+			rnd.Redirect("/album/" + album_id)
 			return "error"
 		}
 	}

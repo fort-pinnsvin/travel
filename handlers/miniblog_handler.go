@@ -107,7 +107,7 @@ func RemovePostMiniblog(res http.ResponseWriter, r *http.Request, session sessio
 	if session.Get("auth_id") != "" {
 		post_id := r.FormValue("id")
 		models.PostBlogCollection.RemoveId(post_id)
-		res.Write([]byte(fmt.Sprintf(`{"error": %d}`, 0)))
+		res.Write([]byte(fmt.Sprintf(`{"St": "%s"}`, "OK" )))
 	}
 }
 
