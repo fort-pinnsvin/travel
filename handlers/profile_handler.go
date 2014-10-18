@@ -9,6 +9,7 @@ import (
 	"labix.org/v2/mgo/bson"
 	"net/http"
 	"time"
+	"html/template"
 )
 
 func UserProfile(rnd render.Render, params martini.Params, session sessions.Session) {
@@ -36,6 +37,7 @@ func UserProfile(rnd render.Render, params martini.Params, session sessions.Sess
 			allPost := []models.Post{}
 			for i := len(posts) - 1; i >= 0; i-- {
 				posts[i].IsLiked = IsPostLiked(session.Get("auth_id").(string), posts[i].Id)
+				posts[i].Html = template.HTML(posts[i].Text)
 				allPost = append(allPost, posts[i])
 				fmt.Printf("%v", posts[i])
 			}

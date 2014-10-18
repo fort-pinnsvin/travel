@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/fort-pinnsvin/travel/utils"
 	"labix.org/v2/mgo"
+	"html/template"
 )
 
 type User struct {
@@ -26,6 +27,8 @@ type Marker struct {
 	Longitude   string
 	Description string
 	FullAddress string
+	Date      	string
+	Nano      	int64
 }
 
 type Post struct {
@@ -38,6 +41,7 @@ type Post struct {
 	Like      int
 	OwnerUser User
 	IsLiked   bool
+	Html      template.HTML
 }
 
 type Like struct {

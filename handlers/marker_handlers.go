@@ -8,6 +8,8 @@ import (
 	"github.com/martini-contrib/sessions"
 	"labix.org/v2/mgo/bson"
 	"net/http"
+	"time"
+	"github.com/fort-pinnsvin/travel/utils"
 )
 
 func GetMarkers(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request, session sessions.Session) {
@@ -40,7 +42,19 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		marker.Longitude = r.FormValue("long")
 		marker.Description = ""
 		marker.FullAddress = "http://placehold.it/250x130"
+		marker.Date = time.Now().Format(models.Layout)
+		marker.Nano = time.Now().Unix()
 		models.MarkerCollection.Insert(&marker)
+		// Add marker to feed
+		new_post := models.Post{}
+		new_post.Id = models.GenerateId()
+		new_post.Owner = session.Get("auth_id").(string)
+		new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
+				"//" +utils.GetValue("WWW", "localhost:3000") + "/album/" +marker.Id+"/"+ `">here</a>.`
+		new_post.Title = "I create New Album!"
+		new_post.Date = time.Now().Format(models.Layout)
+		new_post.Nano = time.Now().Unix()
+		models.PostCollection.Insert(&new_post)
 
 		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `", "url": "http://placehold.it/250x130"}`))
 	} else {
