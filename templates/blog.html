@@ -44,9 +44,10 @@
 
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
-            <li class="active"><a href="#">Albums</a></li>
+            <li><a href="/mini_blog_list">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li><a href="/mini_blog/{{ .blog.Id }}/edit">Edit</a></li>
             <li><a href="/logout">Log Out!</a></li>
         </ul>
         <form class="navbar-form navbar-left" action="../search" method="get">
@@ -159,7 +160,7 @@
             var remove_post_miniblog = function (id) {
                 $.ajax({
                     type: "POST",
-                    url: "../remove_post",
+                    url: "../remove_post_miniblog",
                     data: "id=" + id,
                     success: function (msg) {
                         console.table(msg)

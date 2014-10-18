@@ -35,7 +35,9 @@
 
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
-            <li class="active"><a href="#">Storys</a></li>
+            <li><a href="/advice/country">Advices</a></li>
+            <li class="active"><a href="#">Stories</a></li>
+
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/logout">Log Out!</a></li>
@@ -53,7 +55,7 @@
     <div class="row">
         {{ if .auth_user }}
         <div id="show_form">
-            <a href="#" class="btn btn-default pull-left">New Story</a>
+            <a class="btn btn-default" onclick="add_miniblog()">New Story</a>
         </div>
         {{end}}
         <div class="col-lg-12">
@@ -105,3 +107,17 @@
 </html>
 
 <script src="../js/app/tooltip.js"></script>
+
+<script>
+    var add_miniblog = function () {
+        $.ajax({
+            type: "POST",
+            url: "../blog_create",
+            success: function (msg) {
+                alert(msg)
+                rnd = JSON.parse(msg);
+                window.location.href = "/mini_blog/"+ rnd.id_blog;
+            }
+        });
+    }
+</script>

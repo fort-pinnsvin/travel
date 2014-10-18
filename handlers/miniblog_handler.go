@@ -81,12 +81,49 @@ func CreateMiniBlog(res http.ResponseWriter, rnd render.Render, r *http.Request,
 		new_blog := models.Blog{}
 
 		new_blog.Id = models.GenerateId()
-		new_blog.Name = "New Blog"
+		new_blog.Name = "New Story"
 		new_blog.Owner = session.Get("auth_id").(string)
 		new_blog.Date = time.Now().Format(models.Layout)
 		new_blog.Nano = time.Now().Unix()
 
 		models.BlogCollection.Insert(&new_blog)
 		res.Write([]byte(fmt.Sprintf(`{"id_blog": "%s"}`, new_blog.Id)))
+	}
+}
+
+func RemovePostMiniblog(res http.ResponseWriter, r *http.Request, session sessions.Session) {
+	if session.Get("auth_id") != "" {
+		post_id := r.FormValue("id")
+		models.PostBlogCollection.RemoveId(post_id)
+		res.Write([]byte(fmt.Sprintf(`{"error": %d}`, 0)))
+	}
+}
+
+func MiniBlogEdit(rnd render.Render, session sessions.Session, params martini.Params){
+	if session.Get("auth_id") != "" {
+		user_auth := helpfunc.GetAuthUser(session)
+		id_blog := params["id"]
+		blog := models.Blog{}
+		models.BlogCollection.FindId(&id_blog).One(&blog)
+
+		rnd.HTML(200, "edit_blog", map[string]interface {}{
+			"user" : user_auth,
+			"auth_user" : true,
+			"blog" : blog,
+		});
+	}
+}
+
+
+func SaveEditBlog(res http.ResponseWriter, session sessions.Session, r *http.Request,  params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		blog := &models.Blog{}
+		models.BlogCollection.FindId(id).One(&blog)
+		blog.Name = r.FormValue("title")
+		models.BlogCollection.UpdateId(id, blog)
+		res.Write([]byte(`{"error": 0}`))
+	} else {
+		res.Write([]byte(`{"error": 1}`))
 	}
 }
