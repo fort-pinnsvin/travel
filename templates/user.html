@@ -44,7 +44,7 @@
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
             <li><a href="/album_list">Albums</a></li>
-            <li><a href="/mini_blog_list">Stories</a></li>
+            <li><a href="/mini_blog_list/{{.auth_id}}">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
 
@@ -144,6 +144,11 @@
         <a class="btn btn-default" onclick="show_form()">New Post</a>
         <a class="btn btn-default" onclick="add_miniblog()">New Story</a>
     </div>
+    {{else}}
+    <div id="show_form">
+        <a class="btn btn-default" href="/mini_blog_list/{{ .id }}">Stories</a>
+    </div>
+
 
     {{end}}
 
@@ -424,6 +429,7 @@
             }
         }
     });
+
 
 
 </script>

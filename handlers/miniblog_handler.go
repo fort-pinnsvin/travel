@@ -25,13 +25,18 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini
 
 		blog := models.Blog{}
 		models.BlogCollection.FindId(id_blog).One(&blog)
+		auth_user := false
+		if (blog.Owner == session.Get("auth_id").(string)){
+			auth_user = true;
+		}
+		fmt.Println(blog.Owner + "----" + session.Get("auth_id").(string))
 
 		sort.Sort(models.ByPostBlog(postsBlog))
 
 		user_auth := helpfunc.GetAuthUser(session)
 		rnd.HTML(200, "blog", map[string]interface{}{
 			"user":      user_auth,
-			"auth_user": true,
+			"auth_user": auth_user,
 			"id_blog":   id_blog,
 			"all_post":  postsBlog,
 			"blog":      blog,
@@ -39,20 +44,25 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini
 	}
 }
 
-func MiniBlogListHandler(rnd render.Render, session sessions.Session) {
+func MiniBlogListHandler(rnd render.Render, session sessions.Session,  params martini.Params) {
 	if session.Get("auth_id") != "" {
-		id_user := session.Get("auth_id").(string)
+		owner_blogs := params["id"]
 		blogs := []models.Blog{}
 		query := make(bson.M)
-		query["owner"] = id_user
+		query["owner"] = owner_blogs
 		models.BlogCollection.Find(query).Limit(1024).Iter().All(&blogs)
 
 		sort.Sort(models.ByBlog(blogs))
 
+		auth_user := false
+		if (owner_blogs == session.Get("auth_id").(string)){
+			auth_user = true;
+		}
+
 		user_auth := helpfunc.GetAuthUser(session)
 		rnd.HTML(200, "lists_blogs", map[string]interface{}{
 			"user":      user_auth,
-			"auth_user": true,
+			"auth_user": auth_user,
 			"blogs":     blogs,
 		})
 	}

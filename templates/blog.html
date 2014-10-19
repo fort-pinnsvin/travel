@@ -46,7 +46,7 @@
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
             <li><a href="/album_list">Albums</a></li>
-            <li><a href="/mini_blog_list">Stories</a></li>
+            <li><a href="/mini_blog_list/{{ .user.Id }}">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {{ if .auth_user }}
@@ -88,7 +88,6 @@
     <div id="show_form">
         {{ if .auth_user }}
         <a class="btn btn-default" onclick="show_form()">New Post</a>
-        <a class="btn btn-default" href="/mini_blog_list">Back</a>
         {{end}}
     </div>
     {{end}}
@@ -99,7 +98,7 @@
             <h1 style="text-align:center;">{{ .blog.Name }}</h1>
             {{if not .all_post }}
             <hr>
-            <h1 style="text-align:center;">There are no new post. Press "New Story" to create new story.</h1>
+            <h1 style="text-align:center;">There are no new post. Press "New Post" to create new post.</h1>
             {{end}}
             {{range $element := .all_post }}
             <blockquote>
@@ -118,7 +117,7 @@
     {{else}}
     <div class="row">
         <div class="col-lg-12">
-            <h1 style="text-align:center;">News</h1>
+            <h1 style="text-align:center;">{{ .blog.Name }}</h1>
             {{range $element := .all_post }}
             <blockquote>
 
