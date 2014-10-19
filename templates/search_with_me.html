@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>My news feed</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- Static navbar -->
+<div class="navbar navbar-default">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../">yo-journey</a>
+        <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%"
+                                                                 style="margin-top:-5px;"/>
+            {{ .user.FirstName }} {{ .user.LastName}}</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/friends">Friends</a></li>
+            <li class="active"><a href="/feed">Feed</a></li>
+            <li><a href="/advice/country">Advices</a></li>
+            <li><a href="/album_list">Albums</a></li>
+            <li><a href="/mini_blog_list/{{ .user.Id }}">Stories</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout">Log Out!</a></li>
+        </ul>
+        <form class="navbar-form navbar-left" action="../search" method="get">
+            <input type="text" class="form-control col-lg-8" placeholder="Search User" name="q">
+        </form>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="text-align:center;">{{ .query }}</h1>
+            {{range $element := .result }}
+            <blockquote>
+                <p><strong>{{ $element.Title }}</strong></p>
+
+                <p>{{$element.Text}}</p>
+                <hr>
+                <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
+                    {{$element.Like}}</h4>
+                {{ if not $element.IsLiked }}
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Like</button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                {{ else }}
+                <button class="btn btn-primary btn-sm pull-right" id="like-{{ $element.Id }}" style="display: none" onclick='add_like({{ $element.Id }})'>Like</button>
+                <button class="btn btn-primary btn-sm pull-right" id="unlike-{{ $element.Id }}" onclick='add_like({{ $element.Id }})'>Unlike</button>
+                {{end}}
+                </button>
+                <h5>
+                    <img src="{{$element.OwnerUser.Avatar}}" height="18px;" style="margin-top: -5px;"/>&nbsp;
+                    <a href="../user/{{$element.OwnerUser.Id}}">{{$element.OwnerUser.FirstName}}
+                        {{$element.OwnerUser.LastName}}</a>,
+                    {{$element.Date}}
+                </h5>
+            </blockquote>
+            <br>
+            {{end}}
+        </div>
+    </div>
+
+    <hr>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="/user/111851208681609152255">Alex Saskevich</a> and <a href="/user/109828757283979582891">Danik
+                    Tsyrkunov</a>.</p>
+            </div>
+        </div>
+
+    </footer>
+
+</div>
+
+</body>
+</html>
+
+<script>
+    var getParams = function (id) {
+        return $('#' + id).attr('name') + "=" + $('#' + id).val() + "&"
+    }
+
+    var add_like = function (id) {
+        $.ajax({
+            type: "POST",
+            url: "../add_like",
+            data: getParams("count_like") + "&id=" + id,
+            success: function (msg) {
+                console.table(msg)
+                var obj = JSON.parse(msg);
+                var d = document.getElementById("count_like-" + id);
+                d.innerHTML = obj.counter;
+                console.log(obj.status_like)
+                if (obj.status_like) {
+                    $("#like-" + id).hide()
+                    $("#unlike-" + id).show()
+                }else{
+                    $("#unlike-" + id).hide()
+                    $("#like-" + id).show()
+                }
+
+            }
+        });
+    }
+</script>
