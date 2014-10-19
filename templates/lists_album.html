@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Travel</title>
+    <title>Albums</title>
 
     <!-- Bootstrap core CSS-->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -66,17 +66,16 @@
 
     <div class="row">
         {{range $element := .albums }}
-        <div class="span4">
-            <div class="col-sm-6 col-md-3"> <!--Взять в цикл -->
+            <div class="col-md-3"> <!--Взять в цикл -->
                 <a href="/album/{{$element.Id}}" class="thumbnail">
-                    <img src="{{$element.FullAddress}}" alt="" style="height: 130px">
+                    <div style="width:250px;height:130px">
+                        <img src="{{$element.FullAddress}}" alt="" style="max-width:100%; max-height:100%">
+                    </div>
                     <div class="caption">
                         <h3>{{$element.Name}}</h3>
                     </div>
                 </a>
-
             </div>
-        </div>
         {{end}}
     </div>
 
@@ -85,7 +84,7 @@
         <hr>
         <footer>
             <div class="col-lg-8">
-                <p><strong>Travel, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                <p><strong>Travel, 2014.</strong> Made by <a href="/user/111851208681609152255">Alex Saskevich</a> and <a href="/user/109828757283979582891">Danik
                     Tsyrkunov</a>.</p>
             </div>
             <div class="col-lg-4 pull-right" style="margin-top:20px;">

@@ -25,18 +25,13 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini
 
 		blog := models.Blog{}
 		models.BlogCollection.FindId(id_blog).One(&blog)
-		auth_user := false
-		if (blog.Owner == session.Get("auth_id").(string)){
-			auth_user = true;
-		}
-		fmt.Println(blog.Owner + "----" + session.Get("auth_id").(string))
 
 		sort.Sort(models.ByPostBlog(postsBlog))
 
 		user_auth := helpfunc.GetAuthUser(session)
 		rnd.HTML(200, "blog", map[string]interface{}{
 			"user":      user_auth,
-			"auth_user": auth_user,
+			"auth_user": blog.Owner == user_auth.Id,
 			"id_blog":   id_blog,
 			"all_post":  postsBlog,
 			"blog":      blog,

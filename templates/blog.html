@@ -46,7 +46,7 @@
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
             <li><a href="/album_list">Albums</a></li>
-            <li><a href="/mini_blog_list/{{ .user.Id }}">Stories</a></li>
+            <li class="active" ><a href="/mini_blog_list/{{ .user.Id }}">Stories</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {{ if .auth_user }}
@@ -118,9 +118,12 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 style="text-align:center;">{{ .blog.Name }}</h1>
+            {{if not .all_post }}
+            <hr>
+            <h1 style="text-align:center;">There are no new post. Press "New Story" to create new story.</h1>
+            {{end}}
             {{range $element := .all_post }}
             <blockquote>
-
                 <p>{{$element.Text}}</p>
                 <hr>
                 <h5>{{$element.Date}}</h5>
@@ -130,7 +133,19 @@
         </div>
     </div>
     {{end}}
+
+
+    <div class="row">
+        <hr>
+        <footer>
+            <div class="col-lg-8">
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="/user/111851208681609152255">Alex Saskevich</a> and <a href="/user/109828757283979582891">Danik
+                    Tsyrkunov</a>.</p>
+            </div>
+        </footer>
+    </div>
 </div>
+
 <!-- /container -->
 
 

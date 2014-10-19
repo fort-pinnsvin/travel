@@ -19,6 +19,7 @@ type User struct {
 	Language  string
 	Latitude  float64
 	Longitude float64
+	Points 	  float64
 }
 
 type Marker struct {
@@ -108,6 +109,13 @@ type ByCountry []Country
 func (a ByCountry) Len() int           { return len(a) }
 func (a ByCountry) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByCountry) Less(i, j int) bool { return a[i].Count > a[j].Count }
+
+// Sort Countryes by Count
+type ByUser []User
+
+func (a ByUser) Len() int           { return len(a) }
+func (a ByUser) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByUser) Less(i, j int) bool { return a[i].Points > a[j].Points }
 
 type FollowEdge struct {
 	Id        string `bson:"_id,omitempty"`

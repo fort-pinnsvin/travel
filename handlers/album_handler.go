@@ -54,7 +54,7 @@ func AlbumHandler(rnd render.Render, session sessions.Session, params martini.Pa
 			"owner":      isOwner,
 			"photos":     allPhoto,
 			"info_album": infoAlbum,
-			"auth_user" : true,
+			"auth_user" : isOwner,
 		})
 	}
 }

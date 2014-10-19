@@ -37,7 +37,7 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		marker := &models.Marker{}
 		marker.Id = models.GenerateId()
 		marker.Owner = session.Get("auth_id").(string)
-		marker.Name = r.FormValue("name")
+		marker.Name = GetAddress(tokens, r.FormValue("lat"), r.FormValue("long"), r.FormValue("name"))
 		marker.Latitude = r.FormValue("lat")
 		marker.Longitude = r.FormValue("long")
 		marker.Description = ""
@@ -51,13 +51,13 @@ func CreateMarker(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request
 		new_post := models.Post{}
 		new_post.Id = models.GenerateId()
 		new_post.Owner = session.Get("auth_id").(string)
-		new_post.Text = `<img src="http://placehold.it/250x130"/><br/>Watch it <a href="` +
+		new_post.Text = `Album <b>` + marker.Name + `</b><br/>Watch it <a href="` +
 			"//" + utils.GetValue("WWW", "localhost:3000") + "/album/" + marker.Id + "/" + `">here</a>.`
 		new_post.Title = "I opened new album!"
 		new_post.Date = time.Now().Format(models.Layout)
 		new_post.Nano = time.Now().Unix()
 		models.PostCollection.Insert(&new_post)
-		res.Write([]byte(`{"error": 0, "id": "` + marker.Id + `", "url": "http://placehold.it/250x130"}`))
+		res.Write([]byte(fmt.Sprintf(`{"error":0, "id": "%s", "url": "%s", "name": "%s"}`, marker.Id,  "http://placehold.it/250x130", marker.Name)))
 	} else {
 		res.Write([]byte(`some errors`))
 	}

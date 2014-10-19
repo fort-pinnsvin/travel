@@ -10,6 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.file-input.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 </head>
 <body>
@@ -109,23 +110,18 @@
 
                         <form action="/avatar/upload" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <div class="col-md-12 col-md-offset-2">
-                                    <div class="col-md-6">
-                                    <input type="file" class="text-center btn btn-info" name="file"
-                                           id="file"></div>
-                                    <div class="col-md-6">
-                                    <input type="submit" class="btn btn-info col-md-offset-1" name="submit" value="Update avatar">
-                                        </div>
+                                <div class="col-md-10 col-md-offset-1">
+                                    <input type="file" name="file" class="btn btn-info"
+                                           id="file" title="Choose square image for avatar" data-filename-placement="inside" >
+                                    <input type="submit" class="btn btn-success" name="submit" value="Update avatar">
                                 </div>
-                            </div>
                         </form>
 
                         <div class="form-group">
                             <div class="col-md-12 text-center">
-                                <button class="btn btn-info" onclick="post()">Submit</button>
-
-                                <a href="../user/{{ .Id }}">
-                                    <button class="btn btn-danger" type="submit">Cancel</button>
+                                <a class="btn btn-info" onclick="post()">Submit</a>
+                                <a href="../user/{{ .Id }}" class="btn btn-danger" >
+                                    Cancel
                                 </a>
                             </div>
                         </div>
@@ -140,7 +136,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="/user/111851208681609152255">Alex Saskevich</a> and <a href="/user/109828757283979582891">Danik
                     Tsyrkunov</a>.</p>
             </div>
         </div>
@@ -152,6 +148,7 @@
 </body>
 </html>
 <script>
+    $(document).ready(function(){$('input[type=file]').bootstrapFileInput();});
     var post = function () {
         $.ajax({
             type: "POST",
@@ -167,7 +164,8 @@
                     form.innerHTML = '<button type="button" class="close" data-dismiss="alert">×</button><strong>All good!</strong> Your profile is updated!'
                     setInterval(function () {
                         form.style.display = "none"
-                    }, 5000)
+                        window.location.href = "/user/{{.Id}}"
+                    }, 1500)
                 }
             }
         });

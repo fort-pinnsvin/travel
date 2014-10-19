@@ -200,7 +200,7 @@
             <blockquote>
                 <p><strong>{{ $element.Title }}</strong></p>
 
-                <p>{{$element.Text}}</p>
+                <p>{{$element.Html}}</p>
                 <hr>
                 <h4 class="pull-right" id="count_like-{{ $element.Id }}" style="margin-left: 10px;margin-top: 5px;">
                     {{$element.Like}}</h4>
@@ -232,7 +232,7 @@
         <hr>
         <div class="row">
             <div class="col-lg-12">
-                <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
+                <p><strong>yo-journey, 2014.</strong> Made by <a href="/user/111851208681609152255">Alex Saskevich</a> and <a href="/user/109828757283979582891">Danik
                     Tsyrkunov</a>.</p>
             </div>
         </div>
@@ -324,7 +324,6 @@
             type: "POST",
             url: "../blog_create",
             success: function (msg) {
-                alert(msg)
                 rnd = JSON.parse(msg);
                 window.location.href = "/mini_blog/"+ rnd.id_blog;
             }

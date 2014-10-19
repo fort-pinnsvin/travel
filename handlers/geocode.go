@@ -72,6 +72,7 @@ func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Req
 		rnd.HTML(200, "advice", map[string]interface{}{
 			"user":    user,
 			"country": country,
+			"travelers": GetBestUsers(),
 		})
 	}
 }
@@ -114,5 +115,50 @@ func DecrementCountryStat(code string) {
 				models.CountryCollection.UpdateId(code, countryStat)
 			}
 		}
+	}
+}
+
+func GetAddress(tokens oauth2.Tokens, lat string, lng string, def string) string {
+	tr := gooauth2.NewTransport(http.DefaultTransport, nil, &gooauth2.Token{AccessToken: tokens.Access()})
+	client := http.Client{Transport: tr}
+	res, err := client.Get("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng)
+	if err != nil {
+		log.Fatal(err)
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	dat := map[string]interface{}{}
+	dec := json.NewDecoder(strings.NewReader(string(robots)))
+	dec.Decode(&dat)
+	jq := jsonq.NewQuery(dat)
+	status, _ := jq.String("status")
+	if status == "OK" {
+		address, err := jq.String("results", "6", "formatted_address")
+		println("address:", address)
+		if address == "" || err != nil {
+			return def
+		}
+		return address
+	}
+	return def
+}
+
+func GetBestUsers() []models.User {
+	q := make(bson.M)
+	users := []models.User{}
+	iter := models.UserCollection.Find(q).Limit(1024).Iter()
+	if err := iter.All(&users); err == nil {
+		for i := 0; i < len(users); i ++ {
+			users[i].Points = GetRate(users[i].Id)
+		}
+	}
+	sort.Sort(models.ByUser(users))
+	if len(users) < 10 {
+		return users
+	} else {
+		return users[0:10]
 	}
 }
