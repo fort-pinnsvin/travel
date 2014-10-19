@@ -50,11 +50,25 @@
         <h2>Next countries most popular on <b>yo-journey</b>: </h2>
 
         <div class="col-xs-12">
-            <ol>
+            <ul class="list-group">
                 {{range $element := .country }}
-                <li>{{$element.Name}}</li>
+                <li class="list-group-item" style="height:30px; font-size: 15px"> - {{$element.Name}}</li>
                 {{end}}
-            </ol>
+            </ul>
+        </div>
+        <h2>Next users most active on <b>yo-journey</b>: </h2>
+
+        <div class="col-xs-12">
+            <ul class="list-group">
+                {{range $element := .travelers }}
+                <li class="list-group-item">
+                    <a href="/user/{{ $element.Id }}"><img src="{{ $element.Avatar }}"
+                                                           height="25px"
+                                                           style="margin-top:-5px;"/>
+                        {{ $element.FirstName }} {{ $element.LastName}} ({{ $element.Points }} points)</a>
+                </li>
+                {{ end }}
+            </ul>
         </div>
     </div>
     <hr>

@@ -72,6 +72,7 @@ func GetRecommCountry(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Req
 		rnd.HTML(200, "advice", map[string]interface{}{
 			"user":    user,
 			"country": country,
+			"travelers": GetBestUsers(),
 		})
 	}
 }
@@ -143,4 +144,21 @@ func GetAddress(tokens oauth2.Tokens, lat string, lng string, def string) string
 		return address
 	}
 	return def
+}
+
+func GetBestUsers() []models.User {
+	q := make(bson.M)
+	users := []models.User{}
+	iter := models.UserCollection.Find(q).Limit(1024).Iter()
+	if err := iter.All(&users); err == nil {
+		for i := 0; i < len(users); i ++ {
+			users[i].Points = GetRate(users[i].Id)
+		}
+	}
+	sort.Sort(models.ByUser(users))
+	if len(users) < 10 {
+		return users
+	} else {
+		return users[0:10]
+	}
 }

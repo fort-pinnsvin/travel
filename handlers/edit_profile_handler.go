@@ -30,7 +30,7 @@ func EditPost(tokens oauth2.Tokens, res http.ResponseWriter, session sessions.Se
 		lang := r.FormValue("lang")
 		lat, lng := GetLatLngByAddress(tokens, country)
 
-		edit_user := models.User{user.Id, firstName, lastName, email, user.Avatar, birthday, country, user.Status, about, lang, lat, lng}
+		edit_user := models.User{user.Id, firstName, lastName, email, user.Avatar, birthday, country, user.Status, about, lang, lat, lng, 0}
 
 		session.Set("first_name", user.FirstName)
 		session.Set("last_name", user.LastName)
