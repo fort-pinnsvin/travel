@@ -123,6 +123,14 @@ type FollowEdge struct {
 	Following string
 }
 
+type Route struct {
+	Id        string `bson:"_id,omitempty"`
+	Name 	  string
+	Desc 	  string
+	Lat 	  []float64
+	Long      []float64
+}
+
 func ConnectToDataBase() {
 	url := utils.GetValue("DB_URL", "localhost")
 	database := utils.GetValue("DB", "travel")
@@ -140,4 +148,5 @@ func ConnectToDataBase() {
 	CountryCollection = session.DB(database).C("country")
 	PostBlogCollection = session.DB(database).C("blog_post")
 	BlogCollection = session.DB(database).C("blog")
+	RouteCollection = session.DB(database).C("routes")
 }

@@ -53,6 +53,10 @@ func main() {
 	m.Get("/mini_blog/:id",oauth2.LoginRequired,handlers.MiniBlogHandler)
 	m.Get("/mini_blog_list/:id",oauth2.LoginRequired,handlers.MiniBlogListHandler)
 	m.Get("/mini_blog/:id/edit",oauth2.LoginRequired,handlers.MiniBlogEdit)
+	m.Get("/routes/editor", oauth2.LoginRequired, handlers.RouteEditor)
+	m.Get("/routes/create", oauth2.LoginRequired, handlers.CreateRoute)
+	m.Get("/routes", oauth2.LoginRequired, handlers.RouteHandler)
+	m.Get("/routes/:id", oauth2.LoginRequired, handlers.RouteViewer)
 	m.Post("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsSaveHandler)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)
@@ -66,5 +70,6 @@ func main() {
 	m.Post("/save_post_miniblog",oauth2.LoginRequired, handlers.SavePostMiniblog)
 	m.Post("/remove_post_miniblog",oauth2.LoginRequired, handlers.RemovePostMiniblog)
 	m.Post("/mini_blog/:id/edit", oauth2.LoginRequired, handlers.SaveEditBlog)
+
 	m.Run()
 }
