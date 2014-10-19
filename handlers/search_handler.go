@@ -8,7 +8,6 @@ import (
 	"labix.org/v2/mgo/bson"
 	"net/http"
 	"strings"
-	"fmt"
 )
 
 func Search(rnd render.Render, params martini.Params, session sessions.Session, r *http.Request) {
@@ -53,7 +52,7 @@ func Search(rnd render.Render, params martini.Params, session sessions.Session, 
 		user.Avatar = session.Get("avatar").(string)
 
 
-		fmt.Println(words[1])
+
 		if (words[0] == "->"){
 			for i := len(posts) - 1; i >= 0; i-- {
 				user := models.User{}
