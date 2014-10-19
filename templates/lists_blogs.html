@@ -61,14 +61,11 @@
         <div class="col-lg-12">
 
             <h1 style="text-align:center;">Story</h1>
-            <hr>
 
             {{range $element := .blogs }}<!--взять в цикл -->
-            <blockquote>
                 <a href="mini_blog/{{$element.Id}}"> <p><h3><strong>{{ $element.Name }}</strong></h3></p> </a>
                 <hr>
                 <h5>{{$element.Date}}</h5>
-            </blockquote>
             <br>
             {{end}}
         </div>
@@ -81,19 +78,6 @@
                 <p><strong>yo-journey, 2014.</strong> Made by <a href="">Alex Saskevich</a> and <a href="">Danik
                     Tsyrkunov</a>.</p>
             </div>
-            <div class="col-lg-4 pull-right" style="margin-top:20px;">
-                <p>
-
-                </p><form style="margin-top: -40px;" method="POST" action="set_theme">
-                <select class="form-control pull-right" id="theme" name="theme" style="width: 100px;">
-                    <option>Black</option>
-                    <option>White</option>
-                </select>
-                <button type="submit" class="btn btn-primary pull-right">Save</button>
-            </form>
-                <p></p>
-            </div>
-
         </footer>
     </div>
 </div>
