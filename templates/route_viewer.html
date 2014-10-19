@@ -37,13 +37,12 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">yo-journey</a>
-        <a class="navbar-brand" href="/user/{{ .Id }}"><img src="{{ .Avatar }}" height="150%" style="margin-top:-5px;"/>
-            {{ .FirstName }} {{ .LastName}}</a>
+        <a class="navbar-brand" href="/user/{{ .user.Id }}"><img src="{{ .user.Avatar }}" height="150%" style="margin-top:-5px;"/>
+            {{ .user.FirstName }} {{ .user.LastName}}</a>
     </div>
     <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li><a href="/weather">Weather</a></li>
             <li><a href="/friends">Friends</a></li>
             <li><a href="/feed">Feed</a></li>
             <li><a href="/advice/country">Advices</a></li>
@@ -69,6 +68,10 @@
             </legend>
             <div class="form-group">
                 <div id="googleMap" style="width:100%;height:480px;margin-top:30px;color:black"></div>
+                <br>
+                <blockquote>
+                    {{.Route.Desc}}
+                </blockquote>
             </div>
         </fieldset>
     </form>
