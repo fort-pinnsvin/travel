@@ -57,6 +57,7 @@ func main() {
 	m.Get("/routes/create", oauth2.LoginRequired, handlers.CreateRoute)
 	m.Get("/routes", oauth2.LoginRequired, handlers.RouteHandler)
 	m.Get("/routes/:id", oauth2.LoginRequired, handlers.RouteViewer)
+	m.Get("/routes/:id/delete", oauth2.LoginRequired, handlers.RemoveRoute)
 	m.Post("/album/:id/settings", oauth2.LoginRequired, handlers.AlbumSettingsSaveHandler)
 	m.Post("/load_photo_album", oauth2.LoginRequired, handlers.LoadPhotoAlbum)
 	m.Post("/update", oauth2.LoginRequired, handlers.EditPost)

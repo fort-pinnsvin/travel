@@ -52,6 +52,7 @@ func CreateRoute(tokens oauth2.Tokens, res http.ResponseWriter, r *http.Request,
 		route.Desc = desc
 		route.Lat = lats
 		route.Long = long
+		route.Owner = session.Get("auth_id").(string)
 		models.RouteCollection.Insert(&route)
 		res.Write([]byte(fmt.Sprintf(`{"error":0}`)))
 		return
@@ -83,6 +84,14 @@ func RouteViewer(tokens oauth2.Tokens, rnd render.Render, r *http.Request, sessi
 		user.Avatar = session.Get("avatar").(string)
 		route := &models.Route{}
 		models.RouteCollection.FindId(params["id"]).One(&route)
-		rnd.HTML(200, "route_viewer", map[string]interface{}{"user": user, "Route": route,})
+		rnd.HTML(200, "route_viewer", map[string]interface{}{"user": user, "Route": route, "owner": route.Owner == user.Id})
+	}
+}
+
+func RemoveRoute(tokens oauth2.Tokens, rnd render.Render, r *http.Request, session sessions.Session, params martini.Params) {
+	if session.Get("auth_id") != "" {
+		id := params["id"]
+		models.RouteCollection.RemoveId(id)
+		rnd.Redirect("/routes")
 	}
 }

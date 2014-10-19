@@ -129,6 +129,7 @@ type Route struct {
 	Desc 	  string
 	Lat 	  []float64
 	Long      []float64
+	Owner 	  string
 }
 
 func ConnectToDataBase() {
