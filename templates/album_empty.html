@@ -74,6 +74,11 @@
 
     {{ if .auth_user }}
     <div class="row">
+        {{if not .photos }}
+        <div class="col-md-12" >
+            <h3>Nobody didn't upload photos to this album. :(</h3>
+        </div>
+        {{end}}
         {{range $element := .photos }}
         <div class="col-sm-6 col-md-3" >
             <a class="thumbnail" >
@@ -88,6 +93,11 @@
     </div>
     {{else}}
     <div class="row">
+        {{if not .photos }}
+        <div class="col-md-12" >
+            <h3>Nobody didn't upload photos to this album. :(</h3>
+        </div>
+        {{end}}
         {{range $element := .photos }}
         <div class="col-sm-6 col-md-3" >
             <a class="thumbnail" >
@@ -101,10 +111,9 @@
 
     {{if .owner}}
     <form action="/load_photo_album" method="post" enctype="multipart/form-data">
-        <label for="file">Filename:</label>
-        <input type="file" name="file" id="file">
+        <input type="file" name="file" id="file" data-filename-placement="inside" title="Add new photo">
         <input type="hidden" value="{{ .id }}" name="id"/>
-        <input type="submit" name="submit" value="Submit">
+        <input type="submit" name="submit" value="Submit" class="btn btn-success">
     </form>
     {{end}}
 
@@ -128,10 +137,13 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap.file-input.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/bootstrap.file-input.js"></script>
 </body>
 </html>
-
 <script>
+    $(document).ready(function(){$('input[type=file]').bootstrapFileInput();});
     var remove_photo = function (name_photo, album_id) {
         console.log(name_photo);
         $.ajax({

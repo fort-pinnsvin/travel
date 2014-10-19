@@ -31,7 +31,7 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini
 		user_auth := helpfunc.GetAuthUser(session)
 		rnd.HTML(200, "blog", map[string]interface{}{
 			"user":      user_auth,
-			"auth_user": bolg.Owner == user_auth.Id,
+			"auth_user": blog.Owner == user_auth.Id,
 			"id_blog":   id_blog,
 			"all_post":  postsBlog,
 			"blog":      blog,
