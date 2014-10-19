@@ -25,7 +25,7 @@ func MiniBlogHandler(rnd render.Render, session sessions.Session, params martini
 
 		blog := models.Blog{}
 		models.BlogCollection.FindId(id_blog).One(&blog)
-
+	
 		sort.Sort(models.ByPostBlog(postsBlog))
 
 		user_auth := helpfunc.GetAuthUser(session)
