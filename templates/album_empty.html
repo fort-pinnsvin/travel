@@ -86,7 +86,10 @@
                 <button type="button" class="close" title="{{ $element.Name }}" data-dismiss="alert"
                         onclick="remove_photo({{ $element.Name }}, {{$element.AlbumId}})">×
                 </button>
-                <img src="{{$element.Name}}" alt="">
+
+                <div style="width:250px;height:130px">
+                    <img src="{{$element.Name}}" alt="" style="max-width:100%; max-height:100%">
+                </div>
             </a>
         </div>
         {{end}}

@@ -117,7 +117,7 @@ function placeMarker(location) {
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    title: name,
+                    title: result.name,
                     id: result.id,
                     draggable: true,
                     drag: function () {
@@ -130,7 +130,7 @@ function placeMarker(location) {
                         });
                     },
                     infoWindow: new google.maps.InfoWindow({
-                        content: getInfoWindow(name, "", result.id, result.url)
+                        content: getInfoWindow(result.name, "", result.id, result.url)
                     }),
                     clickListener: function () {
                         this.infoWindow.open(map, this);
